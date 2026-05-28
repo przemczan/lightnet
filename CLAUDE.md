@@ -1,4 +1,4 @@
-# CLAUDE.md — lightnet-website
+# CLAUDE.md — lightnet
 
 ## What this is
 
@@ -7,7 +7,7 @@ MkDocs hub site for the Lightnet project. This repo contains only the hub `mkdoc
 ## Structure
 
 ```
-lightnet-website/
+lightnet/
   mkdocs.yml           ← hub config with !include for child repos
   requirements.txt     ← pip deps (mkdocs-material, mkdocs-monorepo-plugin)
   docs/
