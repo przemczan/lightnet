@@ -1,6 +1,6 @@
 # Lightnet Documentation Hub
 
-[![Deploy](https://github.com/przemczan/lightnet-website/actions/workflows/deploy.yml/badge.svg)](https://github.com/przemczan/lightnet-website/actions)
+[![Deploy](https://github.com/przemczan/lightnet/actions/workflows/deploy.yml/badge.svg)](https://github.com/przemczan/lightnet/actions)
 
 MkDocs hub site for the Lightnet project — a modular addressable lighting system. This repo hosts the landing page and shared reference docs. Firmware and mobile docs live in their own repos and are pulled in at build time via `mkdocs-monorepo-plugin`.
 
@@ -8,7 +8,7 @@ MkDocs hub site for the Lightnet project — a modular addressable lighting syst
 
 | Repo | Description |
 |---|---|
-| [lightnet-website](https://github.com/przemczan/lightnet-website) | This hub — landing page, shared glossary, FAQ, release notes |
+| [lightnet](https://github.com/przemczan/lightnet) | This hub — landing page, shared glossary, FAQ, release notes |
 | [lightnet-firmware](https://github.com/przemczan/lightnet-firmware) | ESP8266/ESP32 controller + ATmega panel firmware |
 | [lightnet-mobile](https://github.com/przemczan/lightnet-mobile) | Kotlin Multiplatform app for Android and iOS |
 
@@ -18,7 +18,7 @@ Clone all three repos side-by-side:
 
 ```
 parent/
-  lightnet-website/   ← this repo
+  lightnet/   ← this repo
   lightnet-firmware/
   lightnet-mobile/
 ```
