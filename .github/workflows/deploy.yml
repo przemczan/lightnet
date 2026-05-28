@@ -1,0 +1,47 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup SSH Key
+      uses: webfactory/ssh-agent@v0.9.1
+      with:
+        ssh-private-key: |
+          ${{ secrets.SSH_FIRMWARE_DEPLOY_PRIVATE_KEY }}
+          ${{ secrets.SSH_MOBILE_DEPLOY_PRIVATE_KEY }}
+
+    - name: Checkout firmware and mobile docs
+      run: |
+        cd ..
+        git clone ssh://git@github.com/przemczan/lightnet-firmware.git
+        git clone ssh://git@github.com/przemczan/lightnet-mobile.git
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Build
+      run: mkdocs build
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      if: github.ref == 'refs/heads/main'
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./site

@@ -1,0 +1,71 @@
+site_name: 'Lightnet'
+site_description: Firmware and mobile app developer hub
+site_url: https://przemczan.github.io/lightnet-website/
+repo_url: https://github.com/przemczan/lightnet-website
+repo_name: przemczan/lightnet-website
+docs_dir: docs
+theme:
+  name: material
+  custom_dir: overrides
+  palette:
+    scheme: slate
+    primary: black
+    accent: deep orange
+  logo: assets/images/logo-full.light.svg
+  icon:
+    repo: fontawesome/brands/github
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.instant
+    - navigation.path
+    - navigation.top
+    - navigation.footer
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+    - navigation.indexes
+extra_css:
+  - stylesheets/common.css
+  - stylesheets/donation.css
+plugins:
+  - search
+  - monorepo
+nav:
+  - Home: index.md
+  - Firmware: '!include ../lightnet-firmware/mkdocs.yml'
+  - App: '!include ../lightnet-mobile/mkdocs.yml'
+  - Reference:
+    - reference/index.md
+    - Glossary: reference/glossary.md
+    - FAQ: reference/faq.md
+    - Release Notes: reference/release-notes.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - def_list
+  - tables
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+      auto_title: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg

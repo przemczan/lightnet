@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block footer %}
+  {{ super() }}
+  <div class="donate-widget">
+    <a class="donate-btn" id="donateCopy"
+       href="ethereum:0x6eb7Ac0FBc7bD95595Eb221681CC2Ba7aeDfd54D"
+       aria-label="Support Lightnet via ETH">
+      <span class="donate-icon">⟠</span>
+      <span class="donate-label">Donate</span>
+      <span class="donate-address">0x6eb7Ac0FBc7bD95595Eb221681CC2Ba7aeDfd54D</span>
+      <span class="donate-copied" id="donateCopied">Copied!</span>
+    </a>
+  </div>
+  <script>
+    (function () {
+      var btn = document.getElementById('donateCopy');
+      var copied = document.getElementById('donateCopied');
+      var addr = '0x6eb7Ac0FBc7bD95595Eb221681CC2Ba7aeDfd54D';
+      btn.addEventListener('click', function () {
+        navigator.clipboard.writeText(addr).then(function () {
+          copied.classList.add('donate-copied--visible');
+          setTimeout(function () { copied.classList.remove('donate-copied--visible'); }, 1800);
+        });
+      });
+    })();
+  </script>
+{% endblock %}

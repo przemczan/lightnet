@@ -1,0 +1,82 @@
+.donate-widget {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 100;
+}
+
+.donate-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.8rem;
+  background: rgba(33, 33, 33, 0.75);
+  color: #ccc;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 2rem;
+  font-size: 0.75rem;
+  font-family: inherit;
+  cursor: pointer;
+  opacity: 0.75;
+  backdrop-filter: blur(6px);
+  transition: opacity 0.2s ease, background 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 6.5rem;
+}
+
+.donate-btn:hover,
+.donate-btn:focus-visible {
+  opacity: 1;
+  background: rgba(33, 33, 33, 0.92);
+  color: #fff;
+  max-width: 26rem;
+  outline: none;
+}
+
+.donate-icon {
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  color: #7986cb;
+}
+
+.donate-btn:hover .donate-icon,
+.donate-btn:focus-visible .donate-icon {
+  color: #9fa8da;
+}
+
+.donate-label {
+  flex-shrink: 0;
+}
+
+.donate-address {
+  font-family: "Roboto Mono", ui-monospace, monospace;
+  font-size: 0.68rem;
+  color: #aaa;
+  overflow: hidden;
+  max-width: 0;
+  opacity: 0;
+  transition: max-width 0.25s ease, opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.donate-btn:hover .donate-address,
+.donate-btn:focus-visible .donate-address {
+  max-width: 22rem;
+  opacity: 1;
+}
+
+.donate-copied {
+  font-size: 0.7rem;
+  color: #81c784;
+  overflow: hidden;
+  max-width: 0;
+  opacity: 0;
+  transition: max-width 0.15s ease, opacity 0.15s ease;
+  pointer-events: none;
+}
+
+.donate-copied--visible {
+  max-width: 5rem;
+  opacity: 1;
+}
