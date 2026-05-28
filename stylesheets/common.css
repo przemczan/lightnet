@@ -3,3 +3,40 @@
   height: 1.8rem;
   width: auto;
 }
+
+/* Hide site name from header (browser title is preserved) */
+.md-header__title span {
+  display: none;
+}
+
+/* Footer social links with names */
+.md-footer-social {
+  display: flex;
+  gap: 2rem;
+  padding: 1.5rem 0;
+  justify-content: center;
+}
+
+.md-footer-social__link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--md-accent-fg-color);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.md-footer-social__link:hover {
+  color: var(--md-accent-fg-color);
+  opacity: 1;
+}
+
+.md-footer-social__link svg {
+  width: .8rem;
+  height: .8rem;
+  fill: currentColor;
+}
+
+.md-footer-social__name {
+  font-size: var(--md-footer-meta-font-size);
+}
