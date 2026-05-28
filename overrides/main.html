@@ -1,7 +1,22 @@
 {% extends "base.html" %}
 
 {% block footer %}
-  {{ super() }}
+  <footer class="md-footer">
+    <div class="md-footer__inner md-grid">
+      <div class="md-footer-custom">
+        {% if config.extra.social %}
+        <div class="md-footer-social">
+          {% for social in config.extra.social %}
+          <a href="{{ social.link }}" title="{{ social.name }}" class="md-footer-social__link">
+            {% include ".icons/" + social.icon + ".svg" %}
+            <span class="md-footer-social__name">{{ social.name }}</span>
+          </a>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </footer>
   <div class="donate-widget">
     <a class="donate-btn" id="donateCopy"
        href="ethereum:0x6eb7Ac0FBc7bD95595Eb221681CC2Ba7aeDfd54D"

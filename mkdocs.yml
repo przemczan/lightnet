@@ -27,6 +27,17 @@ theme:
     - content.code.copy
     - content.code.annotate
     - navigation.indexes
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/przemczan/lightnet
+      name: Docs
+    - icon: fontawesome/brands/github
+      link: https://github.com/przemczan/lightnet-firmware
+      name: Firmware
+    - icon: fontawesome/brands/github
+      link: https://github.com/przemczan/lightnet-mobile
+      name: Mobile App
 extra_css:
   - stylesheets/common.css
   - stylesheets/donation.css
