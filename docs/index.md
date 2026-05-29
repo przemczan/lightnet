@@ -8,7 +8,16 @@ icon: material/home
 
 <br>
 
-**A modular, DIY, addressable lighting system.** One controller, many panels, a tree of cables — and a small, fast firmware that keeps every panel in sync with sub-millisecond reactive triggers.
+!!! info "Note from the author"
+    This project was built for fun, to learn, and because I enjoy tinkering. It was inspired by the well-known Nanoleaf system — I wanted to create something that was truly mine, something I could develop exactly the way I wanted. I knew it would never be perfect or as polished, but working on it gave me a lot of satisfaction and joy. It's far from finished, and I've already put a significant amount of time into it with no idea whether I'll find more. Rather than let it gather dust in a drawer, I decided to share it — hoping that maybe someone will find something useful here.
+
+    **On the current state:** Unfortunately, the project doesn't yet have refined controller and panel schematics, or a PCB design. I've already made a few prototypes, but they still have significant shortcomings. I don't want to publish something so incomplete and risk misleading others or exposing them to costs of non-working devices. I'm not deeply versed in electronics or circuit design, but I'm working on implementing the most important improvements before releasing the schematics and PCB.
+
+    Similarly, the 3D-printed panel design is still in early stages with no viable design yet. However, this isn't critical — I expect anyone using this project would solve the panel fabrication themselves.
+
+    Regarding the mobile app: initially, I decided a web app would be easiest since that's where my expertise lies. Mobile development was unfamiliar territory. Over time, I ported the web version to React Native, and later to Kotlin (the current version) with significant AI assistance. I don't have time to deeply learn Kotlin, so AI remains the primary executor for that part.
+
+    Due to time constraints, this project sat dormant for a long time. Fortunately, today's accessibility of AI tools gave it a second chance — AI helped solve blockers that were preventing further progress. At minimum, I'm aiming to bring it to a usable state as a complete system.
 
 ```mermaid
 graph LR
