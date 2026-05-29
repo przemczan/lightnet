@@ -1542,7 +1542,10 @@
 </p>
 
 <p><br></p>
-<p><strong>A modular, DIY, addressable lighting system.</strong> One controller, many panels, a tree of cables — and a small, fast firmware that keeps every panel in sync with sub-millisecond reactive triggers.</p>
+<div class="admonition info">
+<p class="admonition-title">Note from the author</p>
+<p>This project was built for fun, to learn, and because I enjoy tinkering. It was inspired by the well-known Nanoleaf system — I wanted to create something that was truly mine, something I could develop exactly the way I wanted. I knew it would never be perfect or as polished, but working on it gave me a lot of satisfaction and joy. It's far from finished, and I've already put a significant amount of time into it with no idea whether I'll find more. Rather than let it gather dust in a drawer, I decided to share it — hoping that maybe someone will find something useful here.</p>
+</div>
 <pre class="mermaid"><code>graph LR
   App["📱 Mobile App"] &lt;--&gt;|"HTTP + WebSocket"| C["🎛️ Controller&lt;br/&gt;ESP8266 / ESP32"]
   C &lt;--&gt;|I²C| P1["💡 Panel"]
