@@ -1,5 +1,5 @@
 site_name: 'Lightnet'
-site_description: Firmware and mobile app developer hub
+site_description: Modular addressable lighting — build, use, and develop
 site_url: https://przemczan.github.io/lightnet
 repo_url: https://github.com/przemczan/lightnet
 repo_name: przemczan/lightnet
@@ -15,23 +15,24 @@ theme:
   icon:
     repo: fontawesome/brands/github
   features:
-    - navigation.tabs
-    - navigation.sections
+    # - navigation.tabs
     - navigation.instant
     - navigation.path
     - navigation.top
     - navigation.footer
+    - navigation.indexes
     - toc.follow
     - search.suggest
     - search.highlight
     - content.code.copy
     - content.code.annotate
-    - navigation.indexes
+    - content.tooltips
+    - navigation.instant.preview
 extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/przemczan/lightnet
-      name: Docs
+      name: Documentation hub
     - icon: fontawesome/brands/github
       link: https://github.com/przemczan/lightnet-firmware
       name: Firmware
@@ -41,11 +42,23 @@ extra:
 extra_css:
   - stylesheets/common.css
   - stylesheets/donation.css
+watch:
+  - includes
+  - ../lightnet-firmware/docs
+  - ../lightnet-mobile/docs
 plugins:
   - search
   - monorepo
 nav:
   - Home: index.md
+  - Get Started:
+    - getting-started/index.md
+    - 1. Build the hardware: getting-started/hardware.md
+    - 2. Prepare your tools: getting-started/toolchain.md
+    - 3. Flash the firmware: getting-started/flashing.md
+    - 4. First boot & Wi-Fi: getting-started/first-boot.md
+    - 5. Use the app: getting-started/using-the-app.md
+    - Where to go next: getting-started/next-steps.md
   - Firmware: '!include ../lightnet-firmware/mkdocs.yml'
   - App: '!include ../lightnet-mobile/mkdocs.yml'
   - Reference:
@@ -55,28 +68,38 @@ nav:
     - Release Notes: reference/release-notes.md
 
 markdown_extensions:
+  - abbr
   - admonition
+  - attr_list
+  - def_list
+  - md_in_html
+  - tables
   - pymdownx.details
   - pymdownx.tabbed:
       alternate_style: true
-  - def_list
-  - tables
-  - md_in_html
-  - toc:
-      permalink: true
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
       auto_title: true
   - pymdownx.inlinehilite
-  - pymdownx.snippets
+  - pymdownx.snippets:
+      auto_append:
+        - abbreviations.md
+      base_path:
+        - includes
+        - docs
+        - ../lightnet-firmware/docs
+        - ../lightnet-mobile/docs
+      check_paths: true
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-  - attr_list
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - toc:
+      permalink: true
+  - material.extensions.preview

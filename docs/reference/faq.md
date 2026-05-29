@@ -2,199 +2,190 @@
 icon: material/help-circle-outline
 ---
 
-# Reference: FAQ
+# FAQ
 
-## General Questions
+## About Lightnet
 
 ### What is Lightnet?
 
-Lightnet is a modular addressable lighting system with a controller and multiple panels. The controller manages animations, exposes APIs, and communicates with panels. Panels are simple devices that receive commands and display animations.
+A modular addressable lighting system: one **controller** drives many **panels** over I²C. The controller handles Wi-Fi, the HTTP and WebSocket APIs, and scene playback. Each panel runs animations locally on its ATmega after a single setup packet.
 
-See [Firmware Overview](../lightnet-firmware/overview.md) and [Mobile App Overview](../lightnet-mobile/overview.md) for more.
+See [Firmware Overview](../lightnet-firmware/overview.md) and [App Overview](../lightnet-mobile/overview.md) for the design tour.
 
-### What license does Lightnet use?
+### Is it a kit I can buy?
 
-Both the firmware and mobile app are released under the **GNU General Public License v3.0 (GPL-3.0)**. You are free to use, modify, and distribute the source code, provided that derivative works are also distributed under GPL-3.0.
+No — it's a DIY project. You build the boards, flash the firmware, and connect everything yourself. Schematics, PCB layouts, and a bill of materials will be published in the future. For now, follow the [Get Started](../getting-started/index.md) guide.
 
-- Firmware source: [przemczan/lightnet-firmware](https://github.com/przemczan/lightnet-firmware)
-- Mobile app source: [przemczan/lightnet-mobile](https://github.com/przemczan/lightnet-mobile)
+### What license?
 
-### Can I use Lightnet without the mobile app?
+Both firmware and the mobile app are released under **GNU GPL v3.0**. You can use, modify, and distribute the code, provided derivatives are also GPL-3.0.
 
-Yes. The Lightnet firmware exposes HTTP and WebSocket APIs that any client can consume — web browsers, custom scripts, other mobile apps, etc. The provided KMP app is just one example client.
+- Firmware: [przemczan/lightnet-firmware](https://github.com/przemczan/lightnet-firmware)
+- Mobile app: [przemczan/lightnet-mobile](https://github.com/przemczan/lightnet-mobile)
 
-### How many panels can Lightnet support?
+### Do I need the mobile app?
 
-The firmware supports up to 254 panels (I²C addresses 0–253) per controller. In practice, the limit is determined by physical space and power supply, I²C bus speed and frame timing, and controller SRAM (panel state storage).
+No. The controller exposes HTTP and WebSocket APIs — `curl`, a web page, a Python script, Home Assistant, or anything else that talks HTTP can control Lightnet. The mobile app is a convenient client, not a requirement. See [Firmware → API Reference](../lightnet-firmware/api.md).
 
-See [Firmware Architecture](../lightnet-firmware/architecture.md) for details.
+### How many panels can a controller drive?
 
-### Can panels run animations without the controller?
+The firmware caps it at **100 panels** per controller (`LIGHTNET_MAX_PANELS` in `LightnetConfig.hpp`). In practice the real limit is whichever you hit first: physical layout, power supply, I²C bus quality, and controller SRAM for per-panel state. The I²C address space (7-bit) would allow up to 254, but the firmware reserves headroom.
 
-No. Panels are "headless" devices that depend entirely on the controller for discovery and topology setup, animation definitions, timing and synchronisation, and external API access. Panels execute animations locally, but they don't initiate them.
+See [Firmware → Architecture](../lightnet-firmware/architecture.md) for the bandwidth budget.
+
+### Can a panel run without the controller?
+
+No. Panels are headless — they need the controller for discovery, addressing, palette setup, and any external API. They execute animations locally, but they don't initiate them.
 
 ---
 
-## Firmware Development
+## Firmware
 
 ### How do I build the firmware?
 
-Use PlatformIO:
-
 ```bash
-pio run -e initializer_esp32              # Build controller
-pio run -e panel_atmega328p               # Build panel
-pio run --target upload                   # Build and flash
+pio run -e controller_esp32          # build controller
+pio run -e panel_atmega328pb         # build panel
+pio run -e controller_esp32 -t upload
 ```
 
-See [Getting Started](../lightnet-firmware/getting-started.md) for full instructions.
+Full walkthrough: [Get Started → Flash the firmware](../getting-started/flashing.md). Per-environment details: [Firmware → Getting Started](../lightnet-firmware/getting-started.md).
 
-### What are the differences between ESP8266 and ESP32 controllers?
+### ESP8266 vs ESP32?
 
 === "ESP8266"
-    - Older, smaller, cheaper
-    - Good for simple setups
-    - Single-core, limited RAM
+    - Cheaper, lower-power, single-core
+    - Plenty for typical installs
+    - Slightly different pin map
 
 === "ESP32"
-    - Newer, dual-core, more powerful
-    - Better for large animations and heavy I²C load
-    - Slightly different pin assignments
+    - Dual-core, more SRAM
+    - Better headroom for large installs and heavy I²C load
+    - Recommended if you can pick
 
-Pin assignments differ — see [Hardware](../lightnet-firmware/hardware.md).
+Pin assignments: [Firmware → Hardware](../lightnet-firmware/hardware.md).
 
-### How do I update the firmware for panels?
+### How do I update panel firmware after the first flash?
 
-=== "HTTP OTA"
+Three ways, in order of convenience:
+
+=== "Mobile app / HTTP"
     ```bash
     curl -X POST http://lightnet-XXXX.local/api/firmware/panels \
       --data-binary @panel_fw.bin
     ```
+    The controller streams the binary to its flash, then reflashes every panel one at a time over I²C.
 
-=== "Serial OTA"
+=== "Serial"
     ```bash
     python tools/flash_panels_serial.py <port> <firmware.bin>
     ```
+    Same flow, delivered over the controller's USB serial port instead of Wi-Fi.
 
-=== "Direct programming"
-    Use USBasp directly on panel bootloader environments via PlatformIO.
+=== "Programmer"
+    Plug the USBasp in and reflash the panel directly. Only needed when you're modifying the bootloader itself.
 
-See [OTA & Updates](../lightnet-firmware/ota.md) for details.
+See [Firmware → OTA & Updates](../lightnet-firmware/ota.md) for the full bootloader story.
 
-### How do I debug firmware issues?
+### How do I see what the controller is doing?
 
-Enable serial debug output at 57600 baud:
+Open a serial monitor at **57600 baud**:
 
 ```bash
-pio device monitor -e initializer_esp32
+pio device monitor -e controller_esp32
 ```
 
-`DEBUG=1` is already set globally in `common_env_data.build_flags`. Use WebSocket queries to inspect panel state. See [Troubleshooting](../lightnet-firmware/troubleshooting.md).
+`DEBUG=1` is set globally in the build flags, so the firmware is verbose by default. For panel state, use the `GET_PANELS_STATES` WebSocket command (see [Firmware → Troubleshooting](../lightnet-firmware/troubleshooting.md)).
 
 ---
 
-## Mobile App Development
+## Mobile app
 
-### How do I get started with the mobile app?
+### How do I build the app?
 
 === "Android"
-    1. Connect an Android device (API 24+) or start an emulator
-    2. Run `.\gradlew.bat :composeApp:installDebug`
-    3. Launch the **Lightnet** app on the device
+    ```bash
+    ./gradlew :composeApp:installDebug
+    ```
+    Requires Android SDK with **API 24+** and a connected device or emulator.
 
 === "iOS"
-    1. Open `iosApp/iosApp.xcodeproj` in Xcode
-    2. Run the `iosApp` scheme on a simulator or device
+    Open `iosApp/iosApp.xcodeproj` in Xcode 14+ and run the `iosApp` scheme.
 
-See [Getting Started](../lightnet-mobile/getting-started.md) for full instructions.
+Full walkthrough: [App → Getting Started](../lightnet-mobile/getting-started.md).
 
-### Does the app work on Android and iOS?
+### Does the same codebase run on Android and iOS?
 
-Yes. The app is built with Kotlin Multiplatform (Compose Multiplatform) and targets both platforms from a single shared codebase.
+Yes — it's built with [Kotlin Multiplatform](https://kotlinlang.org/lp/multiplatform/) and [Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/). One source set, two targets.
 
-### How does the app find Lightnet devices?
+### How does the app find controllers?
 
-The app uses mDNS (multicast DNS) to discover Lightnet controllers on the local network. Devices are advertised as `lightnet-<chipid>.local` with service `_lightnet._tcp`.
+Via **mDNS** — Lightnet controllers advertise as `lightnet-<chipid>.local` on service `_lightnet._tcp`. The Android side uses Android's `NsdManager`. iOS discovery isn't implemented yet — add devices manually by hostname.
 
-See [Connectivity](../lightnet-mobile/connectivity.md) for details.
+See [App → Connectivity](../lightnet-mobile/connectivity.md).
 
-### Can the app control multiple Lightnet devices?
+### Can I control multiple controllers at once?
 
-Yes. The app can connect to different controllers sequentially. Multi-device simultaneous control is a potential future feature.
+Sequentially today — pick a device from the list, connect, do your thing, disconnect, switch. Simultaneous multi-controller control isn't implemented.
 
 ---
 
-## API Questions
+## API & integration
 
-### What is the difference between the HTTP and WebSocket APIs?
+### HTTP or WebSocket?
 
 | | HTTP | WebSocket |
 |---|---|---|
-| Format | JSON REST | Binary |
-| Use for | Configuration, discovery, state queries | Real-time panel control, reactive triggers |
-| Latency | ~5 ms | Sub-millisecond |
+| Format | JSON REST | Binary, 14-byte header + payload |
+| Use for | Configuration, scenes, queries | Real-time panel control, reactive triggers |
+| Latency | ~5 ms | sub-millisecond |
 
-Use HTTP for setup and WebSocket for interactive control. See [API Reference](../lightnet-firmware/api.md).
+In short: HTTP for setup, WebSocket for live control. See [Firmware → API Reference](../lightnet-firmware/api.md).
 
 ### Can I trigger animations from an external service?
 
-Yes. Use the HTTP API to start scenes or the WebSocket API to send beat triggers. You can integrate Lightnet with music services, smart home systems, etc.
+Yes. Music sync, smart-home automations, weather feeds — anything that can hit HTTP works:
 
 ```bash
-# Play a stored scene by name
+# Play a stored scene
 curl -X POST http://lightnet-XXXX.local/api/scenes/my-scene/play
 
-# Send a beat trigger via HTTP (use WebSocket ANIMATION_TRIGGER for lower latency)
+# Fire a reactive beat (HTTP path; WebSocket is lower-latency)
 curl -X POST http://lightnet-XXXX.local/api/animations/trigger \
   -H "Content-Type: application/json" \
   -d '{"group": 1, "value": 200}'
 ```
 
-### How do I create custom scenes and palettes?
+### Where's the scene JSON schema?
 
-```bash
-# Create a palette
-curl -X POST http://lightnet-XXXX.local/api/palettes \
-  -H "Content-Type: application/json" \
-  -d '{"name":"custom","stops":[[0,"#000000"],[255,"#FF0000"]]}'
-
-# Save a scene
-curl -X POST http://lightnet-XXXX.local/api/scenes \
-  -H "Content-Type: application/json" \
-  -d '{...scene JSON...}'
-```
-
-See [Animations & Scenes](../lightnet-firmware/animations.md) for the full JSON schema.
+[Firmware → Animations & Scenes](../lightnet-firmware/animations/concepts.md) is the full reference — every animation type, parameter, validation rule, and worked example.
 
 ---
 
-## Network & Connectivity
+## Network
 
-### Do the controller and mobile app need to be on the same WiFi network?
+### Do the controller and phone need to be on the same network?
 
-Yes. The app discovers devices via mDNS, which requires local network access. Both must be on the same WiFi network (or subnet if mDNS is bridged).
+Yes. mDNS discovery and the WebSocket connection are local-network. If your network bridges mDNS across subnets, that works too — but there is no cloud relay.
 
-### Can I access Lightnet over the internet?
+### Can I expose Lightnet to the internet?
 
-No. Lightnet is designed for local network use only.
+It's designed for local use. There's no auth on the HTTP or WebSocket APIs — exposing it to the internet would let anyone on the planet drive your lights. If you need remote access, put it behind your VPN.
 
-### What if mDNS discovery doesn't work?
+### mDNS discovery isn't working
 
-!!! tip "Fallback steps"
-    1. Verify both devices are on the same WiFi network
-    2. Check that mDNS service is running on the controller (it is by default)
-    3. Try accessing the controller by IP directly: `http://<controller-ip>/api/appearance`
-    4. On iOS, check that local network access is allowed in Privacy settings
+!!! tip "Diagnostic steps"
+    1. Confirm both devices are on the same Wi-Fi network
+    2. Try the controller by IP: `http://<ip>/api/appearance`
+    3. Windows: ensure Bonjour is installed (comes with iTunes, or as a standalone Bonjour Print Services install)
+    4. iOS: check that local-network access is allowed in Settings → Privacy
+    5. Some consumer routers block multicast — try a different SSID or AP
 
 ---
 
-## Getting Help
+## Still stuck?
 
-Not answered here? Check:
-
-- [Troubleshooting](../lightnet-firmware/troubleshooting.md) for firmware issues
-- [Connectivity](../lightnet-mobile/connectivity.md) for connection problems
-- [Architecture](../lightnet-firmware/architecture.md) for design deep-dives
-- [API Reference](../lightnet-firmware/api.md) for endpoint details
-
-See the [Glossary](glossary.md) for key terminology.
+- [Firmware → Troubleshooting](../lightnet-firmware/troubleshooting.md)
+- [App → Connectivity](../lightnet-mobile/connectivity.md)
+- [Glossary](glossary.md)
+- File an issue: [firmware](https://github.com/przemczan/lightnet-firmware/issues) · [app](https://github.com/przemczan/lightnet-mobile/issues)

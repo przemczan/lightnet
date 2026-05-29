@@ -2,27 +2,28 @@
 icon: material/tag-outline
 ---
 
-# Release Notes
+# Release notes
 
 !!! info "Placeholder"
-    This documentation reflects the current codebase state. Release notes for new features, bug fixes, and breaking changes will be documented here when releases occur.
+    Versioned releases haven't started yet. This page reflects the current state of the codebase. When tagged releases ship, per-repo changelogs will live here (likely pulled in via `!include` from the firmware and mobile repos).
 
 ## Versioning
 
-Lightnet uses Semantic Versioning:
+Lightnet will follow [Semantic Versioning](https://semver.org/):
 
-- **Major** (X.0.0): Breaking changes or significant new features
-- **Minor** (0.X.0): New features, backwards compatible
-- **Patch** (0.0.X): Bug fixes, no new features
+- **Major** — breaking changes (e.g. I²C protocol bump, JSON schema bump)
+- **Minor** — additive features, backwards-compatible
+- **Patch** — bug fixes only
 
-## Firmware Protocol Versions
+## Firmware protocol versions
 
-The I²C protocol between controller and panels is versioned independently. Controller and panel firmware must use compatible protocol versions.
+The internal I²C protocol between controller and panels is versioned independently of the firmware version itself. The current version is **v4** (`Common/Protocol.hpp` → `VERSION`).
 
-!!! warning "Protocol compatibility"
-    When flashing panel OTA updates, ensure the panel firmware protocol version matches the controller. Mismatched versions will cause panels to behave incorrectly after discovery. See [Architecture — I²C Protocol](../lightnet-firmware/architecture.md#4-i2c-protocol-internal) for the version table.
+!!! warning "Flash controller and panels together"
+    The controller and every panel must agree on the I²C protocol version. When you cross a protocol bump (e.g. v3 → v4), flash the controller and **all** panels in the same session. Mismatched versions cause unpredictable behaviour after discovery completes.
 
-For current implementation details, see:
+    The full protocol-version table lives in [Firmware → Architecture](../lightnet-firmware/architecture.md#4-i2c-protocol-internal).
 
-- [Firmware Overview](../lightnet-firmware/overview.md)
-- [Mobile App Overview](../lightnet-mobile/overview.md)
+## Mobile app protocol
+
+The mobile app's WebSocket binary protocol is at `protocolVersion = 0x0001`. Bumps here will be called out in this file when they happen.
