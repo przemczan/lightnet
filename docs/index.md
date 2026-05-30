@@ -19,6 +19,8 @@ icon: material/home
 
     Due to time constraints, this project sat dormant for a long time. Fortunately, today's accessibility of AI tools gave it a second chance — AI helped solve blockers that were preventing further progress. At minimum, I'm aiming to bring it to a usable state as a complete system.
 
+---
+
 ```mermaid
 graph LR
   App["📱 Mobile App"] <-->|"HTTP + WebSocket"| C["🎛️ Controller<br/>ESP8266 / ESP32"]
