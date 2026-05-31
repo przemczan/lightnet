@@ -853,17 +853,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#set_brightness-type-2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        SET_BRIGHTNESS (type 2)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#set_color-type-3" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1897,17 +1886,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#set_brightness-type-2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        SET_BRIGHTNESS (type 2)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#set_color-type-3" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2419,40 +2397,6 @@
 </tbody>
 </table>
 <hr />
-<h4 id="set_brightness-type-2">SET_BRIGHTNESS (type 2)<a class="headerlink" href="#set_brightness-type-2" title="Permanent link">&para;</a></h4>
-<p>Set a panel's LED brightness directly.</p>
-<table>
-<thead>
-<tr>
-<th>Offset</th>
-<th>Size</th>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>1 B</td>
-<td><code>address</code></td>
-<td>uint8</td>
-<td>Panel index</td>
-</tr>
-<tr>
-<td>1</td>
-<td>1 B</td>
-<td><code>brightness</code></td>
-<td>uint8</td>
-<td><code>0</code> = off, <code>255</code> = full</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This bypasses the animation system. Any running animation continues to compute and will overwrite this value on its next frame.</p>
-</div>
-<hr />
 <h4 id="set_color-type-3">SET_COLOR (type 3)<a class="headerlink" href="#set_color-type-3" title="Permanent link">&para;</a></h4>
 <p>Set a panel's LED colour directly.</p>
 <table>
@@ -2496,10 +2440,10 @@
 </tr>
 </tbody>
 </table>
-<p>Same caveat as SET_BRIGHTNESS — running animations overwrite on next tick.</p>
+<p>Running animations overwrite this on the next tick.</p>
 <hr />
 <h4 id="get_panels_states-type-5">GET_PANELS_STATES (type 5)<a class="headerlink" href="#get_panels_states-type-5" title="Permanent link">&para;</a></h4>
-<p>Request the current state (on/off, colour, brightness) of all discovered panels. The controller replies with a PANELS_STATES response on the same client connection.</p>
+<p>Request the current state (on/off, colour) of all discovered panels. The controller replies with a PANELS_STATES response on the same client connection.</p>
 <p>No payload.</p>
 <hr />
 <h4 id="get_edges_list-type-4">GET_EDGES_LIST (type 4)<a class="headerlink" href="#get_edges_list-type-4" title="Permanent link">&para;</a></h4>
@@ -2541,7 +2485,7 @@
 <p>Responses are sent <strong>controller → client</strong> in reply to query commands.</p>
 <hr />
 <h4 id="panels_states-type-6">PANELS_STATES (type 6)<a class="headerlink" href="#panels_states-type-6" title="Permanent link">&para;</a></h4>
-<p>Sent in reply to GET_PANELS_STATES. <code>payloadSize = 2 + N×8</code>.</p>
+<p>Sent in reply to GET_PANELS_STATES. <code>payloadSize = 2 + N×7</code>.</p>
 <p><strong>Payload header (2 bytes):</strong></p>
 <table>
 <thead>
@@ -2563,7 +2507,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Per entry × N (8 bytes each):</strong></p>
+<p><strong>Per entry × N (7 bytes each):</strong></p>
 <table>
 <thead>
 <tr>
@@ -2609,13 +2553,6 @@
 <td><code>color_b</code></td>
 <td>uint8</td>
 <td>Blue channel</td>
-</tr>
-<tr>
-<td>6</td>
-<td>1 B</td>
-<td><code>brightness</code></td>
-<td>uint8</td>
-<td>Current brightness</td>
 </tr>
 </tbody>
 </table>
@@ -2717,50 +2654,14 @@
 <td><code>{"brightness":N,"baseColors":["#..","#..","#.."],"palette":"..."}</code></td>
 </tr>
 <tr>
-<td><code>PUT</code></td>
+<td><code>PATCH</code></td>
 <td><code>/api/appearance</code></td>
 <td>Any subset of the three fields</td>
 <td><code>{}</code></td>
 </tr>
-<tr>
-<td><code>GET</code></td>
-<td><code>/api/brightness</code></td>
-<td>—</td>
-<td><code>{"value":N}</code></td>
-</tr>
-<tr>
-<td><code>PUT</code></td>
-<td><code>/api/brightness</code></td>
-<td><code>{"value":128}</code></td>
-<td><code>{}</code></td>
-</tr>
-<tr>
-<td><code>GET</code></td>
-<td><code>/api/colors</code></td>
-<td>—</td>
-<td><code>{"primary":"#..","secondary":"#..","tertiary":"#.."}</code></td>
-</tr>
-<tr>
-<td><code>PUT</code></td>
-<td><code>/api/colors</code></td>
-<td>Any subset of the three slots</td>
-<td><code>{}</code></td>
-</tr>
-<tr>
-<td><code>GET</code></td>
-<td><code>/api/palette</code></td>
-<td>—</td>
-<td><code>{"palette":"lava"}</code></td>
-</tr>
-<tr>
-<td><code>PUT</code></td>
-<td><code>/api/palette</code></td>
-<td><code>{"palette":"lava"}</code></td>
-<td><code>{}</code></td>
-</tr>
 </tbody>
 </table>
-<p>All <code>PUT</code> endpoints persist to <code>/config/appearance.json</code> atomically and broadcast the updated value to all panels immediately.</p>
+<p>Persists to <code>/config/appearance.json</code> atomically and broadcasts the updated value to all panels immediately.</p>
 <hr />
 <h3 id="22-palettes">2.2 Palettes<a class="headerlink" href="#22-palettes" title="Permanent link">&para;</a></h3>
 <table>
@@ -2777,7 +2678,7 @@
 <td><code>GET</code></td>
 <td><code>/api/palettes</code></td>
 <td>—</td>
-<td><code>["rainbow","lava","ocean",...]</code></td>
+<td><code>{"rainbow":{...},"lava":{...},...}</code> — map of name → Palette <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr></td>
 </tr>
 <tr>
 <td><code>GET</code></td>
@@ -2905,12 +2806,11 @@
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="err">  &quot;group&quot;: 250,</span>
 </span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="err">  &quot;panels&quot;: &quot;all&quot;,</span>
 </span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="err">  &quot;type&quot;: &quot;PULSE&quot;,</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="err">  &quot;color&quot;: &quot;#FF0000&quot;,</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="err">  &quot;brightnessFrom&quot;: 0,</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="err">  &quot;brightnessTo&quot;: 255,</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="err">  &quot;duration&quot;: 600,</span>
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="err">  &quot;params&quot;: [64, 128, 64]</span>
-</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="err">}</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="err">  &quot;colorFrom&quot;: &quot;#000000&quot;,</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="err">  &quot;colorTo&quot;: &quot;#FF0000&quot;,</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="err">  &quot;duration&quot;: 600,</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="err">  &quot;params&quot;: [64, 128, 64]</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="err">}</span>
 </span></code></pre></div>
 <p>For chained steps (e.g. pulse → fade-out), use <code>POST /api/scenes/play</code> with a full scene body containing one layer with the desired sequence, and a free group ID.</p>
 <p>Response: <code>200 {}</code></p>
@@ -3026,7 +2926,7 @@
 <td><code>GET</code></td>
 <td><code>/api/panels</code></td>
 <td>—</td>
-<td><code>[{"address":N,"on":true,"color":"#RRGGBB","brightness":N},...]</code></td>
+<td><code>[{"address":N,"on":true,"color":"#RRGGBB"},...]</code></td>
 </tr>
 <tr>
 <td><code>GET</code></td>
@@ -3042,12 +2942,6 @@
 </tr>
 <tr>
 <td><code>PUT</code></td>
-<td><code>/api/panels/:address/brightness</code></td>
-<td><code>{"value":128}</code></td>
-<td><code>{}</code></td>
-</tr>
-<tr>
-<td><code>PUT</code></td>
 <td><code>/api/panels/:address/color</code></td>
 <td><code>{"color":"#FF0000"}</code></td>
 <td><code>{}</code></td>
@@ -3056,7 +2950,7 @@
 </table>
 <p><code>:address</code> is the panel's <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> index as returned by <code>GET /api/panels</code>.</p>
 <p><code>GET /api/panels</code> fetches the live state of each discovered panel over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr>. Panels that do not respond are omitted from the array. <code>connectedPanel</code> and <code>connectedEdge</code> in the edges response are <code>0</code> when an edge slot is unoccupied.</p>
-<p>These are the HTTP equivalents of the WebSocket <code>TOGGLE</code>, <code>SET_BRIGHTNESS</code>, <code>SET_COLOR</code>, <code>GET_PANELS_STATES</code>, and <code>GET_EDGES_LIST</code> commands.</p>
+<p>These are the HTTP equivalents of the WebSocket <code>TOGGLE</code>, <code>SET_COLOR</code>, <code>GET_PANELS_STATES</code>, and <code>GET_EDGES_LIST</code> commands.</p>
 <hr />
 <h2 id="3-error-handling">3. Error Handling<a class="headerlink" href="#3-error-handling" title="Permanent link">&para;</a></h2>
 <h3 id="http">HTTP<a class="headerlink" href="#http" title="Permanent link">&para;</a></h3>

@@ -1956,16 +1956,6 @@
 <td>Alias for <code>colorTo</code> when only one colour is needed</td>
 </tr>
 <tr>
-<td><code>brightnessFrom</code></td>
-<td>0–255</td>
-<td>Starting brightness (default 255)</td>
-</tr>
-<tr>
-<td><code>brightnessTo</code></td>
-<td>0–255</td>
-<td>Ending brightness (default 255)</td>
-</tr>
-<tr>
 <td><code>duration</code></td>
 <td>0–65535 ms</td>
 <td>Animation duration. <code>0</code> = infinite, valid only on the last step of a looping scene.</td>
@@ -1989,33 +1979,31 @@
 </table>
 <hr />
 <h3 id="solid">SOLID<a class="headerlink" href="#solid" title="Permanent link">&para;</a></h3>
-<p>Holds a static colour and brightness. Use as the last step to freeze the panel.</p>
-<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SOLID&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FF4400&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;brightnessTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">}</span>
+<p>Holds a static colour. Use as the last step to freeze the panel.</p>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SOLID&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FF4400&quot;</span><span class="p">}</span>
 </span></code></pre></div>
 <p>No parameters.</p>
 <hr />
 <h3 id="fade">FADE<a class="headerlink" href="#fade" title="Permanent link">&para;</a></h3>
-<p>Linearly interpolates brightness from <code>brightnessFrom</code> to <code>brightnessTo</code>. The colour stays fixed at <code>colorTo</code>.</p>
-<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FADE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#0044FF&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;brightnessFrom&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;brightnessTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1500</span><span class="p">}</span>
+<p>Linearly interpolates colour from <code>colorFrom</code> to <code>colorTo</code>.</p>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FADE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorFrom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#0044FF&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#000000&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1500</span><span class="p">}</span>
 </span></code></pre></div>
 <p>No parameters.</p>
 <hr />
 <h3 id="transition">TRANSITION<a class="headerlink" href="#transition" title="Permanent link">&para;</a></h3>
-<p>Simultaneously interpolates both colour (from <code>colorFrom</code> to <code>colorTo</code>) and brightness.</p>
+<p>Interpolates colour from <code>colorFrom</code> to <code>colorTo</code> (equivalent to FADE).</p>
 <div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;TRANSITION&quot;</span><span class="p">,</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">&quot;colorFrom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#000000&quot;</span><span class="p">,</span>
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="nt">&quot;colorTo&quot;</span><span class="p">:</span><span class="w">   </span><span class="s2">&quot;#FF4400&quot;</span><span class="p">,</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">&quot;brightnessFrom&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="nt">&quot;brightnessTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2000</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="p">}</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2000</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="p">}</span>
 </span></code></pre></div>
 <p>No parameters.</p>
 <hr />
 <h3 id="breathe">BREATHE<a class="headerlink" href="#breathe" title="Permanent link">&para;</a></h3>
-<p>Sinusoidal (parabolic-approximation) brightness envelope: rises to <code>brightnessTo</code>, falls back to <code>brightnessFrom</code>, and repeats. Colour is fixed at <code>colorTo</code>.</p>
-<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BREATHE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#0088FF&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;brightnessFrom&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;brightnessTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">220</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">}</span>
+<p>Sinusoidal (parabolic-approximation) colour envelope: oscillates between <code>colorFrom</code> and <code>colorTo</code> and repeats.</p>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BREATHE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorFrom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#000000&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#0088FF&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">}</span>
 </span></code></pre></div>
 <table>
 <thead>
@@ -2035,8 +2023,8 @@
 </table>
 <hr />
 <h3 id="pulse">PULSE<a class="headerlink" href="#pulse" title="Permanent link">&para;</a></h3>
-<p>3-phase (rise → hold → fall) brightness flash. Colour is fixed at <code>colorTo</code>.</p>
-<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;PULSE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FFFFFF&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;brightnessFrom&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;brightnessTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">600</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="p">]}</span>
+<p>3-phase (rise → hold → fall) colour flash. Interpolates between <code>colorFrom</code> and <code>colorTo</code>.</p>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;PULSE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorFrom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#000000&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FFFFFF&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">600</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="p">]}</span>
 </span></code></pre></div>
 <table>
 <thead>
@@ -2062,8 +2050,8 @@
 <p>The <strong>hold</strong> phase is whatever remains: <code>hold_pct = 255 − rise − fall</code>. If rise + fall exceeds 255, the firmware proportionally scales them so they sum to 255 and the hold is zero.</p>
 <hr />
 <h3 id="blink">BLINK<a class="headerlink" href="#blink" title="Permanent link">&para;</a></h3>
-<p>Binary on/off at a fixed period. On = <code>brightnessTo</code>, off = <code>brightnessFrom</code>. Colour from <code>colorTo</code>.</p>
-<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BLINK&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FF0000&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;brightnessFrom&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;brightnessTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">50</span><span class="p">]}</span>
+<p>Binary toggle between <code>colorTo</code> (on) and <code>colorFrom</code> (off) at a fixed period.</p>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BLINK&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorFrom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#000000&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FF0000&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">50</span><span class="p">]}</span>
 </span></code></pre></div>
 <table>
 <thead>
@@ -2084,7 +2072,7 @@
 <hr />
 <h3 id="hue_cycle">HUE_CYCLE<a class="headerlink" href="#hue_cycle" title="Permanent link">&para;</a></h3>
 <p>6-step integer HSV→RGB rainbow rotation. Ignores <code>colorFrom</code>/<code>colorTo</code>.</p>
-<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;HUE_CYCLE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;brightnessTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">10</span><span class="p">]}</span>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;HUE_CYCLE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">10</span><span class="p">]}</span>
 </span></code></pre></div>
 <table>
 <thead>
@@ -2104,8 +2092,8 @@
 </table>
 <hr />
 <h3 id="strobe">STROBE<a class="headerlink" href="#strobe" title="Permanent link">&para;</a></h3>
-<p>Binary flash at a frequency in Hz. On = <code>brightnessTo</code>, off = 0. Colour from <code>colorTo</code>.</p>
-<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;STROBE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FFFFFF&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;brightnessTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">20</span><span class="p">]}</span>
+<p>Binary flash at a frequency in Hz. On = <code>colorTo</code>, off = black.</p>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;STROBE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FFFFFF&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">20</span><span class="p">]}</span>
 </span></code></pre></div>
 <table>
 <thead>
@@ -2125,16 +2113,14 @@
 </table>
 <hr />
 <h3 id="reactive">REACTIVE<a class="headerlink" href="#reactive" title="Permanent link">&para;</a></h3>
-<p>Decay-model animation triggered by WebSocket beats. Rests at <code>colorFrom</code>/<code>brightnessFrom</code>; on trigger, instantly jumps to <code>colorTo</code>/<code>brightnessTo</code> then decays back over time.</p>
+<p>Decay-model animation triggered by WebSocket beats. Rests at <code>colorFrom</code>; on trigger, instantly jumps to <code>colorTo</code> then decays back over time.</p>
 <div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span>
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;REACTIVE&quot;</span><span class="p">,</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nt">&quot;colorFrom&quot;</span><span class="p">:</span><span class="w">      </span><span class="s2">&quot;#110000&quot;</span><span class="p">,</span>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="nt">&quot;colorTo&quot;</span><span class="p">:</span><span class="w">        </span><span class="s2">&quot;#FF8800&quot;</span><span class="p">,</span>
-</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span><span class="nt">&quot;brightnessFrom&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span>
-</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">  </span><span class="nt">&quot;brightnessTo&quot;</span><span class="p">:</span><span class="w">   </span><span class="mi">255</span><span class="p">,</span>
-</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">  </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">  </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">180</span><span class="p">]</span>
-</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="p">}</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nt">&quot;colorFrom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#110000&quot;</span><span class="p">,</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="nt">&quot;colorTo&quot;</span><span class="p">:</span><span class="w">   </span><span class="s2">&quot;#FF8800&quot;</span><span class="p">,</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">  </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">180</span><span class="p">]</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="p">}</span>
 </span></code></pre></div>
 <table>
 <thead>
@@ -2159,7 +2145,7 @@
 <p>Triggers are sent via WebSocket — see <a href="../api/#websocket-triggers">API → WebSocket Triggers</a>.</p>
 <hr />
 <h2 id="controller-runners">Controller Runners<a class="headerlink" href="#controller-runners" title="Permanent link">&para;</a></h2>
-<p>Runners are computed on the controller ESP each frame and send per-panel brightness over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr>. They appear as steps with a <code>"runner"</code> field instead of <code>"type"</code>.</p>
+<p>Runners are computed on the controller ESP each frame and send scaled <code>SET_COLOR</code> packets over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr>. They appear as steps with a <code>"runner"</code> field instead of <code>"type"</code>.</p>
 <h3 id="common-runner-step-fields">Common runner step fields<a class="headerlink" href="#common-runner-step-fields" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -2178,7 +2164,7 @@
 <tr>
 <td><code>color</code></td>
 <td>color ref</td>
-<td>Colour sent to all panels before the runner begins</td>
+<td>Colour for the runner effect</td>
 </tr>
 <tr>
 <td><code>duration</code></td>
@@ -2194,7 +2180,7 @@
 </table>
 <hr />
 <h3 id="wave">WAVE<a class="headerlink" href="#wave" title="Permanent link">&para;</a></h3>
-<p>A brightness envelope (triangular wave) sweeps from one end of the panel list to the other.</p>
+<p>A colour envelope (triangular wave) sweeps from one end of the panel list to the other. The colour is scaled by the wave intensity at each panel position.</p>
 <div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span>
 </span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;WAVE&quot;</span><span class="p">,</span>
 </span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">128</span><span class="p">},</span>
@@ -2220,7 +2206,7 @@
 </table>
 <hr />
 <h3 id="ripple">RIPPLE<a class="headerlink" href="#ripple" title="Permanent link">&para;</a></h3>
-<p>A brightness ring expands outward from an origin panel. Distance is based on index, not physical position.</p>
+<p>A colour ring expands outward from an origin panel. Distance is based on index, not physical position.</p>
 <div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span>
 </span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;RIPPLE&quot;</span><span class="p">,</span>
 </span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FF4400&quot;</span><span class="p">,</span>

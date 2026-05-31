@@ -1545,7 +1545,7 @@
 
 
 <h1 id="animations-scenes">Animations &amp; Scenes<a class="headerlink" href="#animations-scenes" title="Permanent link">&para;</a></h1>
-<p>Lightnet's animation system lets you compose multi-layer light shows in <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> and play them across any number of panels. Panel-local animations run entirely on the <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr> after a single setup packet — zero per-frame <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> traffic. Controller runners are computed on the ESP each frame and stream brightness values over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr>.</p>
+<p>Lightnet's animation system lets you compose multi-layer light shows in <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> and play them across any number of panels. Panel-local animations run entirely on the <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr> after a single setup packet — zero per-frame <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> traffic. Controller runners are computed on the ESP each frame and stream color values over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr>.</p>
 <hr />
 <h2 id="how-it-fits-together">How it fits together<a class="headerlink" href="#how-it-fits-together" title="Permanent link">&para;</a></h2>
 <div class="language-text highlight"><span class="filename">Text Only</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Scene
@@ -1568,19 +1568,19 @@
 <tbody>
 <tr>
 <td><code>SOLID</code></td>
-<td>Holds a static colour and brightness</td>
+<td>Holds a static colour</td>
 </tr>
 <tr>
 <td><code>FADE</code></td>
-<td>Linearly ramps brightness between two values</td>
+<td>Linearly interpolates from one colour to another</td>
 </tr>
 <tr>
 <td><code>TRANSITION</code></td>
-<td>Simultaneously interpolates colour and brightness</td>
+<td>Interpolates colour from <code>colorFrom</code> to <code>colorTo</code></td>
 </tr>
 <tr>
 <td><code>BREATHE</code></td>
-<td>Sinusoidal (parabolic) brightness envelope — loops smoothly</td>
+<td>Sinusoidal (parabolic) colour envelope — oscillates between <code>colorFrom</code> and <code>colorTo</code></td>
 </tr>
 <tr>
 <td><code>PULSE</code></td>
@@ -1605,7 +1605,7 @@
 </tbody>
 </table>
 <h2 id="controller-runners">Controller runners<a class="headerlink" href="#controller-runners" title="Permanent link">&para;</a></h2>
-<p>Computed on the ESP each frame. Per-panel brightness is streamed over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr>.</p>
+<p>Computed on the ESP each frame. Scaled color values are streamed over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr>.</p>
 <table>
 <thead>
 <tr>
@@ -1616,11 +1616,11 @@
 <tbody>
 <tr>
 <td><code>WAVE</code></td>
-<td>Triangular brightness envelope sweeps across the panel list</td>
+<td>Triangular colour envelope sweeps across the panel list</td>
 </tr>
 <tr>
 <td><code>RIPPLE</code></td>
-<td>Brightness ring expands outward from an origin panel</td>
+<td>Colour ring expands outward from an origin panel</td>
 </tr>
 <tr>
 <td><code>CHASE</code></td>

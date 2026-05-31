@@ -717,6 +717,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#platformio-environments" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1517,6 +1528,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#platformio-environments" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1625,9 +1647,118 @@
 </span></code></pre></div>
 <p>The same source tree builds both controller and panel binaries — the active PlatformIO environment selects which one.</p>
 <hr />
+<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
+<p>Before building, copy the example config files and edit them to match your hardware:</p>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>cp<span class="w"> </span>src/controller.config.hpp.example<span class="w"> </span>src/controller.config.hpp
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>cp<span class="w"> </span>src/panel.config.hpp.example<span class="w">       </span>src/panel.config.hpp
+</span></code></pre></div>
+<p>Both files ship with sane defaults, so no changes are required to do a first build. The <code>*.config.hpp</code> files are gitignored — keep per-device settings there without touching the tracked <code>*.example</code> files.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">controller.config.hpp</label><label for="__tabbed_1_2">panel.config.hpp</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Located at <code>src/controller.config.hpp</code>, included by <code>src/controller/config.hpp</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DEMO_MODE</code></td>
+<td><code>0</code></td>
+<td>Set to <code>1</code> to run the built-in light demo on startup</td>
+</tr>
+<tr>
+<td><code>CONFIG_PORTAL_TIMEOUT</code></td>
+<td><code>120</code></td>
+<td>Seconds the Wi-Fi captive portal stays open before timeout</td>
+</tr>
+<tr>
+<td><code>SERVER_PORT</code></td>
+<td><code>80</code></td>
+<td>HTTP server port</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Debug sub-switches</strong> — all default to <code>1</code> when <code>DEBUG=1</code> is set in <code>platformio.ini</code>. Uncomment and set to <code>0</code> to silence a specific area:</p>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Area silenced</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DEBUG_API</code></td>
+<td>WebSocket / HTTP API logs</td>
+</tr>
+<tr>
+<td><code>DEBUG_RGB_CTRL</code></td>
+<td>LED controller logs</td>
+</tr>
+<tr>
+<td><code>DEBUG_LIGHTNET_BUS</code></td>
+<td><abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> bus logs</td>
+</tr>
+<tr>
+<td><code>DEBUG_FLASHER</code></td>
+<td><abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> / panel flash logs</td>
+</tr>
+<tr>
+<td><code>DEBUG_DISCOVERY</code></td>
+<td>Panel discovery / ping logs</td>
+</tr>
+<tr>
+<td><code>DEBUG_INIT</code></td>
+<td>Startup / init logs</td>
+</tr>
+<tr>
+<td><code>DEBUG_DEMO</code></td>
+<td>Demo logs</td>
+</tr>
+</tbody>
+</table>
+<p>Pin assignments (<code>INITIALIZER_EDGE_PIN_NO</code>, <code>IIC_SDA_PIN</code>, etc.) have platform-specific defaults in <code>src/controller/config.hpp</code> and only need overriding for custom hardware.</p>
+</div>
+<div class="tabbed-block">
+<p>Located at <code>src/panel.config.hpp</code>, included by <code>src/panel/config.hpp</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NUMBER_OF_EDGES</code></td>
+<td><code>3</code></td>
+<td>Physical edges on the panel (3–5)</td>
+</tr>
+<tr>
+<td><code>EDGE_1_PIN</code> … <code>EDGE_5_PIN</code></td>
+<td>9–13</td>
+<td>Arduino pin for each edge output</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">6-edge panels</p>
+<p>Six edges require a separate pin-change <abbr title="Interrupt Service Routine — a small function the CPU jumps into when a hardware event fires.">ISR</abbr> — not yet supported.</p>
+</div>
+<p>Panel builds have <code>DEBUG=0</code> by default. To enable, set <code>DEBUG=1</code> for your panel environment in <code>platformio.ini</code>, then uncomment <code>DEBUG_RGB_CTRL</code> in this file.</p>
+</div>
+</div>
+</div>
+<hr />
 <h2 id="platformio-environments">PlatformIO environments<a class="headerlink" href="#platformio-environments" title="Permanent link">&para;</a></h2>
 <p>All environments are defined in <code>platformio.ini</code>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Controller</label><label for="__tabbed_1_2">Panel</label><label for="__tabbed_1_3">Bootloader (one-time)</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Controller</label><label for="__tabbed_2_2">Panel</label><label for="__tabbed_2_3">Bootloader (one-time)</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <table>
@@ -1722,35 +1853,35 @@
 <p class="admonition-title">Flash fuses through the bootloader environment</p>
 <p>Wrong fuse values can lock the microcontroller. Use <code>pio run -e atmega328p_bootloader -t fuses</code> — don't set them by hand unless you know exactly what you're doing.</p>
 </div>
-<div class="language-text highlight"><span class="filename">Text Only</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>lfuse = 0xF7  — 16 MHz external full-swing crystal
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>hfuse = 0xD0  — SPIEN, EESAVE, BOOTRST (boot from twiboot)
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>efuse = 0xFC  — BOD 4.3 V
+<div class="language-text highlight"><span class="filename">Text Only</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>lfuse = 0xF7  — 16 MHz external full-swing crystal
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>hfuse = 0xD0  — SPIEN, EESAVE, BOOTRST (boot from twiboot)
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>efuse = 0xFC  — BOD 4.3 V
 </span></code></pre></div>
 <p>One-time sequence per panel:</p>
-<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>atmega328p_bootloader<span class="w"> </span>-t<span class="w"> </span>fuses<span class="w">    </span><span class="c1"># set fuses</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>atmega328p_bootloader<span class="w"> </span>-t<span class="w"> </span>upload<span class="w">   </span><span class="c1"># burn twiboot</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>panel_atmega328pb<span class="w">  </span>-t<span class="w"> </span>upload<span class="w">      </span><span class="c1"># burn panel application</span>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>atmega328p_bootloader<span class="w"> </span>-t<span class="w"> </span>fuses<span class="w">    </span><span class="c1"># set fuses</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>atmega328p_bootloader<span class="w"> </span>-t<span class="w"> </span>upload<span class="w">   </span><span class="c1"># burn twiboot</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>panel_atmega328pb<span class="w">  </span>-t<span class="w"> </span>upload<span class="w">      </span><span class="c1"># burn panel application</span>
 </span></code></pre></div>
 <p>After this, future panel updates are wireless via the controller. See <a href="../ota/"><abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> &amp; Updates</a>.</p>
 <hr />
 <h2 id="common-commands">Common commands<a class="headerlink" href="#common-commands" title="Permanent link">&para;</a></h2>
-<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Build only</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_esp32
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Build + upload over USB</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_wemos<span class="w"> </span>-t<span class="w"> </span>upload
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># Upload over Wi-Fi (controller OTA via ArduinoOTA + mDNS)</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_wemos<span class="w"> </span>-t<span class="w"> </span>upload<span class="w"> </span>--upload-port<span class="w"> </span>lightnet-XXXX.local
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="c1"># Serial monitor — 57600 baud everywhere</span>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>pio<span class="w"> </span>device<span class="w"> </span>monitor<span class="w"> </span>-e<span class="w"> </span>controller_wemos
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="c1"># Build everything</span>
-</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>pio<span class="w"> </span>run
-</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>
-</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="c1"># Run native host-side unit tests (no device needed — see Testing)</span>
-</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>pio<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-e<span class="w"> </span>native
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Build only</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_esp32
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Build + upload over USB</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_wemos<span class="w"> </span>-t<span class="w"> </span>upload
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># Upload over Wi-Fi (controller OTA via ArduinoOTA + mDNS)</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_wemos<span class="w"> </span>-t<span class="w"> </span>upload<span class="w"> </span>--upload-port<span class="w"> </span>lightnet-XXXX.local
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="c1"># Serial monitor — 57600 baud everywhere</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>pio<span class="w"> </span>device<span class="w"> </span>monitor<span class="w"> </span>-e<span class="w"> </span>controller_wemos
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="c1"># Build everything</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>pio<span class="w"> </span>run
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="c1"># Run native host-side unit tests (no device needed — see Testing)</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>pio<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-e<span class="w"> </span>native
 </span></code></pre></div>
 <div class="admonition info">
 <p class="admonition-title">Post-build <code>.bin</code> generation</p>

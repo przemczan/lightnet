@@ -2090,7 +2090,7 @@
 <p>The firmware compiles to two completely different binaries from a single source tree. The flag <code>LIGHTNET_TARGET_CONTROLLER</code> (set in <code>platformio.ini</code> build flags) selects the target:</p>
 <pre class="mermaid"><code>graph LR
   M["src/main.cpp"] --&gt; CC{"LIGHTNET_TARGET_CONTROLLER?"}
-  CC -- defined --&gt; ESP["src/controller/main.h\n(ESP8266 / ESP32)"]
+  CC -- defined --&gt; ESP["src/controller/main.hpp\n(ESP8266 / ESP32)"]
   CC -- not defined --&gt; ATM["src/panel/main.hpp\n(ATmega)"]</code></pre>
 <p>There is no runtime branching — the preprocessor eliminates the unused side entirely. Code that belongs to both targets lives in <code>lib/Lightnet/Common/</code>.</p>
 <hr />
@@ -2155,7 +2155,7 @@
 </tr>
 <tr>
 <td><code>PanelsController</code></td>
-<td>Unicast commands to panels: color, brightness, configuration, enter-bootloader</td>
+<td>Unicast commands to panels: color, on/off, configuration, enter-bootloader</td>
 </tr>
 <tr>
 <td><code>Panel</code> / <code>Edge</code></td>
@@ -2251,7 +2251,7 @@
 <tbody>
 <tr>
 <td><code>AppearanceServer</code></td>
-<td><code>GET/PUT /api/appearance</code>, <code>/api/brightness</code>, <code>/api/colors</code>, <code>/api/palette</code></td>
+<td><code>GET /api/appearance</code>, <code>PATCH /api/appearance</code></td>
 <td>Appearance read/write</td>
 </tr>
 <tr>
@@ -2420,13 +2420,6 @@
 <td></td>
 </tr>
 <tr>
-<td>6</td>
-<td><code>SET_BRIGHTNESS</code></td>
-<td>C→P</td>
-<td>6 B</td>
-<td></td>
-</tr>
-<tr>
 <td>11</td>
 <td><code>PANEL_CONFIGURATION</code></td>
 <td>C→P</td>
@@ -2437,7 +2430,7 @@
 <td>12</td>
 <td><code>ANIMATION_PREPARE</code></td>
 <td>C→P</td>
-<td>21 B (v3) / 23 B (v4)</td>
+<td>21 B</td>
 <td>Unicast; buffers animation, arms for group start</td>
 </tr>
 <tr>
@@ -2544,8 +2537,8 @@
 <tbody>
 <tr>
 <td><code>WaveRunner</code></td>
-<td>Triangular brightness envelope sweeps across panel list</td>
-<td>Per-frame SET_BRIGHTNESS only on changed panels (~3/frame)</td>
+<td>Triangular envelope sweeps across panel list — sends scaled SET_COLOR per panel</td>
+<td>Per-frame SET_COLOR only on changed panels (~3/frame)</td>
 </tr>
 <tr>
 <td><code>RippleRunner</code></td>
@@ -2559,7 +2552,7 @@
 </tr>
 </tbody>
 </table>
-<p>Delta optimization: all runners cache <code>lastBrightness[]</code> per panel and only send <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> when the value changes.</p>
+<p>Delta optimization: all runners cache the last sent color level per panel and only send <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> when the value changes.</p>
 <h3 id="bandwidth-budget">Bandwidth budget<a class="headerlink" href="#bandwidth-budget" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
