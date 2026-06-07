@@ -1,0 +1,3489 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Modular addressable lighting — build, use, and develop">
+      
+      
+      
+        <link rel="canonical" href="https://przemczan.github.io/lightnet/lightnet-firmware/animations/scene-authoring/">
+      
+      
+        <link rel="prev" href="../concepts/">
+      
+      
+        <link rel="next" href="../types/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Scene Authoring - Lightnet</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/common.css">
+    
+      <link rel="stylesheet" href="../../../stylesheets/donation.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#scene-authoring-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Lightnet" class="md-header__button md-logo" aria-label="Lightnet" data-md-component="logo">
+      
+  <img src="../../../assets/images/logo-full.light.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Lightnet
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Scene Authoring
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/przemczan/lightnet" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    przemczan/lightnet
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Lightnet" class="md-nav__button md-logo" aria-label="Lightnet" data-md-component="logo">
+      
+  <img src="../../../assets/images/logo-full.light.svg" alt="logo">
+
+    </a>
+    Lightnet
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/przemczan/lightnet" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    przemczan/lightnet
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../getting-started/" class="md-nav__link ">
+              
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m13.13 22.19-1.63-3.83c1.57-.58 3.04-1.36 4.4-2.27zM5.64 12.5l-3.83-1.63 6.1-2.77C7 9.46 6.22 10.93 5.64 12.5M19.22 4c.28 0 .53 0 .74.05.17 1.39-.02 4.25-3.3 7.53-1.7 1.71-3.73 3.02-6.01 3.89l-2.15-2.1c.92-2.31 2.23-4.34 3.92-6.03C15.18 4.58 17.64 4 19.22 4m0-2c-1.98 0-4.98.69-8.22 3.93-2.19 2.19-3.5 4.6-4.35 6.71-.28.75-.09 1.57.46 2.13l2.13 2.12c.38.38.89.61 1.42.61.23 0 .47-.06.7-.15A19.1 19.1 0 0 0 18.07 13c5.66-5.66 3.54-10.61 3.54-10.61S20.7 2 19.22 2m-4.68 7.46c-.78-.78-.78-2.05 0-2.83s2.05-.78 2.83 0c.77.78.78 2.05 0 2.83s-2.05.78-2.83 0m-5.66 7.07-1.41-1.41zM6.24 22l3.64-3.64c-.34-.09-.67-.24-.97-.45L4.83 22zM2 22h1.41l4.77-4.76-1.42-1.41L2 20.59zm0-2.83 4.09-4.08c-.21-.3-.36-.62-.45-.97L2 17.76z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Get Started
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Get Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/hardware/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m21.71 20.29-1.42 1.42a1 1 0 0 1-1.41 0L7 9.85A3.8 3.8 0 0 1 6 10a4 4 0 0 1-3.78-5.3l2.54 2.54.53-.53 1.42-1.42.53-.53L4.7 2.22A4 4 0 0 1 10 6a3.8 3.8 0 0 1-.15 1l11.86 11.88a1 1 0 0 1 0 1.41M2.29 18.88a1 1 0 0 0 0 1.41l1.42 1.42a1 1 0 0 0 1.41 0l5.47-5.46-2.83-2.83M20 2l-4 2v2l-2.17 2.17 2 2L18 8h2l2-4Z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Build the hardware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/toolchain/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 8h-3V6c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v10h20V10c0-1.1-.9-2-2-2M9 6h6v2H9zm11 12H4v-3h2v1h2v-1h8v1h2v-1h2zm-2-5v-1h-2v1H8v-1H6v1H4v-3h16v3z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Prepare your tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/flashing/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Flash the firmware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/first-boot/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12 21 3.6-4.8c-1-.75-2.25-1.2-3.6-1.2s-2.6.45-3.6 1.2zm0-18C7.95 3 4.21 4.34 1.2 6.6L3 9c2.5-1.88 5.62-3 9-3s6.5 1.12 9 3l1.8-2.4C19.79 4.34 16.05 3 12 3m0 6c-2.7 0-5.19.89-7.2 2.4l1.8 2.4C8.1 12.67 9.97 12 12 12s3.9.67 5.4 1.8l1.8-2.4C17.19 9.89 14.7 9 12 9"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    4. First boot & Wi-Fi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/using-the-app/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 19H7V5h10m0-4H7c-1.11 0-2 .89-2 2v18a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Use the app
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/next-steps/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m7 17 3.2-6.8L17 7l-3.2 6.8zm5-5.9a.9.9 0 0 0-.9.9.9.9 0 0 0 .9.9.9.9 0 0 0 .9-.9.9.9 0 0 0-.9-.9M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2m0 2a8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8 8 8 0 0 0-8-8"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Where to go next
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 4h12v1h3v2h-3v2h3v2h-3v2h3v2h-3v2h3v2h-3v1H6v-1H3v-2h3v-2H3v-2h3v-2H3V9h3V7H3V5h3zm5 11v3h1v-3zm2 0v3h1v-3zm2 0v3h1v-3z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Firmware
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 9h2V7h-2m1 13c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m0-18A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2m-1 15h2v-6h-2z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m13.13 22.19-1.63-3.83c1.57-.58 3.04-1.36 4.4-2.27zM5.64 12.5l-3.83-1.63 6.1-2.77C7 9.46 6.22 10.93 5.64 12.5M19.22 4c.28 0 .53 0 .74.05.17 1.39-.02 4.25-3.3 7.53-1.7 1.71-3.73 3.02-6.01 3.89l-2.15-2.1c.92-2.31 2.23-4.34 3.92-6.03C15.18 4.58 17.64 4 19.22 4m0-2c-1.98 0-4.98.69-8.22 3.93-2.19 2.19-3.5 4.6-4.35 6.71-.28.75-.09 1.57.46 2.13l2.13 2.12c.38.38.89.61 1.42.61.23 0 .47-.06.7-.15A19.1 19.1 0 0 0 18.07 13c5.66-5.66 3.54-10.61 3.54-10.61S20.7 2 19.22 2m-4.68 7.46c-.78-.78-.78-2.05 0-2.83s2.05-.78 2.83 0c.77.78.78 2.05 0 2.83s-2.05.78-2.83 0m-5.66 7.07-1.41-1.41zM6.24 22l3.64-3.64c-.34-.09-.67-.24-.97-.45L4.83 22zM2 22h1.41l4.77-4.76-1.42-1.41L2 20.59zm0-2.83 4.09-4.08c-.21-.3-.36-.62-.45-.97L2 17.76z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Build & Flash
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 9V7h-2V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2h2v-2h-2v-2h2v-2h-2V9zm-4 10H4V5h14zM6 13h5v4H6zm6-6h4v3h-4zM6 7h5v5H6zm6 4h4v6h-4z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 2v6h2v3H5c-1.11 0-2 .89-2 2v3H1v6h6v-6H5v-3h6v3H9v6h6v-6h-2v-3h6v3h-2v6h6v-6h-2v-3c0-1.11-.89-2-2-2h-6V8h2V2z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 7H5a2 2 0 0 0-2 2v8h2v-4h2v4h2V9a2 2 0 0 0-2-2m0 4H5V9h2m7-2h-4v10h2v-4h2a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2m0 4h-2V9h2m6 0v6h1v2h-4v-2h1V9h-1V7h4v2Z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10.6 9.6 9 15 7.4 9.6 2 8l5.4-1.6L9 1l1.6 5.4L16 8zm6.4 4.6 4-2.2-2.2 4 2.2 4-4-2.2-4 2.2 2.2-4-2.2-4zM10 16l-1.7 3 1.7 3-3-1.7L4 22l1.7-3L4 16l3 1.7z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Animations & Scenes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Animations & Scenes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concepts/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 4H3a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2M3 19V6h8v13zm18 0h-8V6h8zm-7-9.5h6V11h-6zm0 2.5h6v1.5h-6zm0 2.5h6V16h-6z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.75 7.46 12 3.93l1.97-.39 2.74 3.53zm6.87-1.36-.78-3.92-3.93.78 2.74 3.54zM4 12h14.13l2-2H2v10a2 2 0 0 0 2 2h7v-2H4zm7.81-3.95L9.07 4.5l-1.97.41 2.75 3.53zM4.16 5.5l-.98.19a1.995 1.995 0 0 0-1.57 2.35L2 10l4.9-.97zM13 19.96V22h2.04l6.13-6.12-2.04-2.05zm9.85-6.49-1.32-1.32c-.2-.2-.53-.2-.72 0l-.98.98 2.04 2.04.98-.98c.2-.19.2-.52 0-.72"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Scene Authoring
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.75 7.46 12 3.93l1.97-.39 2.74 3.53zm6.87-1.36-.78-3.92-3.93.78 2.74 3.54zM4 12h14.13l2-2H2v10a2 2 0 0 0 2 2h7v-2H4zm7.81-3.95L9.07 4.5l-1.97.41 2.75 3.53zM4.16 5.5l-.98.19a1.995 1.995 0 0 0-1.57 2.35L2 10l4.9-.97zM13 19.96V22h2.04l6.13-6.12-2.04-2.05zm9.85-6.49-1.32-1.32c-.2-.2-.53-.2-.72 0l-.98.98 2.04 2.04.98-.98c.2-.19.2-.52 0-.72"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Scene Authoring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-the-mental-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. The mental model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-how-the-panels-are-connected-topology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. How the panels are connected — topology
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-how-playback-works-timing-choreography" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. How playback works — timing &amp; choreography
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-scene-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Scene properties
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-layer-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Layer properties
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-targeting-panels-the-panels-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Targeting panels — the panels field
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Targeting panels — the panels field">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-explicit-device-specific-exact" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Explicit (device-specific, exact)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-graph-selectors-portable-derived-from-the-tree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Graph selectors (portable, derived from the tree)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-tags-per-device-labels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Tags (per-device labels)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 Composition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-what-happens-when-nothing-matches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5 What happens when nothing matches
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-steps-the-sequence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Steps — the sequence
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Steps — the sequence">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-common-step-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Common step properties
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-panel-local-animation-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Panel-local animation types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-controller-runners" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Controller runners
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-directionality-the-source-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Directionality — the source field
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Directionality — the source field">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#geometric-directionality-directionalitygeometric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Geometric directionality (directionality:"geometric")
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-colours-palettes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Colours &amp; palettes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-per-device-topology-config-logical-root-tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Per-device topology config (logical root + tags)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. Per-device topology config (logical root + tags)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#logical-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logical root
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tags
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-validation-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Validation &amp; limits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-example-scene-library" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Example scene library
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Example scene library">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#solid-hold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solid hold
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#breathing-base-colour-driven-re-skins-with-appearance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Breathing, base-colour driven (re-skins with appearance)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#background-accent-two-layers-no-overlap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Background + accent (two layers, no overlap)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fade-chain-that-loops" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fade chain that loops
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wave-outward-from-the-centre-portable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wave outward from the centre (portable)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ripple-from-a-specific-panel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ripple from a specific panel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ripple-that-collapses-inward-reverse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ripple that collapses inward (reverse)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chase-around-the-leaves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chase around the leaves
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#choreography-with-startafter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choreography with startAfter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#async-background-synced-foreground" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Async background + synced foreground
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tag-driven-accent-per-device-intent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tag-driven accent (per-device intent)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#depth-rings-one-colour-per-ring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Depth rings (one colour per ring)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reactive-music-trigger-over-websocket" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reactive (music) — trigger over WebSocket
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#full-showcase-parallel-gated-async-runner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full showcase (parallel + gated + async + runner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../types/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4zm16-2v12H8V4zm0-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2m-8 12.5v-9l6 4.5z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Animation Types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 7H5a2 2 0 0 0-2 2v8h2v-4h2v4h2V9a2 2 0 0 0-2-2m0 4H5V9h2m7-2h-4v10h2v-4h2a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2m0 4h-2V9h2m6 0v6h1v2h-4v-2h1V9h-1V7h4v2Z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    API & Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ota/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.43-1.8 2.13-3.42Q9.07 4.1 11 4.1q.83 0 1.41.59.59.59.59 1.41v6.05l1.6-1.55L16 12l-4 4-4-4 1.4-1.4 1.6 1.55V6.1q-1.9.35-2.95 1.84T7 11h-.5q-1.45 0-2.47 1.03Q3 13.05 3 14.5T4.03 17q1.02 1 2.47 1h12q1.05 0 1.77-.73.73-.72.73-1.77t-.73-1.77Q19.55 13 18.5 13H17v-2q0-1.2-.55-2.24Q15.9 7.73 15 7V4.68q1.85.87 2.93 2.58Q19 9 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20M12 11.05"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    OTA & Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 8h-2.81c-.45-.8-1.07-1.5-1.82-2L17 4.41 15.59 3l-2.17 2.17a6 6 0 0 0-2.83 0L8.41 3 7 4.41 8.62 6c-.75.5-1.36 1.21-1.81 2H4v2h2.09c-.06.33-.09.66-.09 1v1H4v2h2v1c0 .34.03.67.09 1H4v2h2.81A5.99 5.99 0 0 0 15 20.18c.91-.52 1.67-1.28 2.19-2.18H20v-2h-2.09c.06-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.03-.67-.09-1H20zm-4 7a4 4 0 0 1-4 4 4 4 0 0 1-4-4v-4a4 4 0 0 1 4-4 4 4 0 0 1 4 4zm-2-5v2h-4v-2zm-4 4h4v2h-4z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1c0-.21-.07-.41-.18-.57L13 8.35V4h-2v4.35L5.18 18.43c-.11.16-.18.36-.18.57m1 3a3 3 0 0 1-3-3c0-.6.18-1.16.5-1.63L9 7.81V6a1 1 0 0 1-1-1V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1v1.81l5.5 9.56c.32.47.5 1.03.5 1.63a3 3 0 0 1-3 3zm7-6 1.34-1.34L16.27 18H7.73l2.66-4.61zm-.5-4a.5.5 0 0 1 .5.5.5.5 0 0 1-.5.5.5.5 0 0 1-.5-.5.5.5 0 0 1 .5-.5"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../lightnet-mobile/" class="md-nav__link ">
+              
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 19H7V5h10m0-4H7c-1.11 0-2 .89-2 2v18a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    App
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    App
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../lightnet-mobile/overview/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 9h2V7h-2m1 13c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m0-18A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2m-1 15h2v-6h-2z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../lightnet-mobile/getting-started/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m13.13 22.19-1.63-3.83c1.57-.58 3.04-1.36 4.4-2.27zM5.64 12.5l-3.83-1.63 6.1-2.77C7 9.46 6.22 10.93 5.64 12.5M19.22 4c.28 0 .53 0 .74.05.17 1.39-.02 4.25-3.3 7.53-1.7 1.71-3.73 3.02-6.01 3.89l-2.15-2.1c.92-2.31 2.23-4.34 3.92-6.03C15.18 4.58 17.64 4 19.22 4m0-2c-1.98 0-4.98.69-8.22 3.93-2.19 2.19-3.5 4.6-4.35 6.71-.28.75-.09 1.57.46 2.13l2.13 2.12c.38.38.89.61 1.42.61.23 0 .47-.06.7-.15A19.1 19.1 0 0 0 18.07 13c5.66-5.66 3.54-10.61 3.54-10.61S20.7 2 19.22 2m-4.68 7.46c-.78-.78-.78-2.05 0-2.83s2.05-.78 2.83 0c.77.78.78 2.05 0 2.83s-2.05.78-2.83 0m-5.66 7.07-1.41-1.41zM6.24 22l3.64-3.64c-.34-.09-.67-.24-.97-.45L4.83 22zM2 22h1.41l4.77-4.76-1.42-1.41L2 20.59zm0-2.83 4.09-4.08c-.21-.3-.36-.62-.45-.97L2 17.76z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../lightnet-mobile/development/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 3a2 2 0 0 0-2 2v4a2 2 0 0 1-2 2H3v2h1a2 2 0 0 1 2 2v4a2 2 0 0 0 2 2h2v-2H8v-5a2 2 0 0 0-2-2 2 2 0 0 0 2-2V5h2V3m6 0a2 2 0 0 1 2 2v4a2 2 0 0 0 2 2h1v2h-1a2 2 0 0 0-2 2v4a2 2 0 0 1-2 2h-2v-2h2v-5a2 2 0 0 1 2-2 2 2 0 0 1-2-2V5h-2V3z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../lightnet-mobile/connectivity/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12 21 3.6-4.8c-1-.75-2.25-1.2-3.6-1.2s-2.6.45-3.6 1.2zm0-18C7.95 3 4.21 4.34 1.2 6.6L3 9c2.5-1.88 5.62-3 9-3s6.5 1.12 9 3l1.8-2.4C19.79 4.34 16.05 3 12 3m0 6c-2.7 0-5.19.89-7.2 2.4l1.8 2.4C8.1 12.67 9.97 12 12 12s3.9.67 5.4 1.8l1.8-2.4C17.19 9.89 14.7 9 12 9"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Connectivity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../reference/" class="md-nav__link ">
+              
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.5c-1.35-.85-3.8-1.5-5.5-1.5-1.65 0-3.35.3-4.75 1.05-.1.05-.15.05-.25.05-.25 0-.5-.25-.5-.5V6c.6-.45 1.25-.75 2-1 1.11-.35 2.33-.5 3.5-.5 1.95 0 4.05.4 5.5 1.5 1.45-1.1 3.55-1.5 5.5-1.5 1.17 0 2.39.15 3.5.5.75.25 1.4.55 2 1v14.6c0 .25-.25.5-.5.5-.1 0-.15 0-.25-.05-1.4-.75-3.1-1.05-4.75-1.05-1.7 0-4.15.65-5.5 1.5M12 8v11.5c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5V7c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5m1 3.5c1.11-.68 2.6-1 4.5-1 .91 0 1.76.09 2.5.28V9.23c-.87-.15-1.71-.23-2.5-.23q-2.655 0-4.5.84zm4.5.17c-1.71 0-3.21.26-4.5.79v1.69c1.11-.65 2.6-.99 4.5-.99 1.04 0 1.88.08 2.5.24v-1.5c-.87-.16-1.71-.23-2.5-.23m2.5 2.9c-.87-.16-1.71-.24-2.5-.24-1.83 0-3.33.27-4.5.8v1.69c1.11-.66 2.6-.99 4.5-.99 1.04 0 1.88.08 2.5.24z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/glossary/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 11a2 2 0 0 1 2 2v4H4a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2zm-2 2v2h2v-2zm16 0v2h2v2h-2a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h2v2zm-8-6v4h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V7zm0 8h2v-2h-2z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/faq/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 18h2v-2h-2zm1-16A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m0-14a4 4 0 0 0-4 4h2a2 2 0 0 1 2-2 2 2 0 0 1 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5a4 4 0 0 0-4-4"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/release-notes/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m21.41 11.58-9-9A2 2 0 0 0 11 2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 .59 1.42l9 9A2 2 0 0 0 13 22a2 2 0 0 0 1.41-.59l7-7A2 2 0 0 0 22 13a2 2 0 0 0-.59-1.42M13 20l-9-9V4h7l9 9M6.5 5A1.5 1.5 0 1 1 5 6.5 1.5 1.5 0 0 1 6.5 5"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-the-mental-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. The mental model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-how-the-panels-are-connected-topology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. How the panels are connected — topology
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-how-playback-works-timing-choreography" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. How playback works — timing &amp; choreography
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-scene-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Scene properties
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-layer-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Layer properties
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-targeting-panels-the-panels-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Targeting panels — the panels field
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Targeting panels — the panels field">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-explicit-device-specific-exact" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Explicit (device-specific, exact)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-graph-selectors-portable-derived-from-the-tree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Graph selectors (portable, derived from the tree)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-tags-per-device-labels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Tags (per-device labels)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 Composition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-what-happens-when-nothing-matches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5 What happens when nothing matches
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-steps-the-sequence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Steps — the sequence
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Steps — the sequence">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-common-step-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Common step properties
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-panel-local-animation-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Panel-local animation types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-controller-runners" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Controller runners
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-directionality-the-source-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Directionality — the source field
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Directionality — the source field">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#geometric-directionality-directionalitygeometric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Geometric directionality (directionality:"geometric")
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-colours-palettes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Colours &amp; palettes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-per-device-topology-config-logical-root-tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Per-device topology config (logical root + tags)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. Per-device topology config (logical root + tags)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#logical-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logical root
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tags
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-validation-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Validation &amp; limits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-example-scene-library" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Example scene library
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Example scene library">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#solid-hold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solid hold
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#breathing-base-colour-driven-re-skins-with-appearance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Breathing, base-colour driven (re-skins with appearance)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#background-accent-two-layers-no-overlap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Background + accent (two layers, no overlap)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fade-chain-that-loops" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fade chain that loops
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wave-outward-from-the-centre-portable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wave outward from the centre (portable)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ripple-from-a-specific-panel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ripple from a specific panel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ripple-that-collapses-inward-reverse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ripple that collapses inward (reverse)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chase-around-the-leaves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chase around the leaves
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#choreography-with-startafter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choreography with startAfter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#async-background-synced-foreground" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Async background + synced foreground
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tag-driven-accent-per-device-intent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tag-driven accent (per-device intent)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#depth-rings-one-colour-per-ring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Depth rings (one colour per ring)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reactive-music-trigger-over-websocket" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reactive (music) — trigger over WebSocket
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#full-showcase-parallel-gated-async-runner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full showcase (parallel + gated + async + runner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../../.." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Home
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../../" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Firmware
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Animations & Scenes
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="scene-authoring-guide">Scene Authoring Guide<a class="headerlink" href="#scene-authoring-guide" title="Permanent link">&para;</a></h1>
+<p>Everything you need to write Lightnet scenes by hand and use every feature to its full
+potential: how scenes work, how the panel network is shaped, every <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> property, how to
+target panels and give effects direction, and a library of ready-to-use example scenes.</p>
+<p>This guide is the authoring home. Two reference docs go deeper on specific pieces and are
+linked where relevant:</p>
+<ul>
+<li><a href="../types/">Animation Types</a> — the exhaustive per-type / per-runner parameter tables.</li>
+<li><a href="../concepts/">Concepts</a> — palette internals and the lower-level timing model.</li>
+</ul>
+<p>Scenes are <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr>. The exact same document is used whether you <code>POST</code> it to play inline, save
+it for later, or store it as a file — see the <a href="../api/">HTTP API</a>.</p>
+<hr />
+<h2 id="1-the-mental-model">1. The mental model<a class="headerlink" href="#1-the-mental-model" title="Permanent link">&para;</a></h2>
+<p>A <strong>scene</strong> is a light show. It is built from three nested pieces:</p>
+<pre class="mermaid"><code>graph TD
+  Scene["Scene — the whole show (loops or plays once)"]
+  Scene --&gt; L1["Layer · group: ambient · panels: all"]
+  Scene --&gt; L2["Layer · group: accent · panels: leaves"]
+  L1 --&gt; A1["Step 1 — TRANSITION 3s"]
+  L1 --&gt; A2["Step 2 — BREATHE 4s (loop)"]
+  L2 --&gt; B1["Step 1 — RIPPLE 2s (source: root)"]</code></pre>
+<ul>
+<li>A <strong>scene</strong> holds 1–8 <strong>layers</strong> that all play <strong>at the same time</strong>.</li>
+<li>A <strong>layer</strong> targets a <strong>set of panels</strong> and runs a <strong>sequence</strong> of 1–12 <strong>steps</strong>, one
+  after another.</li>
+<li>A <strong>step</strong> is one animation segment with a duration.</li>
+</ul>
+<p>Two kinds of step exist, and the difference matters for how they behave:</p>
+<table>
+<thead>
+<tr>
+<th>Step kind</th>
+<th>Field</th>
+<th>Runs where</th>
+<th>Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Panel-local animation</strong></td>
+<td><code>"type"</code></td>
+<td>On each panel's own chip (<abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr>)</td>
+<td>One setup packet, then <strong>zero</strong> per-frame traffic</td>
+</tr>
+<tr>
+<td><strong>Controller runner</strong></td>
+<td><code>"runner"</code></td>
+<td>On the controller (ESP), every frame</td>
+<td>A <code>SET_COLOR</code> packet per panel per frame</td>
+</tr>
+</tbody>
+</table>
+<p>A panel-local animation (BREATHE, FADE, …) is told once <em>what</em> to do and runs itself. A
+runner (WAVE, RIPPLE, CHASE) is a <em>moving</em> effect the controller computes by sending each
+panel a new colour every frame. Use panel-local types for per-panel effects; use runners for
+motion <em>across</em> panels.</p>
+<hr />
+<h2 id="2-how-the-panels-are-connected-topology">2. How the panels are connected — topology<a class="headerlink" href="#2-how-the-panels-are-connected-topology" title="Permanent link">&para;</a></h2>
+<p>To use targeting and directional effects well, you need the shape of the network.</p>
+<p>A Lightnet device is a <strong>controller</strong> driving a <strong>tree</strong> of panels over a single <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> bus.
+During boot the controller <em>discovers</em> the panels and gives each a <strong>1-based index</strong>. Index
+<strong>1</strong> is always the panel wired to the controller (the <strong>root</strong>); the rest fan out from it.</p>
+<div class="language-text highlight"><span class="filename">Text Only</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a> controller
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>     │
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    [1]  root            depth 0
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    ╱ ╲
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a> [2]   [3]               depth 1
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  │      │
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a> [4]    [5]              depth 2
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>          │
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>         [6]             depth 3
+</span></code></pre></div>
+<p>For a given physical wiring these indices are <strong>stable across reboots</strong> — they only change
+if you physically re-wire the panels. From this tree the controller derives everything
+targeting and directionality use:</p>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>On the example tree</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>root</strong></td>
+<td>panel <code>1</code> (depth 0)</td>
+</tr>
+<tr>
+<td><strong>depth</strong></td>
+<td>hops from the root: <code>1</code>→0, <code>2</code>,<code>3</code>→1, <code>4</code>,<code>5</code>→2, <code>6</code>→3</td>
+</tr>
+<tr>
+<td><strong>leaves</strong></td>
+<td>panels with no children: <code>4</code>, <code>6</code></td>
+</tr>
+<tr>
+<td><strong>branches</strong></td>
+<td>panels that fork (≥2 children): <code>1</code></td>
+</tr>
+<tr>
+<td><strong>neighbors</strong> of <code>3</code></td>
+<td>panels wired directly to it: <code>1</code>, <code>5</code></td>
+</tr>
+<tr>
+<td><strong>subtree</strong> of <code>3</code></td>
+<td>itself + everything below: <code>3</code>, <code>5</code>, <code>6</code></td>
+</tr>
+<tr>
+<td><strong>canonical order</strong></td>
+<td>a stable depth-first walk: <code>1, 2, 4, 3, 5, 6</code></td>
+</tr>
+</tbody>
+</table>
+<p>Two consequences make scenes <strong>portable</strong> between devices with different panel counts and
+wiring:</p>
+<ol>
+<li>You can target panels by <strong>role in the tree</strong> ("the leaves", "two hops from the root")
+   instead of fixed numbers, so the same scene adapts to whatever panels exist.</li>
+<li>Moving effects travel by <strong>graph distance</strong>, so "ripple outward from the centre" means
+   the same thing on any device.</li>
+</ol>
+<blockquote>
+<p>The panel you call "the centre" can be changed per device with the <strong>logical root</strong>
+(§10) — without editing the scene.</p>
+</blockquote>
+<hr />
+<h2 id="3-how-playback-works-timing-choreography">3. How playback works — timing &amp; choreography<a class="headerlink" href="#3-how-playback-works-timing-choreography" title="Permanent link">&para;</a></h2>
+<p>When a scene starts, <strong>all panels are cleared to black</strong>, then:</p>
+<ul>
+<li>Every layer <strong>without</strong> <code>startAfter</code> begins immediately, in parallel.</li>
+<li>Within a layer, steps play in order; each advances when its <code>duration</code> elapses.</li>
+<li>A layer with <code>startAfter: "X"</code> stays dark until layer <code>X</code>'s whole sequence finishes.</li>
+</ul>
+<pre class="mermaid"><code>gantt
+  title Two layers, one gated (loop = true)
+  dateFormat x
+  axisFormat %Lms
+  section ambient (group)
+  TRANSITION 2s   :0, 2000
+  BREATHE 4s      :2000, 6000
+  section accent (startAfter ambient)
+  (waiting)       :crit, 0, 6000
+  WAVE 2s         :6000, 8000</code></pre>
+<p>When <strong>every</strong> non-async layer has finished, the <strong>scene-cycle barrier</strong> fires:</p>
+<ul>
+<li><code>loop: true</code> → the whole scene restarts, all layers together (they never drift apart).</li>
+<li><code>loop: false</code> → playback stops on the last frame.</li>
+</ul>
+<p><code>speed</code> scales every step's duration (e.g. <code>2.0</code> = twice as fast). An <strong>async</strong> layer opts
+out of the barrier and loops on its own; a <strong>gap</strong> step (no <code>type</code>/<code>runner</code>) just waits.
+The deep timing rules — async, the barrier, infinite steps — are covered in
+<a href="../concepts/#sequencing-timing">Concepts → Sequencing &amp; Timing</a>; the property summaries are
+in §5 below.</p>
+<hr />
+<h2 id="4-scene-properties">4. Scene properties<a class="headerlink" href="#4-scene-properties" title="Permanent link">&para;</a></h2>
+<p>The top-level object:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Required</th>
+<th>Default</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>schemaVersion</code></td>
+<td>no</td>
+<td><code>1</code></td>
+<td>Format version. Rejected (<code>409</code>) if newer than the firmware (currently <code>2</code>).</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>yes (to save)</td>
+<td>—</td>
+<td>1–18 chars, <code>[a-zA-Z0-9_-]</code>. The filename when stored.</td>
+</tr>
+<tr>
+<td><code>loop</code></td>
+<td>no</td>
+<td><code>false</code></td>
+<td>Restart the whole scene when all layers finish.</td>
+</tr>
+<tr>
+<td><code>speed</code></td>
+<td>no</td>
+<td><code>1.0</code></td>
+<td>Playback multiplier, clamped to <code>0.1</code>–<code>10.0</code>. Scales all durations.</td>
+</tr>
+<tr>
+<td><code>colors</code></td>
+<td>no</td>
+<td>white / black / black</td>
+<td>The three <strong>base colours</strong> (<code>primary</code>, <code>secondary</code>, <code>tertiary</code>) referenced by <code>useColor</code> and the <code>userColors</code> palette.</td>
+</tr>
+<tr>
+<td><code>palette</code></td>
+<td>no</td>
+<td><code>"userColors"</code></td>
+<td>Default palette for layers that don't override it.</td>
+</tr>
+<tr>
+<td><code>layers</code></td>
+<td>yes</td>
+<td>—</td>
+<td>1–8 layer objects, played simultaneously.</td>
+</tr>
+</tbody>
+</table>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my_scene&quot;</span><span class="p">,</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">&quot;speed&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ocean&quot;</span><span class="p">,</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">&quot;colors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;primary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#10C0FF&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;secondary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#0030A0&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;tertiary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#000000&quot;</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="cm">/* … */</span><span class="w"> </span><span class="p">]</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="p">}</span>
+</span></code></pre></div>
+<ul>
+<li><strong><code>name</code></strong> is required to <em>save</em> a scene (<code>POST /api/scenes</code>); inline play tolerates it but
+  keep it set. Only <code>[a-zA-Z0-9_-]</code>, max 18.</li>
+<li><strong><code>loop</code></strong> governs the <em>whole scene</em>. To loop a single effect forever instead, use a
+  one-layer scene whose last step is infinite or <code>loop</code>ed (see §7).</li>
+<li><strong><code>speed</code></strong> is global; per-step timing is the step's <code>duration</code> divided by <code>speed</code>.</li>
+<li><strong><code>colors</code></strong> + <strong><code>palette</code></strong> feed the colour system (§9). If you omit <code>palette</code>, the scene
+  uses <code>userColors</code>, a gradient built live from the three base colours.</li>
+</ul>
+<hr />
+<h2 id="5-layer-properties">5. Layer properties<a class="headerlink" href="#5-layer-properties" title="Permanent link">&para;</a></h2>
+<p>Each entry in <code>layers</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Required</th>
+<th>Default</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>group</code></td>
+<td>yes</td>
+<td>—</td>
+<td>A name (<code>"ambient"</code>) or number (1–254). <strong>Unique</strong> within the scene.</td>
+</tr>
+<tr>
+<td><code>panels</code></td>
+<td>no</td>
+<td><code>"all"</code></td>
+<td>Which panels this layer drives — see §6.</td>
+</tr>
+<tr>
+<td><code>sequence</code></td>
+<td>yes</td>
+<td>—</td>
+<td>1–12 steps, played in order — see §7.</td>
+</tr>
+<tr>
+<td><code>startAfter</code></td>
+<td>no</td>
+<td>—</td>
+<td>Group <strong>name</strong> to wait for; until it finishes this layer is dark.</td>
+</tr>
+<tr>
+<td><code>async</code></td>
+<td>no</td>
+<td><code>false</code></td>
+<td>Loop this layer independently of the scene barrier (ignored if <code>startAfter</code> is set).</td>
+</tr>
+<tr>
+<td><code>palette</code></td>
+<td>no</td>
+<td>scene default</td>
+<td>Palette override for this layer's panels (see the overlap caveat in §9).</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong><code>group</code></strong> is the synchronisation unit — all panels in a group start a step together.
+  Prefer <strong>names</strong> (auto-mapped to IDs in first-seen order); don't mix names and numbers in
+  one scene, and never reuse a group across two layers.</li>
+<li><strong><code>startAfter</code></strong> turns the flat "all start at t=0" model into a dependency graph for
+  choreography. The target must exist, can't be the layer itself, can't form a cycle, and
+  can't have an infinite last step (it would never finish).</li>
+<li><strong><code>async</code></strong> is for a background effect that should keep looping regardless of the
+  foreground. A scene with an async layer runs until explicitly stopped.</li>
+</ul>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ambient&quot;</span><span class="p">,</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ocean&quot;</span><span class="p">,</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BREATHE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4000</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="p">}</span>
+</span></code></pre></div>
+<hr />
+<h2 id="6-targeting-panels-the-panels-field">6. Targeting panels — the <code>panels</code> field<a class="headerlink" href="#6-targeting-panels-the-panels-field" title="Permanent link">&para;</a></h2>
+<p><code>panels</code> decides which panels a layer drives. It accepts three families of value, freely
+combined. All resolve <strong>at play time against this device's topology</strong> (§2).</p>
+<h3 id="61-explicit-device-specific-exact">6.1 Explicit (device-specific, exact)<a class="headerlink" href="#61-explicit-device-specific-exact" title="Permanent link">&para;</a></h3>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="nt">&quot;all&quot;</span><span class="w">            </span><span class="c1">// every discovered panel</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">]</span><span class="w">        </span><span class="c1">// exactly these 1-based indices (≤ 32, missing ones skipped)</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;exclude&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1">// everything except these</span>
+</span></code></pre></div>
+<p>Best when you're authoring for <em>your own</em> fixed setup and want precise control.</p>
+<h3 id="62-graph-selectors-portable-derived-from-the-tree">6.2 Graph selectors (portable, derived from the tree)<a class="headerlink" href="#62-graph-selectors-portable-derived-from-the-tree" title="Permanent link">&para;</a></h3>
+<p>A string token resolved from the topology — these make a scene adapt to any device:</p>
+<table>
+<thead>
+<tr>
+<th>Selector</th>
+<th>Targets</th>
+<th>On the §2 tree</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"root"</code></td>
+<td>the root panel</td>
+<td><code>{1}</code></td>
+</tr>
+<tr>
+<td><code>"leaves"</code></td>
+<td>panels with no children</td>
+<td><code>{4, 6}</code></td>
+</tr>
+<tr>
+<td><code>"branches"</code></td>
+<td>fork panels (≥2 children)</td>
+<td><code>{1}</code></td>
+</tr>
+<tr>
+<td><code>"depth:N"</code> / <code>"depth:A-B"</code></td>
+<td>panels N hops from root (or band A–B)</td>
+<td><code>depth:1</code> → <code>{2,3}</code>, <code>depth:1-2</code> → <code>{2,3,4,5}</code></td>
+</tr>
+<tr>
+<td><code>"subtree:N"</code></td>
+<td>panel N + all its descendants</td>
+<td><code>subtree:3</code> → <code>{3,5,6}</code></td>
+</tr>
+<tr>
+<td><code>"neighbors:N"</code></td>
+<td>panels wired directly to N</td>
+<td><code>neighbors:3</code> → <code>{1,5}</code></td>
+</tr>
+<tr>
+<td><code>"fraction:A-B"</code></td>
+<td>a slice of the canonical order, <code>A,B ∈ 0–1</code></td>
+<td><code>fraction:0-0.5</code> → first half</td>
+</tr>
+<tr>
+<td><code>"first:K"</code> / <code>"last:K"</code></td>
+<td>the first / last K panels in canonical order</td>
+<td><code>first:2</code> → <code>{1,2}</code></td>
+</tr>
+<tr>
+<td><code>"even"</code> / <code>"odd"</code></td>
+<td>by parity of canonical position</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><code>fraction</code> scales with panel count (portable "front half"); <code>first/last:K</code> is an absolute
+count. <code>depth</code>, <code>subtree</code>, <code>neighbors</code> follow the wiring.</p>
+<h3 id="63-tags-per-device-labels">6.3 Tags (per-device labels)<a class="headerlink" href="#63-tags-per-device-labels" title="Permanent link">&para;</a></h3>
+<p>A panel can be tagged on the device (e.g. <code>accent</code>, <code>left</code>) via the
+<a href="../api/#27-topology-logical-root-panel-tags">Topology API</a>. A scene then targets the label:</p>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tag:accent&quot;</span>
+</span></code></pre></div>
+<p>The tag resolves to whatever panels <em>this</em> device tagged, so a shared scene's intent ("light
+the accents") follows to other setups once their owner tags their panels. Tag names are
+<code>[a-zA-Z0-9_-]</code>, 1–15 chars.</p>
+<h3 id="64-composition">6.4 Composition<a class="headerlink" href="#64-composition" title="Permanent link">&para;</a></h3>
+<p>Combine any of the above with set algebra:</p>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;any&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;root&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;leaves&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w">            </span><span class="c1">// union  → {1,4,6}</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;all&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;subtree:3&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;leaves&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w">        </span><span class="c1">// intersect → {6}</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;not&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;subtree:3&quot;</span><span class="w"> </span><span class="p">}</span><span class="w">                    </span><span class="c1">// complement → {1,2,4}</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;any&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tag:accent&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;leaves&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w">       </span><span class="c1">// tags compose too</span>
+</span></code></pre></div>
+<h3 id="65-what-happens-when-nothing-matches">6.5 What happens when nothing matches<a class="headerlink" href="#65-what-happens-when-nothing-matches" title="Permanent link">&para;</a></h3>
+<p>If a selector resolves to <strong>no panels</strong> on the target device (e.g. <code>subtree:9</code> where panel 9
+doesn't exist, or an untagged <code>tag:accent</code>), the layer simply <strong>contributes nothing</strong> — the
+scene still plays, that layer is skipped. Explicit indices that don't exist are likewise
+skipped. Nothing errors at play time.</p>
+<div class="language-text highlight"><span class="filename">Text Only</span><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>panels: &quot;leaves&quot;          panels: &quot;subtree:3&quot;        panels: {not:&quot;subtree:3&quot;}
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>        [1]                       [1]                        [*1]
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>       ╱  ╲                      ╱  ╲                       ╱  ╲
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    [2]    [3]                [2]   [*3]                  [*2]  [3]
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>     │      │                  │      │                    │     │
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>   [*4]    [5]               [4]    [*5]                 [*4]   [5]
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>            │                         │                          │
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>          [*6]                      [*6]                        [6]
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>   → 4, 6                   → 3, 5, 6                   → 1, 2, 4
+</span></code></pre></div>
+<hr />
+<h2 id="7-steps-the-sequence">7. Steps — the <code>sequence</code><a class="headerlink" href="#7-steps-the-sequence" title="Permanent link">&para;</a></h2>
+<p>A step is one animation segment. It is <strong>either</strong> a panel-local animation (<code>type</code>) <strong>or</strong> a
+controller runner (<code>runner</code>) — never both — <strong>or</strong> a gap (neither).</p>
+<h3 id="71-common-step-properties">7.1 Common step properties<a class="headerlink" href="#71-common-step-properties" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Applies to</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td>panel-local</td>
+<td>Animation name (§7.2). Mutually exclusive with <code>runner</code>.</td>
+</tr>
+<tr>
+<td><code>runner</code></td>
+<td>runner</td>
+<td><code>WAVE</code> / <code>RIPPLE</code> / <code>CHASE</code> (§7.3).</td>
+</tr>
+<tr>
+<td><code>color</code> / <code>colorTo</code></td>
+<td>both</td>
+<td>The (target) colour — a <a href="#9-colours-palettes">colour reference</a>. <code>color</code> is an alias for <code>colorTo</code>.</td>
+</tr>
+<tr>
+<td><code>colorFrom</code></td>
+<td>most types</td>
+<td>Start colour (for fades, breathe, reactive rest, …).</td>
+</tr>
+<tr>
+<td><code>duration</code></td>
+<td>all</td>
+<td>Milliseconds, 0–65535. <code>0</code> = infinite, <strong>only</strong> on the last step.</td>
+</tr>
+<tr>
+<td><code>loop</code></td>
+<td>panel-local</td>
+<td>Repeat this step's animation for its <code>duration</code>.</td>
+</tr>
+<tr>
+<td><code>pingpong</code></td>
+<td>panel-local</td>
+<td>Reverse at the end instead of restarting.</td>
+</tr>
+<tr>
+<td><code>params</code></td>
+<td>both</td>
+<td>Up to 4 bytes (0–255), type-specific. Prefer the named keys below.</td>
+</tr>
+<tr>
+<td><code>source</code></td>
+<td>runner</td>
+<td>Where a moving effect emanates from (§8).</td>
+</tr>
+<tr>
+<td><code>reverse</code></td>
+<td>runner</td>
+<td>Flip the direction (§8).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="72-panel-local-animation-types">7.2 Panel-local animation types<a class="headerlink" href="#72-panel-local-animation-types" title="Permanent link">&para;</a></h3>
+<p>Set with <code>"type"</code>. Summary below; <strong>full parameter tables are in
+<a href="../types/#panel-local-animations">Animation Types</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th><code>type</code></th>
+<th>Does</th>
+<th>Key params (see types.md)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SOLID</code></td>
+<td>Holds one colour</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>FADE</code> / <code>TRANSITION</code></td>
+<td>Linear <code>colorFrom</code>→<code>colorTo</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>BREATHE</code></td>
+<td>Smooth oscillation between the two colours</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>PULSE</code></td>
+<td>Rise → hold → fall flash</td>
+<td><code>params[0]</code> rise, <code>params[1]</code> fall</td>
+</tr>
+<tr>
+<td><code>BLINK</code></td>
+<td>On/off square wave</td>
+<td><code>params[0]</code> half-period ms</td>
+</tr>
+<tr>
+<td><code>STROBE</code></td>
+<td>Flash at a frequency</td>
+<td><code>params[0]</code> Hz</td>
+</tr>
+<tr>
+<td><code>HUE_CYCLE</code></td>
+<td>Rainbow rotation (ignores colours)</td>
+<td><code>params[0]</code> speed</td>
+</tr>
+<tr>
+<td><code>REACTIVE</code></td>
+<td>Jumps to <code>colorTo</code> on a beat, decays to <code>colorFrom</code></td>
+<td><code>params[0]</code> decay rate</td>
+</tr>
+</tbody>
+</table>
+<p>A step with <strong>neither</strong> <code>type</code> nor <code>runner</code> is a <strong>gap</strong> — a timed hold (panels keep their
+current colour for <code>duration</code>). Use it to delay a layer or pause between effects.</p>
+<h3 id="73-controller-runners">7.3 Controller runners<a class="headerlink" href="#73-controller-runners" title="Permanent link">&para;</a></h3>
+<p>Set with <code>"runner"</code>. Runners are <em>moving</em> effects that sweep a coordinate across the targeted
+panels over <code>duration</code>:</p>
+<table>
+<thead>
+<tr>
+<th><code>runner</code></th>
+<th>Does</th>
+<th>Width</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>WAVE</code></td>
+<td>A bright band travels along the panels</td>
+<td><code>waveWidth</code> (rings)</td>
+</tr>
+<tr>
+<td><code>RIPPLE</code></td>
+<td>A ring expands outward from the source</td>
+<td><code>rippleWidth</code> (rings)</td>
+</tr>
+<tr>
+<td><code>CHASE</code></td>
+<td>A single lit ring steps outward</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>The <strong>direction</strong> of all three is set by <code>source</code>/<code>reverse</code> — see §8.</p>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;WAVE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;root&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;waveWidth&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2500</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+<hr />
+<h2 id="8-directionality-the-source-field">8. Directionality — the <code>source</code> field<a class="headerlink" href="#8-directionality-the-source-field" title="Permanent link">&para;</a></h2>
+<p>A runner needs to know <em>which way</em> to move. Lightnet expresses this as <strong>graph distance from
+a source</strong>: each targeted panel gets a coordinate equal to its hop-distance from the source
+set, and the effect sweeps that coordinate. This is portable — it works on any tree.</p>
+<p>Directionality is <strong>two independent choices</strong>: the field <strong>mode</strong> (<code>"directionality"</code>:
+<code>"topology"</code> <em>(default)</em> or <code>"geometric"</code>) and the <strong><code>"source"</code></strong> it emanates from.</p>
+<p><code>"source"</code> accepts:</p>
+<table>
+<thead>
+<tr>
+<th><code>source</code></th>
+<th>The effect…</th>
+<th>Coordinate (= distance from)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"root"</code> <em>(default)</em></td>
+<td>emanates outward from the root/centre</td>
+<td>distance from the root</td>
+</tr>
+<tr>
+<td><code>"leaves"</code></td>
+<td>converges inward from the tips</td>
+<td>distance from the nearest leaf</td>
+</tr>
+<tr>
+<td><code>"panel:N"</code></td>
+<td>emanates from panel N</td>
+<td>distance from panel N</td>
+</tr>
+<tr>
+<td><code>"all"</code></td>
+<td>every panel pulses together (degenerate)</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>In <strong>topology</strong> mode (default) "distance" is graph <strong>hops</strong>; in <strong>geometric</strong> mode it is physical
+distance (see below). <code>"reverse": true</code> flips the coordinate, so the effect travels the other way
+(e.g. a ripple that <strong>collapses inward</strong> to the root). A <code>source</code> that doesn't exist on a device
+falls back to <code>root</code>.</p>
+<h3 id="geometric-directionality-directionalitygeometric">Geometric directionality (<code>directionality:"geometric"</code>)<a class="headerlink" href="#geometric-directionality-directionalitygeometric" title="Permanent link">&para;</a></h3>
+<p>Topology mode sweeps along the <strong>wiring</strong> — great for portability, but it can't express straight
+motion across the piece, because graph distance has no notion of 2-D direction.
+<code>"directionality": "geometric"</code> adds that: the controller computes each panel's flat <strong>(x,y)
+position</strong> from the regular-polygon geometry of the tree (the <em>same</em> layout the mobile app draws
+in its visualizer — no setup, no extra hardware, no protocol change). It then behaves differently
+per runner:</p>
+<p><strong>WAVE / CHASE — straight axis sweep.</strong> A line at <code>"angle"</code> degrees sweeps across the layout.
+<code>source</code> is not used here (an axis has no origin, only a direction).</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"angle"</code></td>
+<td>Sweep <strong>axis</strong> in degrees <code>[0,360)</code>, measured in the device's computed layout plane. In the app's default (unrotated) view, <code>0</code> sweeps horizontally and <code>90</code> vertically; the exact on-screen direction also depends on the visualizer's view rotation, so treat the angle as a dial to tune by eye rather than a fixed compass bearing. <code>reverse</code> flips which way the sweep travels along the axis. (2° resolution.)</td>
+</tr>
+</tbody>
+</table>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;WAVE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;directionality&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;geometric&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;angle&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">128</span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;waveWidth&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+<p><strong>RIPPLE — Euclidean rings from the <code>source</code>.</strong> A ripple has no axis, so <code>angle</code> is ignored;
+instead a circle grows from the <code>source</code> centre and lights <strong>whatever panel surface it
+intersects</strong> (physical distance, not hops). Each panel is treated as its circumscribed disc, so it
+occupies a <em>range</em> of distances from the centre: as the ring grows it lights the nearest panel
+first, keeps it lit while the ring crosses it, and — because neighbouring panels overlap in
+distance — lights them together during the overlap rather than stepping through one panel at a
+time. This is where <code>source</code> shines in geometric mode:</p>
+<table>
+<thead>
+<tr>
+<th><code>source</code></th>
+<th>Geometric ripple</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"root"</code> <em>(default)</em></td>
+<td>one ripple from the root's centroid</td>
+</tr>
+<tr>
+<td><code>"panel:N"</code></td>
+<td>one ripple from panel N's centroid</td>
+</tr>
+<tr>
+<td><code>"leaves"</code></td>
+<td><strong>one ripple per leaf</strong>, all expanding inward at once (fronts meet in the middle)</td>
+</tr>
+</tbody>
+</table>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;RIPPLE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;directionality&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;geometric&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;leaves&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#30C0FF&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;rippleWidth&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2500</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+<p>Notes:
+- Needs <code>"schemaVersion": 3</code>.
+- The layout frame is anchored deterministically (lowest panel index), so a given <code>angle</code> always
+  produces the same sweep on a given device — but it is not a literal compass bearing; tune by eye.
+- <code>reverse</code> still applies (axis sweep: flips direction ≈ <code>angle + 180</code>; ripple: rings collapse
+  toward the source instead of expanding).
+- Width is on the same scale as the graph field, so <code>waveWidth</code>/<code>rippleWidth</code> behave comparably.
+- If the layout can't be embedded (e.g. degenerate topology), it falls back to topology mode with
+  the same <code>source</code>.
+- The legacy <code>"source": "geometric"</code> still parses (→ <code>directionality:geometric</code>, axis sweep from
+  the default root).</p>
+<p>On the §2 tree, a <code>RIPPLE</code> with <code>source:"root"</code> lights rings outward —
+<code>{1}</code> → <code>{2,3}</code> → <code>{4,5}</code> → <code>{6}</code>:</p>
+<div class="language-text highlight"><span class="filename">Text Only</span><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a> t→0      [1]●              t→½    [1]            t→1   [1]
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>         ╱   ╲                    ╱   ╲                ╱   ╲
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>       [2]   [3]               [2]●  [3]●           [2]   [3]
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>        │     │                 │     │              │     │
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>       [4]   [5]              [4]   [5]            [4]●  [5]●  … then [6]●
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>              │                       │                          │
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>             [6]                     [6]                        [6]
+</span></code></pre></div>
+<p><code>source:"leaves"</code> reverses the rings (starts at <code>4</code>,<code>6</code> and moves in). <code>waveWidth</code> /
+<code>rippleWidth</code> are measured in <strong>rings (hops)</strong>, so width <code>2</code> means "two hops thick"
+regardless of device size.</p>
+<blockquote>
+<p><strong>Migrating older scenes:</strong> the old <code>originPanel</code> field still works and is read as
+<code>source:"panel:N"</code>. <code>WAVE</code>/<code>CHASE</code> that relied on discovery order now default to
+<code>source:"root"</code>.</p>
+</blockquote>
+<hr />
+<h2 id="9-colours-palettes">9. Colours &amp; palettes<a class="headerlink" href="#9-colours-palettes" title="Permanent link">&para;</a></h2>
+<p>Every colour field (<code>color</code>, <code>colorTo</code>, <code>colorFrom</code>) accepts one of four forms:</p>
+<table>
+<thead>
+<tr>
+<th>Form</th>
+<th>Example</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hex string</td>
+<td><code>"#FF8000"</code></td>
+<td>A literal RGB colour.</td>
+</tr>
+<tr>
+<td>Channels</td>
+<td><code>{ "r": 255, "g": 128, "b": 0 }</code></td>
+<td>Literal RGB (any channel omitted = 255).</td>
+</tr>
+<tr>
+<td>Palette position</td>
+<td><code>{ "palette": 200 }</code></td>
+<td>Sample the active palette at 0–255.</td>
+</tr>
+<tr>
+<td>Base colour</td>
+<td><code>{ "useColor": 0 }</code></td>
+<td><code>0</code>=primary, <code>1</code>=secondary, <code>2</code>=tertiary from <code>colors</code>.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Palettes</strong> are 16-stop gradients. Use a built-in name (<code>rainbow</code>, <code>lava</code>, <code>ocean</code>,
+  <code>forest</code>, <code>party</code>, <code>sunset</code>, <code>aurora</code>, <code>embers</code>) or one you've uploaded. Full palette
+  schema and the built-in list are in <a href="../concepts/#palettes">Concepts → Palettes</a>.</li>
+<li><strong><code>userColors</code></strong> (the default palette) is built live from the three base colours, so
+  <code>{"palette":0/128/255}</code> map to primary/secondary/tertiary. Referencing <code>useColor</code> or
+  <code>userColors</code> lets one scene re-skin instantly when the base colours change.</li>
+<li><strong>Per-layer <code>palette</code></strong> overrides the scene palette for that layer's panels. ⚠ Each panel
+  holds only one active palette — don't point two layers with different palettes at the same
+  panel (last one wins). See the <a href="../concepts/#per-layer-palette-override">overlap caveat</a>.</li>
+</ul>
+<hr />
+<h2 id="10-per-device-topology-config-logical-root-tags">10. Per-device topology config (logical root + tags)<a class="headerlink" href="#10-per-device-topology-config-logical-root-tags" title="Permanent link">&para;</a></h2>
+<p>Two device-local settings let the same scene land correctly on different hardware. They are
+<strong>not</strong> part of the scene — they're set once per device via the
+<a href="../api/#27-topology-logical-root-panel-tags">Topology API</a> and persist on the controller.</p>
+<h3 id="logical-root">Logical root<a class="headerlink" href="#logical-root" title="Permanent link">&para;</a></h3>
+<p>Re-designates which panel counts as the "root" for <code>depth</code>, <code>subtree</code>, and the default
+runner <code>source:"root"</code>. Point it at the panel you think of as the centre and every
+center-oriented scene re-centres there — no scene edit:</p>
+<div class="language-text highlight"><span class="filename">Text Only</span><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a> default root = 1                 logical root = 3
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>        [1]  depth 0                    [1]  depth 1
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>       ╱   ╲                           ╱   ╲
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    [2]     [3]  depth 1            [2]    [*3] depth 0   ← new centre
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>     │       │                       │       │
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>    [4]     [5]                    [4]      [5]
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>              │                              │
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>             [6]                            [6]
+</span></code></pre></div>
+<p><code>PUT /api/topology/root</code> with <code>{"logicalRoot": 3}</code>. A value that doesn't exist on the device
+falls back to the physical root.</p>
+<h3 id="tags">Tags<a class="headerlink" href="#tags" title="Permanent link">&para;</a></h3>
+<p>A per-device map of panel → labels, set with <code>PUT /api/panel-tags</code>
+(<code>{"1":["accent"],"5":["accent"]}</code>). Scenes reference them as <code>"tag:&lt;name&gt;"</code> (§6.3). Because
+the mapping lives on the device, a shared scene's <code>tag:accent</code> lights <em>that owner's</em> accent
+panels.</p>
+<hr />
+<h2 id="11-validation-limits">11. Validation &amp; limits<a class="headerlink" href="#11-validation-limits" title="Permanent link">&para;</a></h2>
+<p>Saving or playing a scene validates all of these (HTTP <code>422</code> with a message on failure):</p>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Limit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scene <code>name</code></td>
+<td><code>[a-zA-Z0-9_-]</code>, 1–18 chars; required to save</td>
+</tr>
+<tr>
+<td><code>schemaVersion</code></td>
+<td>≤ firmware version (2) — else <code>409 schema_too_new</code></td>
+</tr>
+<tr>
+<td><code>speed</code></td>
+<td>clamped to 0.1–10.0</td>
+</tr>
+<tr>
+<td>Layers per scene</td>
+<td>1–8</td>
+</tr>
+<tr>
+<td><code>group</code></td>
+<td>unique across layers; name or 1–254 (don't mix)</td>
+</tr>
+<tr>
+<td>Steps per layer</td>
+<td>1–12</td>
+</tr>
+<tr>
+<td><code>type</code> + <code>runner</code></td>
+<td>mutually exclusive</td>
+</tr>
+<tr>
+<td><code>duration</code></td>
+<td>0–65535 ms; <code>0</code> only on the <strong>last</strong> step of a layer</td>
+</tr>
+<tr>
+<td>Explicit panel list</td>
+<td>indices 1–255, ≤ 32 per layer</td>
+</tr>
+<tr>
+<td>Tag name</td>
+<td><code>[a-zA-Z0-9_-]</code>, 1–15</td>
+</tr>
+<tr>
+<td><code>source</code></td>
+<td><code>root</code> / <code>leaves</code> / <code>panel:N</code></td>
+</tr>
+<tr>
+<td><code>params</code></td>
+<td>≤ 4 entries, each 0–255</td>
+</tr>
+<tr>
+<td><code>startAfter</code></td>
+<td>existing group, no self-reference, no cycle, target not infinite</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="12-example-scene-library">12. Example scene library<a class="headerlink" href="#12-example-scene-library" title="Permanent link">&para;</a></h2>
+<p>Copy-paste starting points. Every example here is valid against §11. Selectors/<code>source</code> make
+the topology-aware ones portable; the index-based ones assume your own wiring.</p>
+<h3 id="solid-hold">Solid hold<a class="headerlink" href="#solid-hold" title="Permanent link">&para;</a></h3>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;solid_warm&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;g&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SOLID&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FF6000&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="breathing-base-colour-driven-re-skins-with-appearance">Breathing, base-colour driven (re-skins with appearance)<a class="headerlink" href="#breathing-base-colour-driven-re-skins-with-appearance" title="Permanent link">&para;</a></h3>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;breathe&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span><span class="nt">&quot;colors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;primary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#0080FF&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;secondary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#000000&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;tertiary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#000000&quot;</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ambient&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">      </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BREATHE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorFrom&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;useColor&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;colorTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;useColor&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">                      </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4000</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="background-accent-two-layers-no-overlap">Background + accent (two layers, no overlap)<a class="headerlink" href="#background-accent-two-layers-no-overlap" title="Permanent link">&para;</a></h3>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bg_accent&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ocean&quot;</span><span class="p">,</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">  </span><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bg&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;not&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;leaves&quot;</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">      </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BREATHE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">160</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;accent&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;leaves&quot;</span><span class="p">,</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">      </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;PULSE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorFrom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#000000&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FFFFFF&quot;</span><span class="p">,</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="w">                      </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">900</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="mi">96</span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="fade-chain-that-loops">Fade chain that loops<a class="headerlink" href="#fade-chain-that-loops" title="Permanent link">&para;</a></h3>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;fade_chain&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;g&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FADE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorFrom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FF0000&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#00FF00&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1500</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FADE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorFrom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#00FF00&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#0000FF&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1500</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FADE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorFrom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#0000FF&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FF0000&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1500</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="wave-outward-from-the-centre-portable">Wave outward from the centre (portable)<a class="headerlink" href="#wave-outward-from-the-centre-portable" title="Permanent link">&para;</a></h3>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;wave_out&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lava&quot;</span><span class="p">,</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;g&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">      </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;WAVE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;root&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">210</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="w">                      </span><span class="nt">&quot;waveWidth&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2500</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="ripple-from-a-specific-panel">Ripple from a specific panel<a class="headerlink" href="#ripple-from-a-specific-panel" title="Permanent link">&para;</a></h3>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ripple_p3&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;g&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">      </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;RIPPLE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;panel:3&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#30C0FF&quot;</span><span class="p">,</span>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">                      </span><span class="nt">&quot;rippleWidth&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1800</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="ripple-that-collapses-inward-reverse">Ripple that collapses inward (reverse)<a class="headerlink" href="#ripple-that-collapses-inward-reverse" title="Permanent link">&para;</a></h3>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ripple_in&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;g&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">      </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;RIPPLE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;leaves&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FFB050&quot;</span><span class="p">,</span>
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="w">                      </span><span class="nt">&quot;rippleWidth&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2000</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="chase-around-the-leaves">Chase around the leaves<a class="headerlink" href="#chase-around-the-leaves" title="Permanent link">&para;</a></h3>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;chase_leaves&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">  </span><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;g&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;leaves&quot;</span><span class="p">,</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">      </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CHASE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;root&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;useColor&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1200</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="choreography-with-startafter">Choreography with <code>startAfter</code><a class="headerlink" href="#choreography-with-startafter" title="Permanent link">&para;</a></h3>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;intro_then_main&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;intro&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;root&quot;</span><span class="p">,</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">      </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;PULSE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorFrom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#000000&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FFFFFF&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">700</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;main&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;startAfter&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;intro&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="w">      </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;WAVE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;root&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#00FFAA&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;waveWidth&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2500</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="async-background-synced-foreground">Async background + synced foreground<a class="headerlink" href="#async-background-synced-foreground" title="Permanent link">&para;</a></h3>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;async_bg&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">  </span><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bg&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;async&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="w">      </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BREATHE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#001830&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">6000</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;fg&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;leaves&quot;</span><span class="p">,</span>
+</span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="w">      </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;RIPPLE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;root&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FF4080&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;rippleWidth&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1500</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="tag-driven-accent-per-device-intent">Tag-driven accent (per-device intent)<a class="headerlink" href="#tag-driven-accent-per-device-intent" title="Permanent link">&para;</a></h3>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tag_accent&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;party&quot;</span><span class="p">,</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">  </span><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;base&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;not&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tag:accent&quot;</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="w">      </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SOLID&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;hi&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tag:accent&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;async&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="w">      </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;STROBE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FFFFFF&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2000</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="depth-rings-one-colour-per-ring">Depth rings (one colour per ring)<a class="headerlink" href="#depth-rings-one-colour-per-ring" title="Permanent link">&para;</a></h3>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;depth_rings&quot;</span><span class="p">,</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">  </span><span class="nt">&quot;colors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;primary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FF3000&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;secondary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FFD000&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;tertiary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#00A0FF&quot;</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="w">  </span><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;r0&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;depth:0&quot;</span><span class="p">,</span>
+</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="w">      </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SOLID&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;useColor&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-23-6"><a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;r1&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;depth:1&quot;</span><span class="p">,</span>
+</span><span id="__span-23-7"><a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="w">      </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SOLID&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;useColor&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-23-8"><a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;r2&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;depth:2-9&quot;</span><span class="p">,</span>
+</span><span id="__span-23-9"><a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a><span class="w">      </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SOLID&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;useColor&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="reactive-music-trigger-over-websocket">Reactive (music) — trigger over WebSocket<a class="headerlink" href="#reactive-music-trigger-over-websocket" title="Permanent link">&para;</a></h3>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;reactive&quot;</span><span class="p">,</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">  </span><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;beat&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">      </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;REACTIVE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorFrom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#100010&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FF00C0&quot;</span><span class="p">,</span>
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">                      </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">200</span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+<p>Send beats with <code>POST /api/animations/trigger</code> or the WebSocket <code>ANIMATION_TRIGGER</code> command —
+see <a href="../api/#reactive-trigger-http-alternative-to-websocket">API → Reactive trigger</a>.</p>
+<h3 id="full-showcase-parallel-gated-async-runner">Full showcase (parallel + gated + async + runner)<a class="headerlink" href="#full-showcase-parallel-gated-async-runner" title="Permanent link">&para;</a></h3>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;showcase&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;aurora&quot;</span><span class="p">,</span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">  </span><span class="nt">&quot;colors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;primary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#00FFC0&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;secondary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#8000FF&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;tertiary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#000000&quot;</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">  </span><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-25-4"><a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ambient&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;async&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-25-5"><a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="w">      </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BREATHE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorFrom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#000010&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">90</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-25-6"><a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="w">                      </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">7000</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-25-7"><a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;spine&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;not&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;leaves&quot;</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-25-8"><a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a><span class="w">      </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-25-9"><a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a><span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-25-10"><a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a><span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;WAVE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;root&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">220</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;waveWidth&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2600</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-25-11"><a id="__codelineno-25-11" name="__codelineno-25-11" href="#__codelineno-25-11"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tips&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;startAfter&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;spine&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;leaves&quot;</span><span class="p">,</span>
+</span><span id="__span-25-12"><a id="__codelineno-25-12" name="__codelineno-25-12" href="#__codelineno-25-12"></a><span class="w">      </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;PULSE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorFrom&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#000000&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;colorTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FFFFFF&quot;</span><span class="p">,</span>
+</span><span id="__span-25-13"><a id="__codelineno-25-13" name="__codelineno-25-13" href="#__codelineno-25-13"></a><span class="w">                      </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">600</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="mi">120</span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+  <footer class="md-footer">
+    <div class="md-footer__inner md-grid">
+      <div class="md-footer-custom">
+        
+        <div class="md-footer-social">
+          
+          <a href="https://github.com/przemczan/lightnet" title="Documentation hub" class="md-footer-social__link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+            <span class="md-footer-social__name">Documentation hub</span>
+          </a>
+          
+          <a href="https://github.com/przemczan/lightnet-firmware" title="Firmware" class="md-footer-social__link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+            <span class="md-footer-social__name">Firmware</span>
+          </a>
+          
+          <a href="https://github.com/przemczan/lightnet-mobile" title="Mobile App" class="md-footer-social__link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+            <span class="md-footer-social__name">Mobile App</span>
+          </a>
+          
+        </div>
+        
+      </div>
+    </div>
+  </footer>
+  <div class="donate-widget">
+    <a class="donate-btn" id="donateCopy"
+       href="ethereum:0x6eb7Ac0FBc7bD95595Eb221681CC2Ba7aeDfd54D"
+       aria-label="Support Lightnet via ETH">
+      <span class="donate-icon">⟠</span>
+      <span class="donate-label">Donate</span>
+      <span class="donate-address">0x6eb7Ac0FBc7bD95595Eb221681CC2Ba7aeDfd54D</span>
+      <span class="donate-copied" id="donateCopied">Copied!</span>
+    </a>
+  </div>
+  <script>
+    (function () {
+      var btn = document.getElementById('donateCopy');
+      var copied = document.getElementById('donateCopied');
+      var addr = '0x6eb7Ac0FBc7bD95595Eb221681CC2Ba7aeDfd54D';
+      btn.addEventListener('click', function () {
+        navigator.clipboard.writeText(addr).then(function () {
+          copied.classList.add('donate-copied--visible');
+          setTimeout(function () { copied.classList.remove('donate-copied--visible'); }, 1800);
+        });
+      });
+    })();
+  </script>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.path", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tooltips", "navigation.instant.preview"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

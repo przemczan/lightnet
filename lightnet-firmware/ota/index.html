@@ -774,6 +774,8 @@
       
         
       
+        
+      
     
     
     
@@ -842,6 +844,36 @@
     
   
     Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../animations/scene-authoring/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.75 7.46 12 3.93l1.97-.39 2.74 3.53zm6.87-1.36-.78-3.92-3.93.78 2.74 3.54zM4 12h14.13l2-2H2v10a2 2 0 0 0 2 2h7v-2H4zm7.81-3.95L9.07 4.5l-1.97.41 2.75 3.53zM4.16 5.5l-.98.19a1.995 1.995 0 0 0-1.57 2.35L2 10l4.9-.97zM13 19.96V22h2.04l6.13-6.12-2.04-2.05zm9.85-6.49-1.32-1.32c-.2-.2-.53-.2-.72 0l-.98.98 2.04 2.04.98-.98c.2-.19.2-.52 0-.72"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Scene Authoring
   
 
     
@@ -1819,16 +1851,16 @@
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">twibootClient</span><span class="o">-&gt;</span><span class="n">writePage</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">);</span><span class="w">  </span><span class="c1">// 2 × 64-byte chunks</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">twibootClient</span><span class="o">-&gt;</span><span class="n">startApp</span><span class="p">();</span>
 </span></code></pre></div>
-<p><code>PanelFlasher</code> reads <code>/panel_fw.bin</code> from <abbr title="SPI Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">SPIFFS</abbr> 128 bytes at a time — the full binary is never buffered in RAM.</p>
+<p><code>PanelFlasher</code> reads <code>/panel_fw.bin</code> from LittleFS 128 bytes at a time — the full binary is never buffered in RAM.</p>
 <h3 id="http-upload-flow">HTTP upload flow<a class="headerlink" href="#http-upload-flow" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>sequenceDiagram
   participant Client
   participant Controller
-  participant SPIFFS
+  participant LittleFS
   participant Panels
 
   Client-&gt;&gt;Controller: POST /api/firmware/panels (raw .bin body)
-  Controller-&gt;&gt;SPIFFS: Stream to /panel_fw.bin
+  Controller-&gt;&gt;LittleFS: Stream to /panel_fw.bin
   Controller-&gt;&gt;Client: 200 {"status":"flashing","panels":N}
   loop per panel (main loop)
     Controller-&gt;&gt;Panels: ENTER_BOOTLOADER → flash via twiboot
@@ -1883,7 +1915,7 @@
 <p>Controller replies:</p>
 <ul>
 <li><code>READY\n</code> — after the header is received</li>
-<li><code>OK\n</code> — after <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> validates and binary is saved to <abbr title="SPI Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">SPIFFS</abbr></li>
+<li><code>OK\n</code> — after <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> validates and binary is saved to LittleFS</li>
 <li><code>ERR:&lt;message&gt;\n</code> — on any failure</li>
 </ul>
 <h3 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h3>

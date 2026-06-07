@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://przemczan.github.io/lightnet/lightnet-firmware/animations/types/">
       
       
-        <link rel="prev" href="../concepts/">
+        <link rel="prev" href="../scene-authoring/">
       
       
         <link rel="next" href="../api/">
@@ -776,6 +776,8 @@
       
         
       
+        
+      
     
     
     
@@ -844,6 +846,36 @@
     
   
     Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scene-authoring/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.75 7.46 12 3.93l1.97-.39 2.74 3.53zm6.87-1.36-.78-3.92-3.93.78 2.74 3.54zM4 12h14.13l2-2H2v10a2 2 0 0 0 2 2h7v-2H4zm7.81-3.95L9.07 4.5l-1.97.41 2.75 3.53zM4.16 5.5l-.98.19a1.995 1.995 0 0 0-1.57 2.35L2 10l4.9-.97zM13 19.96V22h2.04l6.13-6.12-2.04-2.05zm9.85-6.49-1.32-1.32c-.2-.2-.53-.2-.72 0l-.98.98 2.04 2.04.98-.98c.2-.19.2-.52 0-.72"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Scene Authoring
   
 
     
@@ -2172,79 +2204,109 @@
 <td>Total duration of the runner effect</td>
 </tr>
 <tr>
-<td><code>params</code></td>
-<td>array</td>
-<td>Runner-specific parameters</td>
+<td><code>directionality</code></td>
+<td>string</td>
+<td>Field mode: <code>topology</code> (graph hop-distance, default) or <code>geometric</code> (planar layout). Orthogonal to <code>source</code>.</td>
+</tr>
+<tr>
+<td><code>source</code></td>
+<td>string</td>
+<td>Where the motion emanates from: <code>root</code> (default), <code>leaves</code>, <code>panel:N</code>, or <code>all</code></td>
+</tr>
+<tr>
+<td><code>angle</code></td>
+<td>0–359</td>
+<td>Geometric <strong>axis sweep</strong> direction in degrees (only <code>directionality:geometric</code> WAVE/CHASE; default 0). 2° resolution. Ignored by RIPPLE.</td>
+</tr>
+<tr>
+<td><code>reverse</code></td>
+<td>bool</td>
+<td>Reverse the travel direction</td>
+</tr>
+<tr>
+<td><code>waveWidth</code> / <code>rippleWidth</code></td>
+<td>0–255</td>
+<td>Band / ring width in <strong>rings</strong> (also settable as <code>params[0]</code>)</td>
 </tr>
 </tbody>
 </table>
+<p><strong>Directionality.</strong> Two orthogonal choices — the field <strong>mode</strong> (<code>directionality</code>) and the
+<strong><code>source</code></strong> it emanates from — both controller-side:</p>
+<ul>
+<li><strong>Topology (graph hop-distance from the <code>source</code>)</strong> — the default. Runners move along each
+  panel's hop-distance (not discovery-list order), so the effect keeps its shape on any device.
+  <code>source:root</code> emanates outward from the (logical) root, <code>source:leaves</code> converges inward,
+  <code>source:panel:N</code> radiates from a specific panel, and <code>reverse</code> flips it.</li>
+<li><strong>Geometric (<code>directionality:geometric</code>)</strong> — uses the <em>physical</em> flat layout instead of the
+  wiring. The controller derives each panel's (x,y) from the regular-polygon geometry of the tree
+  (no setup, no protocol change; same layout as the mobile visualizer). Two sub-behaviours:</li>
+<li><strong>WAVE / CHASE</strong> sweep along a straight <strong>axis</strong> at <code>angle</code> degrees — straight-line motion
+    across the piece that graph distance can't express. <code>source</code> is N/A (an axis has no origin);
+    <code>angle</code> is a tune-by-eye dial (deterministic per device, not a literal compass bearing).</li>
+<li><strong>RIPPLE</strong> grows a <strong>Euclidean ring</strong> from the <code>source</code> centre(s) that lights whatever panel
+    surface it intersects (each panel is its circumscribed disc, so overlapping panels light
+    together): <code>source:root</code> from the root, <code>source:panel:N</code> from panel N, and <code>source:leaves</code>
+    runs <strong>one ripple per leaf</strong> (concurrent fronts converging inward). <code>angle</code> is ignored.</li>
+</ul>
+<p><code>reverse</code> flips travel in both. Falls back to topology (same <code>source</code>) if the layout can't be
+  embedded. Requires <code>schemaVersion: 3</code>. The legacy <code>source:"geometric"</code> still parses (→
+  <code>directionality:geometric</code>, axis sweep from the default root).</p>
+<p>Full explanation with diagrams:
+<a href="../scene-authoring/#8-directionality-the-source-field">Scene Authoring → Directionality</a>.</p>
 <hr />
 <h3 id="wave">WAVE<a class="headerlink" href="#wave" title="Permanent link">&para;</a></h3>
-<p>A colour envelope (triangular wave) sweeps from one end of the panel list to the other. The colour is scaled by the wave intensity at each panel position.</p>
-<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span>
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;WAVE&quot;</span><span class="p">,</span>
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">128</span><span class="p">},</span>
-</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="p">,</span>
-</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
-</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="p">}</span>
+<p>A triangular brightness band sweeps along the distance axis from the <code>source</code> — panels at the
+same distance (a "ring") light together. <code>color</code> is scaled by the band intensity at each panel.</p>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;WAVE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;root&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">128</span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;waveWidth&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="w"> </span><span class="p">}</span>
 </span></code></pre></div>
 <table>
 <thead>
 <tr>
-<th>params index</th>
+<th>Field</th>
 <th>Meaning</th>
 <th>Default</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>params[0]</code></td>
-<td>Wave width in panels (how many panels are illuminated at peak)</td>
+<td><code>waveWidth</code> (<code>params[0]</code>)</td>
+<td>Band width in rings (hops illuminated at peak)</td>
 <td>3</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h3 id="ripple">RIPPLE<a class="headerlink" href="#ripple" title="Permanent link">&para;</a></h3>
-<p>A colour ring expands outward from an origin panel. Distance is based on index, not physical position.</p>
-<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span>
-</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;RIPPLE&quot;</span><span class="p">,</span>
-</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FF4400&quot;</span><span class="p">,</span>
-</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2000</span><span class="p">,</span>
-</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">]</span>
-</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="p">}</span>
+<p>A brightness ring expands outward from the <code>source</code> panel(s). Distance is <strong>graph hops</strong>, so it
+follows the wiring on any device.</p>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;RIPPLE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;panel:3&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FF4400&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;rippleWidth&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2000</span><span class="w"> </span><span class="p">}</span>
 </span></code></pre></div>
 <table>
 <thead>
 <tr>
-<th>params index</th>
+<th>Field</th>
 <th>Meaning</th>
 <th>Default</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>params[0]</code></td>
-<td>Ring width in panels</td>
+<td><code>rippleWidth</code> (<code>params[0]</code>)</td>
+<td>Ring width in rings</td>
 <td>2</td>
-</tr>
-<tr>
-<td><code>params[1]</code></td>
-<td>Origin panel index</td>
-<td>0</td>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="admonition-title">Legacy <code>originPanel</code></p>
+<p>Older scenes set <code>"originPanel": N</code>; it is still accepted and maps to <code>source: "panel:N"</code>.</p>
+</div>
 <hr />
 <h3 id="chase">CHASE<a class="headerlink" href="#chase" title="Permanent link">&para;</a></h3>
-<p>A single lit panel travels through the panel list over the duration.</p>
-<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">{</span>
-</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CHASE&quot;</span><span class="p">,</span>
-</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;useColor&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">},</span>
-</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">  </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span>
-</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="p">}</span>
+<p>A single lit ring steps outward along the distance axis from the <code>source</code> over the duration.</p>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CHASE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;root&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;useColor&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="w"> </span><span class="p">}</span>
 </span></code></pre></div>
-<p>No parameters.</p>
+<p>No width parameter.</p>
 
 
 

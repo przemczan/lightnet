@@ -774,6 +774,8 @@
       
         
       
+        
+      
     
     
     
@@ -842,6 +844,36 @@
     
   
     Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../animations/scene-authoring/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.75 7.46 12 3.93l1.97-.39 2.74 3.53zm6.87-1.36-.78-3.92-3.93.78 2.74 3.54zM4 12h14.13l2-2H2v10a2 2 0 0 0 2 2h7v-2H4zm7.81-3.95L9.07 4.5l-1.97.41 2.75 3.53zM4.16 5.5l-.98.19a1.995 1.995 0 0 0-1.57 2.35L2 10l4.9-.97zM13 19.96V22h2.04l6.13-6.12-2.04-2.05zm9.85-6.49-1.32-1.32c-.2-.2-.53-.2-.72 0l-.98.98 2.04 2.04.98-.98c.2-.19.2-.52 0-.72"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Scene Authoring
   
 
     
@@ -1642,7 +1674,7 @@
 <h1 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h1>
 <p>How the firmware is tested, what runs where, and how to add new coverage.</p>
 <p>Today the only automated layer is <strong>native host-side unit tests</strong> — pure C++ logic compiled and run on your PC. Fast (under 2 s), no device, no flashing. This is what <code>pio test -e native</code> runs.</p>
-<p>There is no in-device Unity runner today; hardware-only code paths (<abbr title="SPI Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">SPIFFS</abbr> I/O, <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr>, animation timing) are exercised by running the firmware on a real board and observing serial / WebSocket output.</p>
+<p>There is no in-device Unity runner today; hardware-only code paths (filesystem I/O, <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr>, animation timing) are exercised by running the firmware on a real board and observing serial / WebSocket output.</p>
 <hr />
 <h2 id="running-native-tests">Running native tests<a class="headerlink" href="#running-native-tests" title="Permanent link">&para;</a></h2>
 <div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pio<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-e<span class="w"> </span>native<span class="w">                       </span><span class="c1"># all suites</span>
@@ -1684,9 +1716,39 @@
 <td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_palette_parser/test_main.cpp"><code>test/test_palette_parser/test_main.cpp</code></a></td>
 <td><code>parsePaletteJson</code> — happy paths (with/without name, pretty-printed <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr>, reverse key order), every documented failure mode, <code>PALETTE_STOPS</code> cap</td>
 </tr>
+<tr>
+<td><code>test_topology</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_topology/test_main.cpp"><code>test/test_topology/test_main.cpp</code></a></td>
+<td><code>TopologyIndex</code> — depth, leaf/branch, canonical order, neighbours, subtree, multi-source distances, re-rooting, fallback root (against the worked topology in <code>docs/design/scene-portability.md</code>)</td>
+</tr>
+<tr>
+<td><code>test_panel_selector</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_panel_selector/test_main.cpp"><code>test/test_panel_selector/test_main.cpp</code></a></td>
+<td><code>resolveSelector</code> — every graph selector, <code>any</code>/<code>all</code>/<code>not</code> composition, <code>tag:</code> resolution via a mock <code>ITagResolver</code> (incl. bounded-read rejection), v2-form equivalence, malformed-program rejection</td>
+</tr>
+<tr>
+<td><code>test_panel_selector_parser</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_panel_selector_parser/test_main.cpp"><code>test/test_panel_selector_parser/test_main.cpp</code></a></td>
+<td><code>parsePanelSelector</code> — <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> <code>panels</code> grammar → RPN → resolved panels, including nested composition and error cases</td>
+</tr>
+<tr>
+<td><code>test_panel_field</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_panel_field/test_main.cpp"><code>test/test_panel_field/test_main.cpp</code></a></td>
+<td><code>computeDistanceField</code> — hop-distance field from each <code>source</code> (root/leaves/panel/all), <code>reverse</code>, missing-source fallback, max-coord over the targeted subset</td>
+</tr>
+<tr>
+<td><code>test_panel_geometry</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_panel_geometry/test_main.cpp"><code>test/test_panel_geometry/test_main.cpp</code></a></td>
+<td><code>PanelGeometry</code> planar layout (centroids match the mobile visualizer frame) + <code>computeGeometricField</code> axis projection (horizontal/vertical/2-D), <code>reverse</code>, single-panel uniform, empty-build invalid</td>
+</tr>
+<tr>
+<td><code>test_runner_math</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_runner_math/test_main.cpp"><code>test/test_runner_math/test_main.cpp</code></a></td>
+<td><code>RunnerMath</code> wave/ripple/chase envelopes + sweep positions, including zero-width (no divide)</td>
+</tr>
 </tbody>
 </table>
-<p>44 tests total, ~1.5 s wall time.</p>
+<p>126 tests total, ~6 s wall time.</p>
 <hr />
 <h2 id="what-is-testable-natively-what-isnt">What is testable natively, what isn't<a class="headerlink" href="#what-is-testable-natively-what-isnt" title="Permanent link">&para;</a></h2>
 <table>
@@ -1721,7 +1783,7 @@
 <tr>
 <td><code>PaletteStore::resolve</code>/<code>save</code>/<code>exists</code></td>
 <td>❌</td>
-<td>Need <abbr title="SPI Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">SPIFFS</abbr></td>
+<td>Need LittleFS / hardware</td>
 </tr>
 <tr>
 <td>HTTP handlers (<code>PaletteServer</code>, <code>SceneServer</code>, …)</td>
@@ -1770,7 +1832,7 @@
 <p>Run <code>pio test -e native -f test_&lt;name&gt;</code>.</p>
 </li>
 </ol>
-<p>If the header you want to test currently has an Arduino or <abbr title="SPI Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">SPIFFS</abbr> dependency, <strong>extract the pure logic into its own header first</strong> — that's how <code>PaletteJson.hpp</code> and <code>HttpUrl.hpp</code> came to exist. A header that needs Arduino can't be tested natively; one that doesn't, can.</p>
+<p>If the header you want to test currently has an Arduino or filesystem dependency, <strong>extract the pure logic into its own header first</strong> — that's how <code>PaletteJson.hpp</code> and <code>HttpUrl.hpp</code> came to exist. A header that needs Arduino can't be tested natively; one that doesn't, can.</p>
 <hr />
 <h2 id="when-to-add-a-test">When to add a test<a class="headerlink" href="#when-to-add-a-test" title="Permanent link">&para;</a></h2>
 <ul>
