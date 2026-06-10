@@ -1717,6 +1717,11 @@
 <td><code>parsePaletteJson</code> — happy paths (with/without name, pretty-printed <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr>, reverse key order), every documented failure mode, <code>PALETTE_STOPS</code> cap</td>
 </tr>
 <tr>
+<td><code>test_panel_graph</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_panel_graph/test_main.cpp"><code>test/test_panel_graph/test_main.cpp</code></a></td>
+<td><code>PanelGraph</code> — the shared root-independent adjacency: slot↔panel-index round-trip, <code>lowestSlot</code>, degree/neighbour CSR walk, per-side connector indices, symmetry, single-panel/empty/over-capacity builds</td>
+</tr>
+<tr>
 <td><code>test_topology</code></td>
 <td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_topology/test_main.cpp"><code>test/test_topology/test_main.cpp</code></a></td>
 <td><code>TopologyIndex</code> — depth, leaf/branch, canonical order, neighbours, subtree, multi-source distances, re-rooting, fallback root (against the worked topology in <code>docs/design/scene-portability.md</code>)</td>
@@ -1745,6 +1750,11 @@
 <td><code>test_runner_math</code></td>
 <td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_runner_math/test_main.cpp"><code>test/test_runner_math/test_main.cpp</code></a></td>
 <td><code>RunnerMath</code> wave/ripple/chase envelopes + sweep positions, including zero-width (no divide)</td>
+</tr>
+<tr>
+<td><code>test_panel_anim</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_panel_anim/test_main.cpp"><code>test/test_panel_anim/test_main.cpp</code></a></td>
+<td>Portable <code>Core/Anim/AnimationPlayer</code> — time-as-parameter (deterministic FADE), <code>setColorDirect</code> ungated (delta-gate regression), <code>FLAG_CURRENT_COLOR_*</code> reads current output, SOLID hold</td>
 </tr>
 </tbody>
 </table>
@@ -1776,7 +1786,7 @@
 <td>Pure C string helpers, split out of <code>HttpHelpers.hpp</code></td>
 </tr>
 <tr>
-<td><code>Common/Palette.hpp</code> (sampler)</td>
+<td><code>Core/Anim/Palette.hpp</code> (sampler)</td>
 <td>✅</td>
 <td>Pure interpolation math — not yet tested but eligible</td>
 </tr>

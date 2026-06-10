@@ -933,10 +933,21 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#animationplayer-panel-side" class="md-nav__link">
+  <a href="#animationplayer-panel-side-layer-compositor-shared-with-mobile" class="md-nav__link">
     <span class="md-ellipsis">
       
-        AnimationPlayer (panel side)
+        AnimationPlayer (panel side) — layer compositor, shared with mobile
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#animationplayer-panel-side-layer-compositor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AnimationPlayer (panel side) — layer compositor
       
     </span>
   </a>
@@ -955,10 +966,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#controller-runners" class="md-nav__link">
+  <a href="#controller-runners-compiled-to-per-panel-local-pulses-v6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Controller runners
+        Controller runners — compiled to per-panel local pulses (v6)
       
     </span>
   </a>
@@ -1927,10 +1938,21 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#animationplayer-panel-side" class="md-nav__link">
+  <a href="#animationplayer-panel-side-layer-compositor-shared-with-mobile" class="md-nav__link">
     <span class="md-ellipsis">
       
-        AnimationPlayer (panel side)
+        AnimationPlayer (panel side) — layer compositor, shared with mobile
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#animationplayer-panel-side-layer-compositor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AnimationPlayer (panel side) — layer compositor
       
     </span>
   </a>
@@ -1949,10 +1971,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#controller-runners" class="md-nav__link">
+  <a href="#controller-runners-compiled-to-per-panel-local-pulses-v6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Controller runners
+        Controller runners — compiled to per-panel local pulses (v6)
       
     </span>
   </a>
@@ -2206,11 +2228,15 @@
 <tbody>
 <tr>
 <td><code>AnimationScheduler</code></td>
-<td><code>playOnPanels()</code> PREPARE+START sequence; <code>tick()</code> drives controller-computed runners at 60 fps</td>
+<td><code>playOnPanels()</code> PREPARE+START sequence; <code>sendPrepareToPanel()</code>/<code>sendGroupStart()</code> for compiled runners; <code>tick()</code> drives any streaming demo runners</td>
 </tr>
 <tr>
 <td><code>AnimationRunner</code></td>
-<td>Base class for controller-computed runners: <code>WaveRunner</code>, <code>RippleRunner</code>, <code>ChaseRunner</code></td>
+<td>Base class for the streaming runner classes (<code>WaveRunner</code>/<code>RippleRunner</code>/<code>ChaseRunner</code>) — used by demos; scenes compile runners to per-panel pulses instead</td>
+</tr>
+<tr>
+<td><code>RunnerCompile.hpp</code></td>
+<td>Inverts the runner envelopes to a per-panel local PULSE (onset + shape)</td>
 </tr>
 </tbody>
 </table>
@@ -2354,7 +2380,7 @@
 </tr>
 <tr>
 <td><code>AnimationPlayer</code></td>
-<td>4-deep animation queue. Tick every ~16 ms. Resolves <code>ColorRef</code> → RGB against panel's current palette + base colors</td>
+<td>Layer compositor: <code>slots[4]</code> composited each ~16 ms tick (blend modes + <code>MOD_*</code> modifiers + background base). Resolves <code>ColorRef</code> → RGB against panel's current palette + base colors</td>
 </tr>
 <tr>
 <td><code>BootloaderBridge</code></td>
@@ -2377,7 +2403,7 @@
 </tr>
 <tr>
 <td><code>WebsocketHandler</code></td>
-<td>Decodes and dispatches commands: <code>TOGGLE</code>, <code>SET_COLOR</code>, <code>GET_PANELS_STATES</code>, <code>GET_EDGES_LIST</code>, <code>ANIMATION_TRIGGER</code>, <code>SET_MIRROR</code></td>
+<td>Decodes and dispatches commands: <code>TOGGLE</code>, <code>SET_COLOR</code>, <code>GET_PANELS_STATES</code>, <code>GET_EDGES_LIST</code>, <code>ANIMATION_TRIGGER</code>, <code>SET_MIRROR</code>, <code>PING</code></td>
 </tr>
 <tr>
 <td><code>WebsocketApi</code></td>
@@ -2414,11 +2440,21 @@
 <td>scenes</td>
 <td><code>PacketAnimationPrepare</code>: <code>colorFrom</code>/<code>colorTo</code> changed from <code>ColorRGB</code> (3 B) to <code>ColorRef</code> (4 B). Three new appearance packets.</td>
 </tr>
+<tr>
+<td><strong>v5</strong></td>
+<td>—</td>
+<td>Per-panel brightness removed (animations express brightness through colour).</td>
+</tr>
+<tr>
+<td><strong>v6</strong></td>
+<td>compositing</td>
+<td>Layer compositor. <code>PacketAnimationPrepare</code> gains <code>composeMode</code> + <code>composeOrder</code> + <code>startDelayMs</code> (25 B); <code>PacketAnimationControl</code> gains <code>group_id</code> (per-slot, 7 B); new <code>SET_BACKGROUND</code> packet. Runners are compiled to per-panel local PULSEs.</td>
+</tr>
 </tbody>
 </table>
 <div class="admonition warning">
 <p class="admonition-title">Protocol compatibility</p>
-<p>Panel and controller must be flashed together when upgrading across protocol versions. v3 and v4 packets are not interchangeable.</p>
+<p>Panel and controller must be flashed together when upgrading across protocol versions — versions are not interchangeable.</p>
 </div>
 <h3 id="packet-catalogue">Packet catalogue<a class="headerlink" href="#packet-catalogue" title="Permanent link">&para;</a></h3>
 <table>
@@ -2471,8 +2507,8 @@
 <td>12</td>
 <td><code>ANIMATION_PREPARE</code></td>
 <td>C→P</td>
-<td>21 B</td>
-<td>Unicast; buffers animation, arms for group start</td>
+<td>25 B</td>
+<td>Unicast; buffers a layer (incl. <code>composeMode</code>/<code>composeOrder</code>/<code>startDelayMs</code>), arms for group start</td>
 </tr>
 <tr>
 <td>13</td>
@@ -2485,8 +2521,8 @@
 <td>14</td>
 <td><code>ANIMATION_CONTROL</code></td>
 <td>C→P</td>
-<td>6 B</td>
-<td>STOP / PAUSE / RESUME / CLEAR_QUEUE</td>
+<td>7 B</td>
+<td>STOP / PAUSE / RESUME / CLEAR_QUEUE; <code>group_id</code>=0 → all slots</td>
 </tr>
 <tr>
 <td>15</td>
@@ -2524,6 +2560,13 @@
 <td>0–255 multiplier</td>
 </tr>
 <tr>
+<td>20</td>
+<td><code>SET_BACKGROUND</code></td>
+<td>C→P or GC</td>
+<td>8 B</td>
+<td>Scene compositor base colour (sent once at scene start)</td>
+</tr>
+<tr>
 <td>200</td>
 <td><code>RESET_DEVICE</code></td>
 <td>C→P</td>
@@ -2552,13 +2595,39 @@
 </div>
 <hr />
 <h2 id="5-animation-framework-internals">5. Animation Framework Internals<a class="headerlink" href="#5-animation-framework-internals" title="Permanent link">&para;</a></h2>
-<h3 id="animationplayer-panel-side">AnimationPlayer (panel side)<a class="headerlink" href="#animationplayer-panel-side" title="Permanent link">&para;</a></h3>
+<h3 id="animationplayer-panel-side-layer-compositor-shared-with-mobile">AnimationPlayer (panel side) — layer compositor, shared with mobile<a class="headerlink" href="#animationplayer-panel-side-layer-compositor-shared-with-mobile" title="Permanent link">&para;</a></h3>
+<p><code>lib/Lightnet/Core/Anim/AnimationPlayer.{hpp,cpp}</code> (+ its pure deps <code>AnimationTypes</code>, <code>ColorCompose</code>,
+<code>ColorRef</code>, <code>Palette</code>, <code>LightnetConfig</code>, <code>ProtocolTypes</code>) is <strong>portable, host-compilable C++</strong> — no
+Arduino/FastLED, time passed as <code>uint16_t now</code>, output pulled via <code>currentColor()</code>/<code>takeDirty()</code>.
+It is the <strong>single implementation</strong> of panel-local animation math, compiled into:</p>
 <ul>
-<li><code>queue[4]</code> of <code>AnimationState</code> structs — 88 bytes <abbr title="Static RAM — runtime memory on the microcontroller; very limited on ATmega panels.">SRAM</abbr> (v3), 96 bytes (v4 with <code>ColorRef</code>)</li>
-<li><code>tick()</code> gated at 16 ms (60 fps); uses integer math only (no FPU on <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr>)</li>
-<li>Progress interpolation: <code>progress_q8 = (elapsed * 256) / durationMs</code> (q8 fixed-point)</li>
-<li>Reactive decay: <code>reactiveLevel -= (decayRate * elapsedMs) / 1000</code> per tick</li>
-<li><code>resolveColorRef()</code> called at the start of every tick function — palette/color changes take effect on the next frame with no re-prepare</li>
+<li>the <strong>Panel</strong> firmware (<code>LightnetPanel</code>),</li>
+<li>the <strong>Controller</strong>'s <code>SIM_MODE</code> virtual panels (<code>SimPanel</code>),</li>
+<li>native unit tests (<code>test/test_panel_anim</code>),</li>
+<li>and the <strong>mobile app</strong>, via <code>lib/Lightnet/Core/CApi</code> (a thin C ABI) — Android over JNI/NDK,
+  iOS over Kotlin/Native cinterop. The mobile <code>PanelAnimationPlayer</code> is a thin Kotlin wrapper that
+  feeds raw mirrored packet bytes to the native core and only owns mobile-specific clock-domain
+  translation (controller millis ↔ mobile monotonic clock). See <code>lib/Lightnet/Core/README.md</code> and
+  <code>lib/Lightnet/Core/CApi/README.md</code>.</li>
+</ul>
+<h3 id="animationplayer-panel-side-layer-compositor">AnimationPlayer (panel side) — layer compositor<a class="headerlink" href="#animationplayer-panel-side-layer-compositor" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>slots[MAX_ANIM_SLOTS]</code> (8) — each an independent layer keyed by <code>group_id</code>, with its running
+  step + a 1-deep pending step (PREPARE buffers <code>pending</code>; START activates it).</li>
+<li><code>tick()</code> gated at 16 ms (60 fps), integer math only. Each tick resolves every started slot to one
+  contribution (source colour or modifier value). <strong>Non-looping</strong> layers honour <code>startDelayMs</code>
+  (transparent before onset); <strong>looping</strong> layers (<code>FLAG_LOOP</code>) treat <code>startDelayMs</code> as an initial
+  phase offset so they start immediately and re-fire/sync seamlessly. After onset, the layer
+  composites until finish→hold (or repeats if looping), then <code>ColorCompose::foldLayers()</code> sorts by
+  <code>composeOrder</code> and folds onto the <strong>background base</strong> — one write to the LED.</li>
+<li>Source layers blend via <code>composeMode</code>; modifier layers (<code>MOD_*</code>) transform the accumulator
+  (brightness = RGB multiply; saturation/hue = integer HSV). Finished non-loop slots hold their
+  last value.</li>
+<li><code>PACKET_SET_BACKGROUND</code> sets the compositor base (default black; idle panels display it).</li>
+<li>Progress interpolation: <code>progress_q8 = (elapsed * 256) / durationMs</code> (q8 fixed-point). The pure
+  compose/HSV/fold math lives in <code>Core/Anim/ColorCompose.hpp</code> (natively tested, shared with mobile
+  via <code>Core/CApi</code>).</li>
+<li><code>resolveColorRef()</code> called every tick — palette/colour changes take effect next frame with no re-prepare.</li>
 </ul>
 <h3 id="animationscheduler-controller-side">AnimationScheduler (controller side)<a class="headerlink" href="#animationscheduler-controller-side" title="Permanent link">&para;</a></h3>
 <ul>
@@ -2566,34 +2635,45 @@
 <li><code>tick()</code>: 60 fps frame gate; ticks all active runners, deletes finished ones</li>
 <li>Per-panel <code>AnimationRecord</code> in-memory state — avoids polling panels for status queries</li>
 </ul>
-<h3 id="controller-runners">Controller runners<a class="headerlink" href="#controller-runners" title="Permanent link">&para;</a></h3>
+<h3 id="controller-runners-compiled-to-per-panel-local-pulses-v6">Controller runners — compiled to per-panel local pulses (v6)<a class="headerlink" href="#controller-runners-compiled-to-per-panel-local-pulses-v6" title="Permanent link">&para;</a></h3>
+<p>As of v6, <code>ScenePlayer::fireStep</code> no longer streams a runner: it <strong>compiles</strong> the sweep into one
+local PULSE per panel via <code>Animations/RunnerCompile.hpp</code> (a closed-form inversion of the
+<code>RunnerMath</code> envelope), each with its own <code>startDelayMs</code> (onset) and pulse shape, then fires one
+general-call START. The panels then run the sweep autonomously — <strong>zero per-frame <code>SET_COLOR</code></strong> — and
+a runner composites like any other layer (default <code>max</code> blend). This removes the per-frame mirror
+traffic that previously grew with panel count.</p>
 <table>
 <thead>
 <tr>
 <th>Runner</th>
-<th>Description</th>
-<th>Bandwidth</th>
+<th>Compiled pulse</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>WaveRunner</code></td>
-<td>Triangular envelope sweeps across panel list — sends scaled SET_COLOR per panel</td>
-<td>Per-frame SET_COLOR only on changed panels (~3/frame)</td>
+<td><code>WAVE</code></td>
+<td>triangular PULSE, onset <code>dur·c/(maxCoord+w)</code>, window <code>dur·w/(maxCoord+w)</code></td>
 </tr>
 <tr>
-<td><code>RippleRunner</code></td>
-<td>Ring expands from origin panel by index-distance</td>
-<td>Same</td>
+<td><code>RIPPLE</code></td>
+<td>band PULSE from the panel's <code>[near,far]</code> radial extent</td>
 </tr>
 <tr>
-<td><code>ChaseRunner</code></td>
-<td>Single lit panel travels through list</td>
-<td>Same</td>
+<td><code>CHASE</code></td>
+<td>near-square PULSE, onset <code>dur·c/(maxCoord+1)</code>, window <code>dur/(maxCoord+1)</code></td>
+</tr>
+<tr>
+<td><code>WHEEL</code></td>
+<td>rotating-blade PULSE from the panel's geometric bearing; always <code>FLAG_LOOP</code>, <code>period = duration/lines</code></td>
 </tr>
 </tbody>
 </table>
-<p>Delta optimization: all runners cache the last sent color level per panel and only send <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> when the value changes.</p>
+<p><code>"repeat": true</code> plays WAVE/RIPPLE/CHASE as a continuous train instead of a single pass: the same
+<code>compile*</code> geometry feeds <code>compileRepeating()</code>, which <strong>swaps <code>colorFrom</code>/<code>colorTo</code></strong> (lit↔dark) so
+the rise→hold→fall envelope reads departing→dark-hold→approaching with <code>FLAG_LOOP</code> — true dark gaps
+using only the existing PULSE/loop mechanism. WHEEL always uses this engine (<code>compileWheel</code>).
+Colour-only (<code>animates:color</code>); <code>SCENE_SCHEMA_VERSION</code> is 5.</p>
+<p>The streaming <code>WaveRunner</code>/<code>RippleRunner</code>/<code>ChaseRunner</code> classes remain for the built-in demos.</p>
 <h3 id="bandwidth-budget">Bandwidth budget<a class="headerlink" href="#bandwidth-budget" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
