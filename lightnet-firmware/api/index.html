@@ -2548,7 +2548,7 @@
 </tbody>
 </table>
 <p>Bytes 0–6 (<code>type</code> + <code>protocolVersion</code> + <code>nonce</code>) form the inner <code>PacketHeader</code> struct that is covered by <code>headerCrc</code>.</p>
-<p><strong><abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> algorithm</strong>: <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16/IBM (poly <code>0x8005</code>, init <code>0x0000</code>, no reflection) — same function throughout the firmware (<code>Utils/Crc.hpp</code>).</p>
+<p><strong><abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> algorithm</strong>: <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16/IBM (reflected, poly <code>0xA001</code>, init <code>0xFFFF</code>) — same function throughout the firmware (<code>Utils/Crc.hpp</code>).</p>
 <div class="admonition warning">
 <p class="admonition-title">Malformed frames are silently dropped</p>
 <p>The controller validates header <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>, payload <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>, and protocol version. There is no error response — if a command has no effect, check these three fields first.</p>
@@ -2932,7 +2932,13 @@
 </ol>
 <hr />
 <h2 id="2-http-api">2. HTTP API<a class="headerlink" href="#2-http-api" title="Permanent link">&para;</a></h2>
-<p>All endpoints return <code>application/json</code>. Successful mutations return <code>200 {}</code>. All ports are 80.</p>
+<p>All endpoints return <code>application/json</code>. All ports are 80.</p>
+<p>Mutating endpoints whose side effects emit <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> packets to panels — scene play/stop/speed, one-shot
+play, animation trigger, appearance PATCH, per-panel on/color, power, and topology root — <strong>validate
+synchronously then queue the work onto the main loop</strong>, returning <code>202 Accepted</code>. The change is
+applied on the next main-loop tick (sub-millisecond later); validation failures (<code>4xx</code>) are still
+returned synchronously, and a full queue returns <code>503 busy</code>. Read-only endpoints and pure
+filesystem/config mutations (scene/palette save &amp; delete, config PATCH, panel-tags) return <code>200</code>.</p>
 <h3 id="21-appearance">2.1 Appearance<a class="headerlink" href="#21-appearance" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -2954,7 +2960,7 @@
 <td><code>PATCH</code></td>
 <td><code>/api/appearance</code></td>
 <td>Any subset of the three fields</td>
-<td><code>{}</code></td>
+<td><code>202 {}</code> (applied on the main loop)</td>
 </tr>
 </tbody>
 </table>
@@ -3002,20 +3008,11 @@
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">&quot;schemaVersion&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my-palette&quot;</span><span class="p">,</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">&quot;stops&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="p">[</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">      </span><span class="mi">0</span><span class="p">,</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">      </span><span class="s2">&quot;#000000&quot;</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="p">],</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="p">[</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">      </span><span class="mi">128</span><span class="p">,</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">      </span><span class="s2">&quot;#FF4400&quot;</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="p">],</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="p">[</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">      </span><span class="mi">255</span><span class="p">,</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">      </span><span class="s2">&quot;#FFFFFF&quot;</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="p">]</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">  </span><span class="p">]</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="p">}</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;#000000&quot;</span><span class="p">],</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="p">[</span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;#FF4400&quot;</span><span class="p">],</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="p">[</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;#FFFFFF&quot;</span><span class="p">]</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">}</span>
 </span></code></pre></div></p>
 <hr />
 <h3 id="23-scenes">2.3 Scenes<a class="headerlink" href="#23-scenes" title="Permanent link">&para;</a></h3>
@@ -3070,74 +3067,65 @@
 <tbody>
 <tr>
 <td><code>POST</code></td>
+<td><code>/api/scenes/play/one-shot</code></td>
+<td>Full scene <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> body — stored under the hidden name <code>@one-shot</code>, then played by name</td>
+<td><code>202 {}</code> (parsed/validated synchronously; played on the main loop)</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
 <td><code>/api/scenes/play</code></td>
-<td>Full scene <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> body — stored under the reserved name <code>Current</code>, then played by name</td>
-<td><code>{}</code></td>
+<td>— (replays <code>lastPlayedScene</code>: by name if it was a stored scene, or <code>@one-shot</code> if it was a one-shot play)</td>
+<td><code>202 {}</code>, or <code>404 no_last_played_scene</code></td>
 </tr>
 <tr>
 <td><code>POST</code></td>
 <td><code>/api/scenes/:name/play</code></td>
 <td>— (plays stored scene by name)</td>
-<td><code>{}</code></td>
+<td><code>202 {}</code></td>
 </tr>
 <tr>
 <td><code>POST</code></td>
 <td><code>/api/scenes/stop</code></td>
 <td>—</td>
-<td><code>{}</code></td>
+<td><code>202 {}</code></td>
 </tr>
 <tr>
 <td><code>POST</code></td>
 <td><code>/api/scenes/speed</code></td>
 <td><code>{"speed": &lt;float&gt;}</code> — set playback speed multiplier [0.1, 10.0]</td>
-<td><code>{"ok":true,"speed":2.0}</code></td>
-</tr>
-<tr>
-<td><code>GET</code></td>
-<td><code>/api/scenes/status</code></td>
-<td>—</td>
-<td>See below</td>
+<td><code>202 {"ok":true,"speed":2.0}</code></td>
 </tr>
 </tbody>
 </table>
-<p>Status response while playing:
-<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">&quot;playing&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">&quot;scene&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sunset&quot;</span><span class="p">,</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">&quot;speed&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">}</span>
-</span></code></pre></div></p>
-<p>Status when idle: <code>{"playing": false}</code></p>
+<p>Playback status (<code>playing</code>, <code>speed</code>) and <code>lastPlayedSceneIsStored</code> are reported via <code>GET /api/state</code> (§2.5).</p>
 <hr />
 <h3 id="24-animations">2.4 Animations<a class="headerlink" href="#24-animations" title="Permanent link">&para;</a></h3>
 <h4 id="one-shot-animation">One-shot animation<a class="headerlink" href="#one-shot-animation" title="Permanent link">&para;</a></h4>
 <p>Plays a single-layer animation directly without saving to disk. Use this for notifications that overlay an ambient scene on a free group ID.</p>
 <p>The body is a <strong>flat object</strong> — step fields (<code>type</code>/<code>runner</code>, <code>color</code>, <code>duration</code>, <code>params</code>, etc.) sit at the root level alongside <code>group</code> and <code>panels</code>. There is no <code>"sequence"</code> wrapper.</p>
-<div class="language-http highlight"><span class="filename">HTTP</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="err">POST /api/animations/play</span>
+<div class="language-http highlight"><span class="filename">HTTP</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="err">POST /api/animations/play</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="err">Content-Type: application/json</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="err">{</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="err">  &quot;group&quot;: 250,</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="err">  &quot;panels&quot;: &quot;all&quot;,</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="err">  &quot;type&quot;: &quot;PULSE&quot;,</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="err">  &quot;colorFrom&quot;: &quot;#000000&quot;,</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="err">  &quot;colorTo&quot;: &quot;#FF0000&quot;,</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="err">  &quot;duration&quot;: 600,</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="err">  &quot;params&quot;: [64, 128, 64]</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="err">}</span>
+</span></code></pre></div>
+<p>For chained steps (e.g. pulse → fade-out), use <code>POST /api/scenes/play/one-shot</code> with a full scene body containing one layer with the desired sequence, and a free group ID.</p>
+<p>Response: <code>202 {}</code> (parsed synchronously; played on the main loop)</p>
+<h4 id="reactive-trigger-http-alternative-to-websocket">Reactive trigger (HTTP alternative to WebSocket)<a class="headerlink" href="#reactive-trigger-http-alternative-to-websocket" title="Permanent link">&para;</a></h4>
+<div class="language-http highlight"><span class="filename">HTTP</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="err">POST /api/animations/trigger</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="err">Content-Type: application/json</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="err">{</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="err">  &quot;group&quot;: 250,</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="err">  &quot;panels&quot;: &quot;all&quot;,</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="err">  &quot;type&quot;: &quot;PULSE&quot;,</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="err">  &quot;colorFrom&quot;: &quot;#000000&quot;,</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="err">  &quot;colorTo&quot;: &quot;#FF0000&quot;,</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="err">  &quot;duration&quot;: 600,</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="err">  &quot;params&quot;: [64, 128, 64]</span>
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="err">}</span>
-</span></code></pre></div>
-<p>For chained steps (e.g. pulse → fade-out), use <code>POST /api/scenes/play</code> with a full scene body containing one layer with the desired sequence, and a free group ID.</p>
-<p>Response: <code>200 {}</code></p>
-<h4 id="reactive-trigger-http-alternative-to-websocket">Reactive trigger (HTTP alternative to WebSocket)<a class="headerlink" href="#reactive-trigger-http-alternative-to-websocket" title="Permanent link">&para;</a></h4>
-<div class="language-http highlight"><span class="filename">HTTP</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="err">POST /api/animations/trigger</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="err">Content-Type: application/json</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="err">{&quot;group&quot;: 1, &quot;value&quot;: 200}</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="err">{&quot;group&quot;: 1, &quot;value&quot;: 200}</span>
 </span></code></pre></div>
 <p><code>group</code> accepts a numeric ID <strong>or</strong> the string name used in the scene <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> (e.g. <code>"group": "layer5"</code>). The name is resolved against the currently playing scene; <code>group_not_found</code> is returned if no loaded layer has that name.</p>
-<p>Response: <code>200 {}</code></p>
+<p>Response: <code>202 {}</code> (trigger applied on the main loop)</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>Use the WebSocket <code>ANIMATION_TRIGGER</code> (type 8) when latency matters — HTTP adds ~5 ms compared to the sub-millisecond path through the WebSocket handler.</p>
@@ -3145,9 +3133,9 @@
 <hr />
 <h3 id="25-firmware-updates">2.5 Firmware updates<a class="headerlink" href="#25-firmware-updates" title="Permanent link">&para;</a></h3>
 <h4 id="upload-and-flash-panel-firmware">Upload and flash panel firmware<a class="headerlink" href="#upload-and-flash-panel-firmware" title="Permanent link">&para;</a></h4>
-<div class="language-http highlight"><span class="filename">HTTP</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="err">POST /api/firmware/panels</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="err">Content-Type: application/octet-stream</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="err">[raw binary body — panel firmware .bin file]</span>
+<div class="language-http highlight"><span class="filename">HTTP</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="err">POST /api/firmware/panels</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="err">Content-Type: application/octet-stream</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="err">[raw binary body — panel firmware .bin file]</span>
 </span></code></pre></div>
 <p>The body is streamed directly to <code>/panel_fw.bin</code> to avoid buffering in RAM. Once the upload completes, the controller starts flashing panels over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> one by one in discovery order.</p>
 <p><strong>Responses:</strong></p>
@@ -3187,14 +3175,14 @@
 <p>After flashing all panels, the <strong>controller must be restarted</strong> so <code>PanelsInitializer</code> can re-run discovery with the new panel firmware.</p>
 </div>
 <h4 id="flash-status">Flash status<a class="headerlink" href="#flash-status" title="Permanent link">&para;</a></h4>
-<div class="language-http highlight"><span class="filename">HTTP</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="err">GET /api/firmware/status</span>
+<div class="language-http highlight"><span class="filename">HTTP</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="err">GET /api/firmware/status</span>
 </span></code></pre></div>
-<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">&quot;state&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;flashing&quot;</span><span class="p">,</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">&quot;panel&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="nt">&quot;total&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span>
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span><span class="nt">&quot;progress&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">45</span>
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="p">}</span>
+<div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">&quot;state&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;flashing&quot;</span><span class="p">,</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">&quot;panel&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">&quot;total&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span><span class="nt">&quot;progress&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">45</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="p">}</span>
 </span></code></pre></div>
 <p>State values:</p>
 <table>
@@ -3260,13 +3248,13 @@
 <td><code>PUT</code></td>
 <td><code>/api/panels/:address/on</code></td>
 <td><code>{"value":1}</code></td>
-<td><code>{}</code></td>
+<td><code>202 {}</code></td>
 </tr>
 <tr>
 <td><code>PUT</code></td>
 <td><code>/api/panels/:address/color</code></td>
 <td><code>{"color":"#FF0000"}</code></td>
-<td><code>{}</code></td>
+<td><code>202 {}</code></td>
 </tr>
 </tbody>
 </table>
@@ -3275,7 +3263,7 @@
 <p>These are the HTTP equivalents of the WebSocket <code>TOGGLE</code>, <code>SET_COLOR</code>, <code>GET_PANELS_STATES</code>, and <code>GET_EDGES_LIST</code> commands.</p>
 <hr />
 <h3 id="27-topology-logical-root-panel-tags">2.7 Topology (logical root + panel tags)<a class="headerlink" href="#27-topology-logical-root-panel-tags" title="Permanent link">&para;</a></h3>
-<p>Per-device topology configuration that scene <strong>panel selectors</strong> resolve against (see <a href="design/scene-portability.md"><code>docs/design/scene-portability.md</code></a>). Stored in <code>/config/topology.json</code>, written atomically.</p>
+<p>Per-device topology configuration that scene <strong>panel selectors</strong> resolve against (see <a href="../animations/scene-authoring/#6-targeting-panels-the-panels-field">Scene Authoring → Targeting panels</a> and <a href="../animations/scene-authoring/#10-per-device-topology-config-logical-root--tags">§10 Per-device topology config</a>). Stored in <code>/config/topology.json</code>, written atomically.</p>
 <table>
 <thead>
 <tr>
@@ -3296,7 +3284,7 @@
 <td><code>PUT</code></td>
 <td><code>/api/topology/root</code></td>
 <td><code>{"logicalRoot":N}</code> (1–255, or 0 to reset to the physical root)</td>
-<td><code>{"ok":true,"logicalRoot":N}</code></td>
+<td><code>202 {"ok":true,"logicalRoot":N}</code></td>
 </tr>
 <tr>
 <td><code>GET</code></td>
@@ -3373,11 +3361,12 @@
 <p>Values outside <code>0–2</code> return <code>422</code>.</p>
 <hr />
 <h3 id="29-state">2.9 State<a class="headerlink" href="#29-state" title="Permanent link">&para;</a></h3>
-<p>Runtime app state — power state and the most recently played scene's name. Persisted in
-<code>/config/app_state.json</code> with a 5-second deferred-write window. The initial <code>isOn</code> value on boot
-is derived from <code>powerStateOnBoot</code> (see §2.7); <code>lastPlayedScene</code> is set whenever a scene is played
-via <code>POST /api/scenes/play</code> or <code>POST /api/scenes/:name/play</code> (inline plays are recorded under the
-reserved name <code>Current</code>, see §2.3 Scenes).</p>
+<p>Runtime app state — power state, scene playback status, and the most recently played scene's
+name. Persisted in <code>/config/app_state.json</code> with a 5-second deferred-write window. The initial
+<code>isOn</code> value on boot is derived from <code>powerStateOnBoot</code> (see §2.7); <code>lastPlayedScene</code> /
+<code>lastPlayedSceneIsStored</code> are set whenever a scene is played via <code>POST /api/scenes/play/one-shot</code>
+or <code>POST /api/scenes/:name/play</code> (see §2.3 Scenes). <code>lastPlayedSceneIsStored</code> is <code>false</code> when
+<code>lastPlayedScene</code> refers to the hidden <code>@one-shot</code> scene rather than a device-stored scene.</p>
 <table>
 <thead>
 <tr>
@@ -3392,13 +3381,13 @@ reserved name <code>Current</code>, see §2.3 Scenes).</p>
 <td><code>GET</code></td>
 <td><code>/api/state</code></td>
 <td>—</td>
-<td><code>{"isOn":true,"lastPlayedScene":"sunset"}</code></td>
+<td><code>{"isOn":true,"lastPlayedScene":"sunset","lastPlayedSceneIsStored":true,"playing":true,"speed":1.0}</code></td>
 </tr>
 <tr>
 <td><code>POST</code></td>
 <td><code>/api/state/power</code></td>
 <td><code>{"isOn":bool}</code></td>
-<td><code>{"isOn":bool}</code></td>
+<td><code>202 {"isOn":bool}</code> (panel effects applied on the main loop)</td>
 </tr>
 </tbody>
 </table>
@@ -3419,11 +3408,19 @@ reserved name <code>Current</code>, see §2.3 Scenes).</p>
 <tbody>
 <tr>
 <td><code>200 {}</code></td>
-<td>Success</td>
+<td>Success (read-only or filesystem/config mutation)</td>
+</tr>
+<tr>
+<td><code>202 {}</code></td>
+<td>Accepted — validated; the packet-emitting work was queued onto the main loop</td>
 </tr>
 <tr>
 <td><code>404 {"error":"not_found"}</code></td>
 <td>Named scene or palette does not exist</td>
+</tr>
+<tr>
+<td><code>503 {"error":"busy"}</code></td>
+<td>Main-loop work queue is full; retry shortly</td>
 </tr>
 <tr>
 <td><code>409 {"error":"..."}</code></td>

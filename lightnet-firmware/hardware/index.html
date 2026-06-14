@@ -757,6 +757,67 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#panel-sram-budget-max_anim_slots" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Panel SRAM budget &amp; MAX_ANIM_SLOTS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Panel SRAM budget &amp; MAX_ANIM_SLOTS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#whats-eating-panel-ram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's eating panel RAM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#current-measurement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current measurement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sizing-max_anim_slots" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sizing MAX_ANIM_SLOTS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#future-option-shared-pending-buffer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Future option: shared pending buffer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1537,6 +1598,67 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#panel-sram-budget-max_anim_slots" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Panel SRAM budget &amp; MAX_ANIM_SLOTS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Panel SRAM budget &amp; MAX_ANIM_SLOTS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#whats-eating-panel-ram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's eating panel RAM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#current-measurement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current measurement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sizing-max_anim_slots" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sizing MAX_ANIM_SLOTS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#future-option-shared-pending-buffer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Future option: shared pending buffer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1710,6 +1832,100 @@
 </div>
 </div>
 </div>
+<hr />
+<h2 id="panel-sram-budget-max_anim_slots">Panel <abbr title="Static RAM — runtime memory on the microcontroller; very limited on ATmega panels.">SRAM</abbr> budget &amp; <code>MAX_ANIM_SLOTS</code><a class="headerlink" href="#panel-sram-budget-max_anim_slots" title="Permanent link">&para;</a></h2>
+<p>The ATmega328P/PB has <strong>2048 B <abbr title="Static RAM — runtime memory on the microcontroller; very limited on ATmega panels.">SRAM</abbr> total</strong>, shared statically between everything below — there
+is no separate heap budget worth relying on. <code>MAX_ANIM_SLOTS</code>
+(<code>lib/Lightnet/Core/Anim/AnimationTypes.hpp</code>) is the one constant most likely to push the panel
+over that limit, because it's the only one that scales with a number the firmware author picks
+freely.</p>
+<h3 id="whats-eating-panel-ram">What's eating panel RAM<a class="headerlink" href="#whats-eating-panel-ram" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Consumer</th>
+<th>Size</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Wire/TWI buffers (<code>TWI_BUFFER_SIZE=80</code> × 4)</td>
+<td>320 B</td>
+<td><code>twi_rxBuffer</code>, <code>twi_txBuffer</code>, <code>TwoWire::rxBuffer</code>, <code>TwoWire::txBuffer</code>. Must be ≥ <code>Protocol::MAX_PACKET_SIZE</code> (80) — see above.</td>
+</tr>
+<tr>
+<td>RX packet ring (<code>RX_QUEUE_BYTES=80</code>, <code>SpscByteQueue</code>)</td>
+<td>80 B</td>
+<td>Single lock-free ring (<code>.bss</code>). <code>handleIncomingPackets()</code> also uses an 80 B stack scratch buffer while draining it — but that's reused stack space, not a second standing allocation. The old double-buffered <code>CircularQueue</code> pair permanently held <strong>both</strong> buffers (plus heap/object overhead, ~190 B) for the program's lifetime.</td>
+</tr>
+<tr>
+<td><code>AnimationPlayer</code> — <code>MAX_ANIM_SLOTS × 55 B</code></td>
+<td>990 B at 18 slots</td>
+<td>Each <code>Slot</code> is 55 B: two <code>AnimationState</code> (<code>cur</code> + <code>pending</code>, 22 B each) + ~11 B of flags/timing/reactive fields. This is the <strong>only per-slot cost</strong> and the main lever.</td>
+</tr>
+<tr>
+<td><code>AnimationPlayer</code> — palette + base colours</td>
+<td>73 B</td>
+<td><code>palette[PALETTE_STOPS=16]</code> (64 B) + <code>baseColors[BASE_COLORS_COUNT=3]</code> (9 B). Fixed, independent of slot count.</td>
+</tr>
+<tr>
+<td><code>LNPanel</code> other fields</td>
+<td>~30 B</td>
+<td>Address, flags, config, misc bookkeeping.</td>
+</tr>
+<tr>
+<td>3 × <code>LightnetPanelEdge</code> + <code>LightnetPinger</code></td>
+<td>~125 B</td>
+<td>Per-edge state for the 3 physical connectors plus ping-pulse tracking.</td>
+</tr>
+<tr>
+<td>Arduino Serial ring buffers (<code>SERIAL_RX=2</code> + <code>SERIAL_TX=32</code>)</td>
+<td>~34 B</td>
+<td>Reduced from MiniCore defaults (64 B RX is overkill for 57600-baud debug output).</td>
+</tr>
+<tr>
+<td><strong>Static total</strong> (above)</td>
+<td><strong>~1652 B</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>Free for stack growth / runtime dynamic state</td>
+<td><strong>remainder</strong></td>
+<td>See below.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="current-measurement">Current measurement<a class="headerlink" href="#current-measurement" title="Permanent link">&para;</a></h3>
+<p>At <code>MAX_ANIM_SLOTS = 18</code> (<code>pio run -e panel_atmega328p</code>):</p>
+<div class="language-text highlight"><span class="filename">Text Only</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>RAM:   [========  ]  83.0% (used 1700 bytes from 2048 bytes)
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Flash: [=====     ]  51.4% (used 16844 bytes from 32768 bytes)
+</span></code></pre></div>
+<p><strong>348 B free</strong> for stack and any remaining heap use. Flash is not a constraint (51.4%).</p>
+<h3 id="sizing-max_anim_slots">Sizing <code>MAX_ANIM_SLOTS</code><a class="headerlink" href="#sizing-max_anim_slots" title="Permanent link">&para;</a></h3>
+<p>Marginal cost is <strong>55 B per slot</strong>, confirmed empirically (14→24 slots: +550 B = 55 B/slot).
+From the 18-slot baseline above:</p>
+<ul>
+<li><strong>Hard ceiling</strong> (0 B free, unsafe): 18 + ⌊348 / 55⌋ = <strong>24 slots</strong>. Don't do this — leaves
+  nothing for the call stack, which on AVR with FastLED's interrupt-driven output and nested
+  <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> <abbr title="Interrupt Service Routine — a small function the CPU jumps into when a hardware event fires.">ISR</abbr> handling needs real headroom.</li>
+<li><strong>Practical safe range</strong>: keep ≥150–200 B free for stack. That's 18 + ⌊(348−175)/55⌋ ≈
+  <strong>21 slots</strong> as a hard upper bound. <strong>18 is the current default</strong> (348 B / 17.0% free) — within
+  the safe range, but note that <code>composite()</code> also puts a transient <code>7 × MAX_ANIM_SLOTS</code> B array
+  on the stack each frame (126 B at 18), so the effective per-frame headroom is tighter than the
+  static free figure suggests. Going above 18 is not recommended without an on-device free-stack
+  measurement.</li>
+</ul>
+<p>If a panel starts crashing mid-init, dropping <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> packets, or printing garbage on serial after
+raising <code>MAX_ANIM_SLOTS</code>, that's stack-corruption-by-overrun — lower it back down (or also check
+<code>TWI_BUFFER_SIZE</code> / <code>RX_QUEUE_BYTES</code>, the other two static-budget knobs).</p>
+<h3 id="future-option-shared-pending-buffer">Future option: shared <code>pending</code> buffer<a class="headerlink" href="#future-option-shared-pending-buffer" title="Permanent link">&para;</a></h3>
+<p><code>Slot::pending</code> is a second full <code>AnimationState</code> (22 B) used only transiently, while a
+transition is being staged for the <em>next</em> step. If <code>AnimationPlayer</code> held <strong>one</strong> shared
+<code>pending</code> buffer at the player level (used one slot at a time during step transitions) instead of
+one per slot, marginal cost would drop from 55 B/slot to ~33 B/slot — nearly doubling the slot
+count for the same RAM. Not implemented; would need care around concurrent multi-slot
+transitions (e.g. group-synced steps firing on the same tick).</p>
 <hr />
 <ul>
 <li><a href="../getting-started/">Build &amp; Flash</a> — Fuse values, bootloader install, and all flash commands</li>

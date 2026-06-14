@@ -1724,7 +1724,7 @@
 <tr>
 <td><code>test_topology</code></td>
 <td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_topology/test_main.cpp"><code>test/test_topology/test_main.cpp</code></a></td>
-<td><code>TopologyIndex</code> — depth, leaf/branch, canonical order, neighbours, subtree, multi-source distances, re-rooting, fallback root (against the worked topology in <code>docs/design/scene-portability.md</code>)</td>
+<td><code>TopologyIndex</code> — depth, leaf/branch, canonical order, neighbours, subtree, multi-source distances, re-rooting, fallback root (against the worked topology in <a href="../animations/scene-authoring/#2-how-the-panels-are-connected--topology">Scene Authoring §2</a>)</td>
 </tr>
 <tr>
 <td><code>test_panel_selector</code></td>
@@ -1756,9 +1756,14 @@
 <td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_panel_anim/test_main.cpp"><code>test/test_panel_anim/test_main.cpp</code></a></td>
 <td>Portable <code>Core/Anim/AnimationPlayer</code> — time-as-parameter (deterministic FADE), <code>setColorDirect</code> ungated (delta-gate regression), <code>FLAG_CURRENT_COLOR_*</code> reads current output, SOLID hold</td>
 </tr>
+<tr>
+<td><code>test_spsc_queue</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_spsc_queue/test_main.cpp"><code>test/test_spsc_queue/test_main.cpp</code></a></td>
+<td>Lock-free <code>Core/Util/SpscByteQueue</code> — FIFO order, full/empty edges, wrap-boundary straddle integrity, panel-sized (70 B) max record, 200k-iteration fuzz vs. a reference model</td>
+</tr>
 </tbody>
 </table>
-<p>126 tests total, ~6 s wall time.</p>
+<p>241 tests total, ~9 s wall time.</p>
 <hr />
 <h2 id="what-is-testable-natively-what-isnt">What is testable natively, what isn't<a class="headerlink" href="#what-is-testable-natively-what-isnt" title="Permanent link">&para;</a></h2>
 <table>

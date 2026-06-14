@@ -1733,12 +1733,36 @@
 <td><code>ServiceDiscovery</code> interface, <code>SavedDevice</code>, <code>DeviceRepository</code></td>
 </tr>
 <tr>
+<td><code>animation/</code></td>
+<td><code>NativeAnimCore</code>, <code>PanelAnimationPlayer</code> — client-side preview of panel animations</td>
+</tr>
+<tr>
+<td><code>network/</code></td>
+<td><code>DnsResolver</code> — resolves <abbr title="Multicast DNS — local-network discovery protocol that lets devices announce a hostname like `lightnet-xxxx.local` without DNS or static IP.">mDNS</abbr> hostnames to IPs</td>
+</tr>
+<tr>
+<td><code>settings/</code></td>
+<td><code>AppPreferences</code>, <code>DevicePreferences</code>, <code>SceneRepository</code> — multiplatform-settings backed prefs</td>
+</tr>
+<tr>
+<td><code>debug/</code></td>
+<td><code>DebugLog</code> — in-app log buffer + debug mode flag</td>
+</tr>
+<tr>
 <td><code>ui/screens/</code></td>
-<td>Compose screens: <code>MyDevicesScreen</code>, <code>DeviceDiscoveryScreen</code>, <code>DeviceControllerScreen</code></td>
+<td>Compose screens: <code>MyDevicesScreen</code>, <code>DeviceControllerScreen</code>, <code>DeviceSettingsScreen</code>, <code>GlobalSettingsScreen</code>, <code>DebugScreen</code>, <code>PaletteEditorScreen</code>, <code>ScenesSettingsScreen</code>; bottom sheets: <code>AddDeviceSheet</code>, <code>EditDeviceSheet</code>, <code>ColorPickerSheet</code>, <code>DeviceSwitcherSheet</code></td>
+</tr>
+<tr>
+<td><code>ui/screens/scene/</code></td>
+<td>Scene editor: <code>SceneEditorScreen</code>, <code>LayerEditorScreen</code>, <code>StepEditorScreen</code></td>
 </tr>
 <tr>
 <td><code>ui/components/</code></td>
 <td><code>LightnetDeviceVisualizer</code> — Compose Canvas renderer + gesture handling</td>
+</tr>
+<tr>
+<td><code>ui/theme/</code></td>
+<td>App theming (colours, typography)</td>
 </tr>
 </tbody>
 </table>
@@ -1772,14 +1796,8 @@
 </div>
 <p><code>DeviceControllerScreen</code> uses <code>host == "mock"</code> to choose <code>MockConnector</code> vs <code>SocketConnector</code>.</p>
 <h2 id="navigation">Navigation<a class="headerlink" href="#navigation" title="Permanent link">&para;</a></h2>
-<p>Simple state-based back-stack in <code>App.kt</code> (<code>mutableStateListOf&lt;AppScreen&gt;</code>). No navigation library. <code>AppScreen</code> is a sealed class with three variants:</p>
-<div class="language-kotlin highlight"><span class="filename">Kotlin</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">sealed</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">AppScreen</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="kd">object</span><span class="w"> </span><span class="nc">MyDevices</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">AppScreen</span><span class="p">()</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="kd">object</span><span class="w"> </span><span class="nc">DeviceDiscovery</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">AppScreen</span><span class="p">()</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="kd">data</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">DeviceController</span><span class="p">(</span><span class="kd">val</span><span class="w"> </span><span class="nv">host</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">port</span><span class="p">:</span><span class="w"> </span><span class="kt">Int</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">AppScreen</span><span class="p">()</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">}</span>
-</span></code></pre></div>
-<p>Device list state is lifted to <code>LightnetApp</code> and refreshed after every add/delete.</p>
+<p>State-based in <code>App.kt</code> — no navigation library, no sealed screen class. Three boolean/nullable vars drive routing: <code>showGlobalSettings</code>, <code>showDevice</code>, <code>activeDevice</code>. The default view is <code>MyDevicesScreen</code>; opening a device sets <code>activeDevice</code> and <code>showDevice = true</code>.</p>
+<p>Device add/edit is handled by <code>AddDeviceSheet</code> / <code>EditDeviceSheet</code> bottom sheets overlaid on whichever screen is active.</p>
 <h2 id="visualiser">Visualiser<a class="headerlink" href="#visualiser" title="Permanent link">&para;</a></h2>
 <p><code>LightnetDeviceVisualizer</code> is a Compose <code>Canvas</code> component:</p>
 <ul>
