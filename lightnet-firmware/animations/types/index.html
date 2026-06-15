@@ -1087,30 +1087,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#modifier-layers" class="md-nav__link">
+  <a href="#modifier-targets-animates" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Modifier Layers
+        Modifier targets (animates)
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Modifier Layers">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#mod_dim-mod_desaturate-mod_hue_shift-mod_invert-mod_brighten-mod_saturate" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        MOD_DIM / MOD_DESATURATE / MOD_HUE_SHIFT / MOD_INVERT / MOD_BRIGHTEN / MOD_SATURATE
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1894,30 +1877,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#modifier-layers" class="md-nav__link">
+  <a href="#modifier-targets-animates" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Modifier Layers
+        Modifier targets (animates)
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Modifier Layers">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#mod_dim-mod_desaturate-mod_hue_shift-mod_invert-mod_brighten-mod_saturate" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        MOD_DIM / MOD_DESATURATE / MOD_HUE_SHIFT / MOD_INVERT / MOD_BRIGHTEN / MOD_SATURATE
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -2173,6 +2139,16 @@
 <td>array, ≤2 × 0–255</td>
 <td>Type-specific parameters (see each type). The parser accepts up to 4 entries for forward-compatibility, but the panel firmware currently uses only <code>params[0]</code> and <code>params[1]</code>.</td>
 </tr>
+<tr>
+<td><code>animates</code></td>
+<td>string</td>
+<td>What this animation modulates: <code>color</code> (default), <code>dim</code>, <code>desaturate</code>, <code>hue</code>, <code>invert</code>, <code>brighten</code>, or <code>saturate</code>. See <a href="#modifier-targets-animates">Modifier targets</a>.</td>
+</tr>
+<tr>
+<td><code>from</code> / <code>to</code></td>
+<td>0–255</td>
+<td>Scalar ramp endpoints, used instead of <code>colorFrom</code>/<code>colorTo</code> when <code>animates</code> is not <code>color</code>.</td>
+</tr>
 </tbody>
 </table>
 <hr />
@@ -2379,65 +2355,77 @@
 </div>
 <p>Triggers are sent via WebSocket — see <a href="../api/#websocket-triggers">API → WebSocket Triggers</a>.</p>
 <hr />
-<h2 id="modifier-layers">Modifier Layers<a class="headerlink" href="#modifier-layers" title="Permanent link">&para;</a></h2>
-<p>Modifier steps transform the colour composited <strong>below</strong> them rather than producing their own (see
-<a href="../concepts/#layer-compositing">Concepts → Layer compositing</a>). They animate a scalar <code>from</code> → <code>to</code>
-(0–255) over <code>duration</code>, and a finished modifier <strong>holds</strong> its final value. Place a modifier layer
-<em>after</em> (above) the layers it should affect.</p>
-<h3 id="mod_dim-mod_desaturate-mod_hue_shift-mod_invert-mod_brighten-mod_saturate">MOD_DIM / MOD_DESATURATE / MOD_HUE_SHIFT / MOD_INVERT / MOD_BRIGHTEN / MOD_SATURATE<a class="headerlink" href="#mod_dim-mod_desaturate-mod_hue_shift-mod_invert-mod_brighten-mod_saturate" title="Permanent link">&para;</a></h3>
+<h2 id="modifier-targets-animates">Modifier targets (<code>animates</code>)<a class="headerlink" href="#modifier-targets-animates" title="Permanent link">&para;</a></h2>
+<p>Every panel-local animation type (except <code>HUE_CYCLE</code>) can either produce its own colour (the
+default, <code>animates: "color"</code>) or transform the colour composited <strong>below</strong> it (see
+<a href="../concepts/#layer-compositing">Concepts → Layer compositing</a>). The <em>shape</em> of the animation
+(<code>SOLID</code>/<code>FADE</code>/<code>BREATHE</code>/<code>PULSE</code>/<code>BLINK</code>/<code>STROBE</code>/<code>REACTIVE</code>) is unchanged — only the thing being
+ramped changes: <code>colorFrom</code>/<code>colorTo</code> (color) vs. <code>from</code>/<code>to</code> (a 0–255 scalar). A finished,
+non-looping modifier <strong>holds</strong> its final value. Place a modifier layer <em>after</em> (above) the layers
+it should affect.</p>
 <div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span>
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MOD_DIM&quot;</span><span class="p">,</span>
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">&quot;from&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span>
-</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span><span class="nt">&quot;to&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">64</span><span class="p">,</span>
-</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2000</span>
-</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="p">}</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BREATHE&quot;</span><span class="p">,</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">&quot;animates&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dim&quot;</span><span class="p">,</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span><span class="nt">&quot;from&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="nt">&quot;to&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">64</span><span class="p">,</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">  </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2000</span><span class="p">,</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">  </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="p">}</span>
 </span></code></pre></div>
 <table>
 <thead>
 <tr>
-<th>Type</th>
-<th><code>from</code>/<code>to</code></th>
+<th><code>animates</code></th>
+<th>Effect</th>
 <th>Identity (no-op)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>MOD_DIM</code></td>
+<td><code>dim</code></td>
 <td>brightness scale down toward black, 255 = full</td>
 <td>255</td>
 </tr>
 <tr>
-<td><code>MOD_DESATURATE</code></td>
+<td><code>desaturate</code></td>
 <td>saturation scale down toward grey, 255 = unchanged</td>
 <td>255</td>
 </tr>
 <tr>
-<td><code>MOD_HUE_SHIFT</code></td>
+<td><code>hue</code></td>
 <td>hue rotation, 0…255 = a full turn</td>
 <td>0</td>
 </tr>
 <tr>
-<td><code>MOD_INVERT</code></td>
+<td><code>invert</code></td>
 <td>cross-fade toward RGB-inverted (<code>255-r,255-g,255-b</code>); 255 = fully inverted</td>
 <td>0</td>
 </tr>
 <tr>
-<td><code>MOD_BRIGHTEN</code></td>
+<td><code>brighten</code></td>
 <td>push brightness up toward white, 255 = white</td>
 <td>0</td>
 </tr>
 <tr>
-<td><code>MOD_SATURATE</code></td>
+<td><code>saturate</code></td>
 <td>push saturation up toward fully saturated, 255 = max</td>
 <td>0</td>
 </tr>
 </tbody>
 </table>
-<p><code>MOD_DIM</code>/<code>MOD_BRIGHTEN</code> and <code>MOD_INVERT</code> are exact (RGB multiply / lerp); desaturate/saturate/hue
-variants use an integer HSV approximation on the panel (small, deterministic colour drift, bypassed
-at the identity value). Use <code>MOD_BRIGHTEN</code>/<code>MOD_SATURATE</code> when you want a sweep to <em>increase</em>
-brightness/saturation rather than suppress it — e.g. a wave that flares a dim background brighter,
-or pushes a muted colour toward full saturation.</p>
+<p><code>dim</code>/<code>brighten</code> and <code>invert</code> are exact (RGB multiply / lerp); <code>desaturate</code>/<code>saturate</code>/<code>hue</code> use an
+integer HSV approximation on the panel (small, deterministic colour drift, bypassed at the identity
+value). Use <code>brighten</code>/<code>saturate</code> when you want a sweep to <em>increase</em> brightness/saturation rather
+than suppress it — e.g. a wave that flares a dim background brighter, or pushes a muted colour
+toward full saturation.</p>
+<p><strong>Exceptions:</strong></p>
+<ul>
+<li><code>HUE_CYCLE</code> is colour-only — <code>animates</code> must be <code>color</code> (or omitted).</li>
+<li><code>SOLID</code> only reads <code>from</code> (a constant value); <code>to</code> is ignored.</li>
+<li><code>invert</code> ignores <code>from</code>/<code>to</code> entirely — it's a fixed full-strength modifier; the animation's
+  envelope (e.g. <code>BREATHE</code>'s oscillation) still drives <em>when</em> the invert is applied, just not its
+  strength.</li>
+</ul>
 <hr />
 <h2 id="controller-runners">Controller Runners<a class="headerlink" href="#controller-runners" title="Permanent link">&para;</a></h2>
 <p>Runners appear as steps with a <code>"runner"</code> field instead of <code>"type"</code>. As of protocol v6 a runner is
@@ -2469,7 +2457,7 @@ to the <code>max</code> blend so its dark phase is transparent over the backgrou
 <tr>
 <td><code>duration</code></td>
 <td>ms</td>
-<td>Total duration of the runner effect (one lap, for repeating/looping runners)</td>
+<td>Total duration of the runner effect (one lap, for repeating/looping runners). For WAVE/RIPPLE/CHASE, also each individual sweep's travel time.</td>
 </tr>
 <tr>
 <td><code>directionality</code></td>
@@ -2497,14 +2485,14 @@ to the <code>max</code> blend so its dark phase is transparent over the backgrou
 <td>Band / ring / tail / fade width (also settable as <code>params[0]</code>) — see each runner's table for what <code>width</code> means for it</td>
 </tr>
 <tr>
-<td><code>repeat</code></td>
-<td>bool</td>
-<td>WAVE/RIPPLE/CHASE: a continuous train of evenly-spaced sweeps instead of a single pass, see below. Ignored by BOUNCE/RAIN/SPARKLE.</td>
+<td><code>density</code></td>
+<td>0–255</td>
+<td>WAVE/RIPPLE/CHASE: spawn density of the continuous sweep train (<code>params[5]</code>, default 0). <code>0</code> = one sweep in flight at a time, gapless; <code>255</code> = up to <code>MAX_CONCURRENT_SWEEPS</code> sweeps in flight. Linear in between (<code>spawnSweepIntervalMs</code> in <code>RunnerSpawn.hpp</code>). Ignored by BOUNCE/WHEEL/RAIN/SPARKLE/MATRIX.</td>
 </tr>
 <tr>
 <td><code>repeatCount</code> / <code>waves</code></td>
 <td>1–255</td>
-<td>With <code>repeat:true</code> (WAVE/RIPPLE/CHASE/WHEEL): number of sweeps in flight at once. For <strong>RAIN/SPARKLE/MATRIX</strong> (particle spawners) <code>waves</code> is instead the <strong>spawn rate</strong> — drops/flashes per <strong>second</strong>. <code>params[5]</code>. Default 1.</td>
+<td><strong>RAIN/SPARKLE/MATRIX</strong> (particle spawners): the <strong>spawn rate</strong> — drops/flashes per <strong>second</strong>. <code>params[5]</code>. Default 1.</td>
 </tr>
 <tr>
 <td><code>speed</code></td>
@@ -2514,29 +2502,25 @@ to the <code>max</code> blend so its dark phase is transparent over the backgrou
 <tr>
 <td><code>animates</code></td>
 <td>string</td>
-<td>What the sweep modulates: <code>color</code> (default), <code>dim</code>, <code>desaturate</code>, <code>hue</code>, <code>invert</code>, <code>brighten</code>, or <code>saturate</code></td>
+<td>What the sweep modulates: <code>color</code> (default), <code>dim</code>, <code>desaturate</code>, <code>hue</code>, <code>invert</code>, <code>brighten</code>, or <code>saturate</code>. See <a href="#modifier-targets-animates">Modifier targets</a>.</td>
 </tr>
 <tr>
 <td><code>amount</code></td>
 <td>0–255</td>
 <td>Peak intensity for non-<code>color</code> targets (also settable as <code>params[4]</code>); ignored when <code>animates:color</code></td>
 </tr>
-<tr>
-<td><code>shape</code></td>
-<td>string</td>
-<td>Envelope shape for non-<code>color</code> sweeps: <code>fall</code> (peak→identity, default), <code>rise</code> (identity→peak), or <code>bell</code> (identity→peak→identity). Ignored when <code>animates:color</code>, and when <code>repeat:true</code> (repeating modifier sweeps always use <code>bell</code>, see below).</td>
-</tr>
 </tbody>
 </table>
-<p><strong>What the sweep animates.</strong> By default a runner sweeps <code>color</code> — each panel snaps a <code>PULSE</code>
-between <code>color</code> and the layer's background. Setting <code>animates</code> to <code>dim</code>, <code>desaturate</code>, <code>hue</code>,
-<code>invert</code>, <code>brighten</code>, or <code>saturate</code> instead drives the matching <code>MOD_*</code> modifier on each panel as
-the sweep passes through it: the panel snaps to <code>amount</code> at onset and <strong>decays back to that
-property's identity</strong> over the lit window, so the effect modulates — rather than replaces —
-whatever colour is composited below it (e.g. a dimming wave over an ambient background, a hue
-sweep rotating it, or a <code>brighten</code>/<code>saturate</code> wave flaring it brighter or more vivid, as it
-passes). The identity value is 255 for <code>dim</code>/<code>desaturate</code> (suppress toward black/grey), 0 for
-<code>hue</code>/<code>invert</code>, and 0 for <code>brighten</code>/<code>saturate</code> (boost toward white/full saturation).</p>
+<p><strong>What the sweep animates.</strong> By default a runner sweeps <code>color</code> — each panel runs a <code>PULSE</code>
+between <code>color</code> and the layer's background as the sweep passes through it. Setting <code>animates</code> to
+<code>dim</code>, <code>desaturate</code>, <code>hue</code>, <code>invert</code>, <code>brighten</code>, or <code>saturate</code> instead compiles the <strong>same</strong>
+<code>PULSE</code> (same <code>risePct</code>/<code>fallPct</code> envelope as the colour sweep would use), but ramps <code>valueFrom</code>/
+<code>valueTo</code> between that property's identity value and <code>amount</code> (peak) instead of <code>colorFrom</code>/
+<code>colorTo</code> — so the effect modulates, rather than replaces, whatever colour is composited below it
+(e.g. a dimming wave over an ambient background, a hue sweep rotating it, or a <code>brighten</code>/
+<code>saturate</code> wave flaring it brighter or more vivid, as it passes). The identity value is 255 for
+<code>dim</code>/<code>desaturate</code> (suppress toward black/grey) and 0 for <code>hue</code>/<code>invert</code>/<code>brighten</code>/<code>saturate</code>
+(boost toward white/full saturation/full rotation/full invert).</p>
 <div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span>
 </span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;WAVE&quot;</span><span class="p">,</span>
 </span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;root&quot;</span><span class="p">,</span>
@@ -2562,80 +2546,43 @@ passes). The identity value is 255 for <code>dim</code>/<code>desaturate</code> 
 </tr>
 <tr>
 <td><code>dim</code></td>
-<td><code>MOD_DIM</code> sweep</td>
+<td>dim modifier sweep</td>
 <td>peak dimming: <code>0</code> = blackout, <code>255</code> = no change</td>
 </tr>
 <tr>
 <td><code>desaturate</code></td>
-<td><code>MOD_DESATURATE</code> sweep</td>
+<td>desaturate modifier sweep</td>
 <td>peak desaturation: <code>0</code> = full grey, <code>255</code> = no change</td>
 </tr>
 <tr>
 <td><code>hue</code></td>
-<td><code>MOD_HUE_SHIFT</code> sweep</td>
+<td>hue-shift modifier sweep</td>
 <td>peak hue rotation: <code>0…255</code> = a full turn</td>
 </tr>
 <tr>
 <td><code>invert</code></td>
-<td><code>MOD_INVERT</code> sweep</td>
+<td>invert modifier sweep</td>
 <td>peak invert blend: <code>0</code> = no change, <code>255</code> = fully inverted</td>
 </tr>
 <tr>
 <td><code>brighten</code></td>
-<td><code>MOD_BRIGHTEN</code> sweep</td>
+<td>brighten modifier sweep</td>
 <td>peak brightening: <code>0</code> = no change, <code>255</code> = white</td>
 </tr>
 <tr>
 <td><code>saturate</code></td>
-<td><code>MOD_SATURATE</code> sweep</td>
+<td>saturate modifier sweep</td>
 <td>peak saturation boost: <code>0</code> = no change, <code>255</code> = fully saturated</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Envelope shape (<code>shape</code>).</strong> For non-<code>color</code> sweeps the shape of the modifier envelope within
-each panel's lit window is configurable:</p>
-<table>
-<thead>
-<tr>
-<th><code>shape</code></th>
-<th>Envelope</th>
-<th>Effect</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>fall</code> <em>(default)</em></td>
-<td>peak → identity</td>
-<td>burst that decays (e.g. brightness flare that fades)</td>
-</tr>
-<tr>
-<td><code>rise</code></td>
-<td>identity → peak</td>
-<td>swell that builds (e.g. brightness that brightens as the wave passes)</td>
-</tr>
-<tr>
-<td><code>bell</code></td>
-<td>identity → peak → identity</td>
-<td>symmetric pulse — bright in the middle, soft on both edges</td>
-</tr>
-</tbody>
-</table>
-<p>No protocol change: this reuses the existing modifier <code>PREPARE</code> with <code>param1 = amount</code> (peak) and
-<code>param2</code> = the property's identity value, and the panel's existing linear modifier ramp.</p>
 <p><strong>Repeating sweeps (<code>repeat</code>).</strong> WAVE, RIPPLE, and CHASE normally play one pass over <code>duration</code>
 and stop. Setting <code>"repeat": true</code> instead turns <code>duration</code> into the time for <strong>one lap</strong> and
 loops the sweep forever — a continuous train of evenly-spaced rings/bands/blips, several in
 flight at once.</p>
-<ul>
-<li><code>animates:color</code> (default): each pass is a true dark gap between passes (the swapped-colour
-  trick — departing → dark → approaching).</li>
-<li>Any other <code>animates</code> (<code>dim</code>/<code>desaturate</code>/<code>hue</code>/<code>invert</code>/<code>brighten</code>/<code>saturate</code>): each pass is a
-  <code>bell</code> envelope (identity → <code>amount</code> → identity), regardless of the step's <code>shape</code>. A
-  rise/fall envelope can't loop without a discontinuity (it would jump from <code>amount</code> straight
-  back to identity at the seam), so repeating modifier sweeps always use <code>bell</code>, which already
-  starts and ends at identity and therefore loops cleanly — the same trick used for the WHEEL
-  modifier blade.</li>
-</ul>
+<p>For both <code>animates:color</code> and any other <code>animates</code>, each pass uses the same swapped-endpoints
+trick — departing → dark/identity → approaching — on <code>colorFrom</code>/<code>colorTo</code> for <code>color</code> or
+<code>valueFrom</code>/<code>valueTo</code> for the other targets. The same trick is used for the WHEEL blade.</p>
 <p>Needs <code>schemaVersion: 5</code>.</p>
 <div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">{</span>
 </span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;RIPPLE&quot;</span><span class="p">,</span>
@@ -2827,8 +2774,9 @@ is the time for one full rotation.</p>
 </tr>
 </tbody>
 </table>
-<p><code>angle</code> and <code>waveWidth</code>/<code>rippleWidth</code> are N/A. When <code>animates</code> is not <code>color</code>, the blade automatically
-uses a <code>bell</code> envelope (soft on both edges) since WHEEL always loops — <code>shape</code> has no effect on WHEEL.
+<p><code>angle</code> and <code>waveWidth</code>/<code>rippleWidth</code> are N/A. WHEEL always loops, so each blade uses the same
+swapped-endpoints trick as a repeating WAVE/RIPPLE/CHASE (departing → dark/identity → approaching),
+regardless of <code>animates</code>.
 Needs <code>schemaVersion: 5</code>.</p>
 <hr />
 <h3 id="bounce">BOUNCE<a class="headerlink" href="#bounce" title="Permanent link">&para;</a></h3>
@@ -2881,7 +2829,7 @@ in-flight drops simply finish (a soft, seamless boundary).</p>
 <li><code>speed</code> is the constant <strong>drop fall-time</strong> — how long one drop takes to cross its path.</li>
 <li><code>waves</code> is the <strong>spawn rate</strong> in drops per second.</li>
 <li><code>width</code> is the <strong>tail length</strong> in rings (hops behind the head that fade out).</li>
-<li><code>reverse</code> makes drops rise (leaf→root). <code>animates</code> (+ <code>amount</code>/<code>shape</code>) work as for any runner
+<li><code>reverse</code> makes drops rise (leaf→root). <code>animates</code> (+ <code>amount</code>) work as for any runner
   (e.g. <code>animates:dim</code> → dimming raindrops); <code>colorFrom</code> is the colour the tail fades to (default
   black), <code>color</code> the head colour.</li>
 <li><strong>Directionality.</strong> By default drops fall <strong>down the tree</strong> (root→leaf). With
@@ -2946,7 +2894,7 @@ the play window ends, in-flight fades simply finish.</p>
 <li><code>duration</code> is the <strong>play window</strong> (use <code>0</code> on the last step to twinkle indefinitely).</li>
 <li><code>waves</code> is the <strong>spawn rate</strong> in flashes per second.</li>
 <li><code>width</code> is the <strong>fade-out duration</strong> (<code>0</code>–<code>255</code>, longer = slower fade).</li>
-<li><code>animates</code> (+ <code>amount</code>/<code>shape</code>) and <code>colorFrom</code>→<code>color</code> work as for any runner. SPARKLE ignores
+<li><code>animates</code> (+ <code>amount</code>) and <code>colorFrom</code>→<code>color</code> work as for any runner. SPARKLE ignores
   <code>speed</code>.</li>
 </ul>
 <div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="p">{</span>

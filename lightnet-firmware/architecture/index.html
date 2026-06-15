@@ -2599,7 +2599,7 @@ synchronous (<code>200</code>). See <a href="#8-concurrency-task-model-deferred-
 </tr>
 <tr>
 <td><code>AnimationPlayer</code></td>
-<td>Layer compositor: <code>slots[4]</code> composited each ~16 ms tick (blend modes + <code>MOD_*</code> modifiers + background base). Resolves <code>ColorRef</code> → RGB against panel's current palette + base colors</td>
+<td>Layer compositor: <code>slots[4]</code> composited each ~16 ms tick (blend modes + <code>animates</code> modifier targets + background base). Resolves <code>ColorRef</code> → RGB against panel's current palette + base colors</td>
 </tr>
 <tr>
 <td><code>BootloaderBridge</code></td>
@@ -2841,9 +2841,9 @@ It is the <strong>single implementation</strong> of panel-local animation math, 
   phase offset so they start immediately and re-fire/sync seamlessly. After onset, the layer
   composites until finish→hold (or repeats if looping), then <code>ColorCompose::foldLayers()</code> sorts by
   <code>composeOrder</code> and folds onto the <strong>background base</strong> — one write to the LED.</li>
-<li>Source layers blend via <code>composeMode</code>; modifier layers (<code>MOD_*</code>) transform the accumulator
-  (brightness = RGB multiply; saturation/hue = integer HSV). Finished non-loop slots hold their
-  last value.</li>
+<li>Source layers blend via <code>composeMode</code>; modifier layers (<code>animates != TARGET_COLOR</code>) transform
+  the accumulator (brightness = RGB multiply; saturation/hue = integer HSV). Finished non-loop
+  slots hold their last value.</li>
 <li><code>PACKET_SET_BACKGROUND</code> sets the compositor base (default black; idle panels display it).</li>
 <li>Progress interpolation: <code>progress_q8 = (elapsed * 256) / durationMs</code> (q8 fixed-point). The pure
   compose/HSV/fold math lives in <code>Core/Anim/ColorCompose.hpp</code> (natively tested, shared with mobile

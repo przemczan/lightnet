@@ -2392,8 +2392,9 @@ in <code>layers[]</code> is the bottom of the stack). Each layer is one of:</p>
 <ul>
 <li>A <strong>source</strong> layer (any normal animation/runner) — produces a colour and combines it with what's
   below via its <code>blend</code> mode.</li>
-<li>A <strong>modifier</strong> layer (<code>MOD_*</code>) — has no colour of its own; it <em>transforms</em> the colour accumulated
-  below it (brightness/saturation/hue).</li>
+<li>A <strong>modifier</strong> layer (a panel-local step with <code>animates</code> set to something other than <code>color</code>) —
+  has no colour of its own; it <em>transforms</em> the colour accumulated below it (brightness/
+  saturation/hue).</li>
 </ul>
 <p>The accumulator starts from the scene <a href="#scene-background"><code>background</code></a> (black by default).</p>
 <h3 id="blend-modes-blend-on-a-layer">Blend modes (<code>"blend"</code> on a layer)<a class="headerlink" href="#blend-modes-blend-on-a-layer" title="Permanent link">&para;</a></h3>
@@ -2447,45 +2448,45 @@ in <code>layers[]</code> is the bottom of the stack). Each layer is one of:</p>
 clobbering it. <strong>Runner layers default to <code>max</code></strong> for exactly this reason (a runner's off-phase is
 black); a standalone runner over a black background looks identical to before.</p>
 <h3 id="modifier-layers">Modifier layers<a class="headerlink" href="#modifier-layers" title="Permanent link">&para;</a></h3>
-<p>A modifier is a step whose <code>type</code> is <code>MOD_DIM</code>, <code>MOD_DESATURATE</code>, <code>MOD_HUE_SHIFT</code>, <code>MOD_INVERT</code>,
-<code>MOD_BRIGHTEN</code>, or <code>MOD_SATURATE</code>. It animates a scalar from <code>from</code> → <code>to</code> (0–255) over its
-<code>duration</code> and applies it to everything composited below it:</p>
+<p>A modifier is a panel-local step (any <code>type</code> except <code>HUE_CYCLE</code>) with <code>animates</code> set to <code>dim</code>,
+<code>desaturate</code>, <code>hue</code>, <code>invert</code>, <code>brighten</code>, or <code>saturate</code>. It animates a scalar from <code>from</code> → <code>to</code>
+(0–255) over its <code>duration</code> and applies it to everything composited below it:</p>
 <table>
 <thead>
 <tr>
-<th>Type</th>
+<th><code>animates</code></th>
 <th><code>from</code>/<code>to</code> meaning</th>
 <th>Identity</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>MOD_DIM</code></td>
+<td><code>dim</code></td>
 <td>brightness scale down toward black (255 = full)</td>
 <td>255</td>
 </tr>
 <tr>
-<td><code>MOD_DESATURATE</code></td>
+<td><code>desaturate</code></td>
 <td>saturation scale down toward grey (255 = unchanged)</td>
 <td>255</td>
 </tr>
 <tr>
-<td><code>MOD_HUE_SHIFT</code></td>
+<td><code>hue</code></td>
 <td>hue rotation (0…255 = full turn)</td>
 <td>0</td>
 </tr>
 <tr>
-<td><code>MOD_INVERT</code></td>
+<td><code>invert</code></td>
 <td>cross-fade toward RGB-inverted colour (255 = fully inverted)</td>
 <td>0</td>
 </tr>
 <tr>
-<td><code>MOD_BRIGHTEN</code></td>
+<td><code>brighten</code></td>
 <td>push brightness up toward white (255 = white)</td>
 <td>0</td>
 </tr>
 <tr>
-<td><code>MOD_SATURATE</code></td>
+<td><code>saturate</code></td>
 <td>push saturation up toward fully saturated (255 = max)</td>
 <td>0</td>
 </tr>

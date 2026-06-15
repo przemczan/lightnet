@@ -2953,26 +2953,26 @@ single panel can run at once and what happens beyond that.</p>
 <p><strong>Runner layers default to <code>max</code></strong> so a runner's dark phase shows the background/layers below
 (a standalone runner over a black base is unchanged). To layer any source over a background, give
 it <code>add</code>/<code>max</code>/<code>screen</code>.</p>
-<p><strong>Modifier layers</strong> are steps whose <code>type</code> is <code>MOD_DIM</code> / <code>MOD_DESATURATE</code> / <code>MOD_HUE_SHIFT</code>
-/ <code>MOD_INVERT</code> / <code>MOD_BRIGHTEN</code> / <code>MOD_SATURATE</code> — they animate a scalar <code>from</code>→<code>to</code>
-(0–255) and reshape everything composited below. Put the modifier layer <em>after</em> (above) the layers
-it should affect:</p>
+<p><strong>Modifier layers</strong> are panel-local steps (any <code>type</code> except <code>HUE_CYCLE</code>) with <code>animates</code> set to
+something other than <code>color</code> — <code>dim</code> / <code>desaturate</code> / <code>hue</code> / <code>invert</code> / <code>brighten</code> / <code>saturate</code>.
+Instead of producing a colour, they animate a scalar <code>from</code>→<code>to</code> (0–255) and reshape everything
+composited below (see <a href="../types/#modifier-targets-animates">Modifier targets</a> for the full field
+reference). Put the modifier layer <em>after</em> (above) the layers it should affect:</p>
 <div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;base&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SOLID&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dim&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MOD_DIM&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;from&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;to&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dim&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FADE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;animates&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dim&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;from&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;to&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
 </span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="p">]</span>
 </span></code></pre></div>
 <p>A finished modifier <strong>holds</strong> its final value; ramp it back to identity to release: <code>255</code> for
-<code>MOD_DIM</code>/<code>MOD_DESATURATE</code>, <code>0</code> for <code>MOD_HUE_SHIFT</code>/<code>MOD_INVERT</code>, and <code>0</code> for
-<code>MOD_BRIGHTEN</code>/<code>MOD_SATURATE</code>.</p>
-<p><code>MOD_BRIGHTEN</code>/<code>MOD_SATURATE</code> are the inverse of <code>MOD_DIM</code>/<code>MOD_DESATURATE</code>:
+<code>dim</code>/<code>desaturate</code>, <code>0</code> for <code>hue</code>/<code>invert</code>, and <code>0</code> for <code>brighten</code>/<code>saturate</code>.</p>
+<p><code>brighten</code>/<code>saturate</code> are the inverse of <code>dim</code>/<code>desaturate</code>:
 identity at <code>0</code>, pushing toward white / full saturation as the value rises to <code>255</code>. Use these to
 <em>brighten</em> or <em>boost saturation</em> of whatever's below — e.g. flaring a dim background brighter, or
 making a multi-colour background more vivid (where the single-colour <code>screen</code>/<code>overlay</code> tricks
 don't generalise):</p>
 <div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;base&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SOLID&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;flare&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MOD_SATURATE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;from&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;to&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1500</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;flare&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FADE&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;animates&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;saturate&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;from&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;to&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1500</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
 </span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="p">]</span>
 </span></code></pre></div>
 <hr />
@@ -3146,13 +3146,13 @@ controller runner (<code>runner</code>) — never both — <strong>or</strong> a
 </tr>
 <tr>
 <td><code>animates</code> / <code>amount</code></td>
-<td>runner</td>
-<td>What the sweep modulates, and its peak intensity (§7.3).</td>
+<td>both</td>
+<td>What the animation/sweep modulates, and (for runners) its peak intensity (§7.3, <a href="../types/#modifier-targets-animates">types.md</a>).</td>
 </tr>
 <tr>
-<td><code>shape</code></td>
-<td>runner</td>
-<td>Envelope shape for non-<code>color</code> sweeps: <code>fall</code> (default) / <code>rise</code> / <code>bell</code> (§7.3).</td>
+<td><code>from</code> / <code>to</code></td>
+<td>panel-local</td>
+<td>Scalar ramp endpoints (0–255), used instead of <code>colorFrom</code>/<code>colorTo</code> when <code>animates</code> is not <code>color</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -3286,29 +3286,30 @@ ignored) and no <code>speed</code>. See
 </span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">  </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2500</span>
 </span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="p">}</span>
 </span></code></pre></div>
-<p><strong>Repeating sweeps — <code>repeat</code>.</strong> Set <code>"repeat": true</code> on a WAVE/RIPPLE/CHASE step to replay it
-as a continuous train instead of a single pass: <code>duration</code> becomes the time for <strong>one lap</strong>, and
-the ring/band/blip loops forever. For <code>animates:color</code> (default), each pass is a true dark gap
-between passes. For other <code>animates</code> targets, each pass is a <code>bell</code> envelope (identity → <code>amount</code>
-→ identity) — <code>shape</code> is ignored while repeating, since only <code>bell</code> loops without a jump. Needs
-<code>schemaVersion: 5</code>.</p>
+<p><strong>Repeating sweeps — <code>density</code>.</strong> WAVE/RIPPLE/CHASE are always a continuous train of passes:
+each pass is a full one-shot sweep from the field's origin to its far edge, travelling over
+<code>duration</code>, and a new pass starts on a schedule controlled by <code>"density"</code> (0-255, default 0):</p>
+<ul>
+<li><code>density: 0</code> — one pass in flight at a time, gapless (the next starts as the previous finishes).</li>
+<li><code>density: 128</code> — roughly two passes in flight at once.</li>
+<li><code>density: 255</code> — as many passes in flight as the implementation allows (capped, see
+  <a href="../types/"><code>types.md</code></a>).</li>
+</ul>
 <div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span>
 </span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;RIPPLE&quot;</span><span class="p">,</span>
 </span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;root&quot;</span><span class="p">,</span>
 </span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">96</span><span class="w"> </span><span class="p">},</span>
 </span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span><span class="nt">&quot;rippleWidth&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">  </span><span class="nt">&quot;repeat&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">  </span><span class="nt">&quot;density&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span>
 </span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">  </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1500</span>
 </span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="p">}</span>
 </span></code></pre></div>
-<p>For <strong>multiple evenly-spaced sweeps in flight at once</strong> (e.g. several waves chasing each other
-around the loop), add <code>"repeatCount": N</code> — see <a href="../types/"><code>types.md</code></a> for details.</p>
 <p><strong>What the sweep animates — <code>animates</code> / <code>amount</code>.</strong> By default a runner sweeps <code>color</code> (a
 per-panel <code>PULSE</code> between <code>color</code> and the background). Set <code>animates</code> to <code>dim</code> /
-<code>desaturate</code> / <code>hue</code> / <code>invert</code> / <code>brighten</code> / <code>saturate</code> to sweep one of the
-modifier properties instead — each panel snaps to <code>amount</code> (peak intensity, 0–255) as the sweep
-passes and decays back to that property's identity, so the wave <strong>modulates</strong> what's already
-showing rather than replacing it:</p>
+<code>desaturate</code> / <code>hue</code> / <code>invert</code> / <code>brighten</code> / <code>saturate</code> to compile the <strong>same</strong> <code>PULSE</code>
+(same envelope as the colour sweep), but ramping between that property's identity value and
+<code>amount</code> (peak intensity, 0–255) instead — so the wave <strong>modulates</strong> what's already showing
+rather than replacing it:</p>
 <div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">{</span>
 </span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;RIPPLE&quot;</span><span class="p">,</span>
 </span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;root&quot;</span><span class="p">,</span>
@@ -3364,37 +3365,6 @@ showing rather than replacing it:</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Envelope shape — <code>shape</code>.</strong> For non-<code>color</code> targets you can also control the <em>shape</em> of
-the modifier within each panel's lit window:</p>
-<table>
-<thead>
-<tr>
-<th><code>shape</code></th>
-<th>Envelope</th>
-<th>Use case</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>fall</code> <em>(default)</em></td>
-<td>peak → identity</td>
-<td>burst that decays</td>
-</tr>
-<tr>
-<td><code>rise</code></td>
-<td>identity → peak</td>
-<td>swell that builds</td>
-</tr>
-<tr>
-<td><code>bell</code></td>
-<td>identity → peak → identity</td>
-<td>soft symmetric pulse</td>
-</tr>
-</tbody>
-</table>
-<p><code>shape</code> is ignored when <code>animates: "color"</code>, and when <code>repeat: true</code> (a repeating modifier sweep
-always uses <code>bell</code> — see above). WHEEL forces <code>bell</code> (it always loops; <code>shape</code> has no effect on
-WHEEL).</p>
 <p>See <a href="../types/#controller-runners">Animation Types → Controller Runners</a> for the full mechanics.</p>
 <hr />
 <h2 id="8-directionality-the-source-field">8. Directionality — the <code>source</code> field<a class="headerlink" href="#8-directionality-the-source-field" title="Permanent link">&para;</a></h2>
@@ -3711,10 +3681,10 @@ that panel:</p>
   the same panel at the same moment</em> count against the 18.</li>
 </ul>
 <p>For the underlying mechanics (slot allocation, composite ordering, spawner pools), see
-<a href="../../lib/Lightnet/Core/Anim/AnimationPlayer.hpp"><code>AnimationPlayer.hpp</code></a> (<code>MAX_ANIM_SLOTS</code>) and
-<a href="../../lib/Lightnet/Controller/Scenes/ScenePlayer.cpp"><code>ScenePlayer.cpp</code></a> (<code>allocSpawnPools</code>).</p>
+<a href="lib/Lightnet/Core/Panel/AnimationPlayer.hpp"><code>AnimationPlayer.hpp</code></a> (<code>MAX_ANIM_SLOTS</code>) and
+<a href="lib/Lightnet/Core/Controller/ScenePlayer.cpp"><code>ScenePlayer.cpp</code></a> (<code>allocSpawnPools</code>).</p>
 <p>This 18-slot panel-side budget is independent of the controller-side
-<a href="../../lib/Lightnet/Controller/Animations/AnimationScheduler.hpp"><code>AnimationScheduler</code></a>
+<a href="lib/Lightnet/Core/Controller/AnimationScheduler.hpp"><code>AnimationScheduler</code></a>
 (<code>MAX_ACTIVE_RUNNERS = 8</code>), which tracks one in-flight <strong>runner</strong> (WAVE/RIPPLE/CHASE/WHEEL/
 BOUNCE/RAIN/SPARKLE/MATRIX) per layer. Since a scene has at most 8 layers, this cap is never
 actually reached — it just lets the controller pre-size its runner list at scene load instead
