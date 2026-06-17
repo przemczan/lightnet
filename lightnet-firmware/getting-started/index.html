@@ -1866,24 +1866,24 @@
 </thead>
 <tbody>
 <tr>
-<td><code>panel_nanoatmega328</code></td>
-<td>Arduino Nano (ATmega328)</td>
-<td>Arduino serial</td>
-<td>Arduino</td>
-<td>Via controller serial bridge</td>
+<td><code>panel_atmega328p_via_controller</code></td>
+<td>ATmega328P</td>
+<td>Custom serial via controller</td>
+<td>—</td>
+<td>Upload <code>.bin</code> over the controller's 57600-baud serial port</td>
 </tr>
 <tr>
 <td><code>panel_atmega328pb</code></td>
 <td>ATmega328PB</td>
 <td><abbr title="A cheap USB AVR programmer used to flash the bootloader and fuses onto a panel ATmega.">USBasp</abbr></td>
-<td>twiboot at <code>0x7C00</code></td>
+<td>twiboot at <code>0x7000</code></td>
 <td><code>-D</code> flag preserves bootloader on erase</td>
 </tr>
 <tr>
 <td><code>panel_atmega328p</code></td>
 <td>ATmega328P</td>
 <td><abbr title="A cheap USB AVR programmer used to flash the bootloader and fuses onto a panel ATmega.">USBasp</abbr></td>
-<td>twiboot at <code>0x7C00</code></td>
+<td>twiboot at <code>0x7000</code></td>
 <td>Same binary as 328PB</td>
 </tr>
 </tbody>
@@ -1918,7 +1918,7 @@
 <p>Wrong fuse values can lock the microcontroller. Use <code>pio run -e atmega328p_bootloader -t fuses</code> — don't set them by hand unless you know exactly what you're doing.</p>
 </div>
 <div class="language-text highlight"><span class="filename">Text Only</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>lfuse = 0xF7  — 16 MHz external full-swing crystal
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>hfuse = 0xD0  — SPIEN, EESAVE, BOOTRST (boot from twiboot)
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>hfuse = 0xD8  — SPIEN, EESAVE, BOOTRST (4 KB boot section at 0x7000)
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>efuse = 0xFC  — BOD 4.3 V
 </span></code></pre></div>
 <p>One-time sequence per panel:</p>

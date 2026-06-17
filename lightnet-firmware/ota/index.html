@@ -1855,7 +1855,7 @@
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1"># Hex file is in `.pio/build/atmega328pb_bootloader/firmware.hex`</span>
 </span></code></pre></div></p>
 <ul>
-<li>Lives in the <strong>4 KB boot section</strong> at <code>0x7C00</code> (ATmega328PB/P)</li>
+<li>Lives in the <strong>4 KB boot section</strong> at <code>0x7000</code> (ATmega328PB/P)</li>
 <li>TWI address: <code>0x29</code> (compiled in via <code>-DTWI_ADDRESS=0x29</code>)</li>
 <li>Stays in bootloader only when EEPROM byte 510 contains <code>0xB007</code> (cleared after first read)</li>
 </ul>
@@ -1863,13 +1863,13 @@
 <pre class="mermaid"><code>sequenceDiagram
   participant C as Controller
   participant P as Panel App
-  participant BL as twiboot (0x7C00)
+  participant BL as twiboot (0x7000)
 
   C-&gt;&gt;P: PACKET_ENTER_BOOTLOADER (type 201, token 0xB0)
   P-&gt;&gt;P: Write 0xB007 to EEPROM[510]
   P-&gt;&gt;P: Disable TWI + PCINT interrupts
   P-&gt;&gt;P: Zero SRAM 0x0100–0x04FF
-  P-&gt;&gt;BL: Software jump to 0x7C00
+  P-&gt;&gt;BL: Software jump to 0x7000
   BL-&gt;&gt;BL: Read EEPROM[510] == 0xB007 → stay resident, clear magic
   C-&gt;&gt;BL: CMD_WAIT (0x00) — verify presence
   loop per 128-byte page

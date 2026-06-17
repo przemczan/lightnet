@@ -833,6 +833,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#corecontroller-portable-scene-engine-esp-native-mobile-c-abi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core/Controller/ — portable scene engine (ESP + native + mobile C ABI)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#panel-atmega-only" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1975,6 +1986,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#corecontroller-portable-scene-engine-esp-native-mobile-c-abi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core/Controller/ — portable scene engine (ESP + native + mobile C ABI)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#panel-atmega-only" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2373,7 +2395,7 @@
 </ol>
 <hr />
 <h2 id="1-physical-topology">1. Physical Topology<a class="headerlink" href="#1-physical-topology" title="Permanent link">&para;</a></h2>
-<p>Panels form a <strong>tree structure</strong> rooted at the controller. Each panel has up to 3 edges (physical connectors); edges carry both power and a single-wire ping line. The controller discovers the network by sequentially pinging each edge via <abbr title="General-Purpose Input/Output — a pin on the microcontroller that can be driven high or low or read as a signal.">GPIO</abbr>, triggering <abbr title="Pin Change Interrupt — AVR feature that triggers an ISR whenever a watched pin changes state.">PCINT</abbr> interrupts on the receiving <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr>.</p>
+<p>Panels form a <strong>tree structure</strong> rooted at the controller. Each panel has up to 5 edges (physical connectors); edges carry both power and a single-wire ping line. The controller discovers the network by sequentially pinging each edge via <abbr title="General-Purpose Input/Output — a pin on the microcontroller that can be driven high or low or read as a signal.">GPIO</abbr>, triggering <abbr title="Pin Change Interrupt — AVR feature that triggers an ISR whenever a watched pin changes state.">PCINT</abbr> interrupts on the receiving <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr>.</p>
 <pre class="mermaid"><code>graph TD
   C[🎛️ Controller]
   C --&gt; A[Panel A — edge 0]
@@ -2420,15 +2442,15 @@
 </tr>
 <tr>
 <td><code>LightnetConfig</code></td>
-<td>Cross-cutting constants: <code>LIGHTNET_MAX_PANELS=100</code>, <code>PALETTE_STOPS=16</code>, <code>BASE_COLORS_COUNT=3</code></td>
+<td>Cross-cutting constants in <code>Core/Common/LightnetConfig.hpp</code>: <code>LIGHTNET_MAX_PANELS</code> (100 on <abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr>, 32 on <abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr>), <code>PALETTE_STOPS=16</code>, <code>BASE_COLORS_COUNT=3</code></td>
 </tr>
 <tr>
 <td><code>ColorRef</code></td>
-<td>4-byte tagged union: <code>kind=0</code> inline RGB, <code>kind=1</code> palette position, <code>kind=2</code> base-color slot</td>
+<td>4-byte tagged union in <code>Core/Common/ColorRef.hpp</code>: <code>kind=0</code> inline RGB, <code>kind=1</code> palette position, <code>kind=2</code> base-color slot</td>
 </tr>
 <tr>
 <td><code>Palette</code></td>
-<td><code>GradientStop</code> struct (pos+RGB, 4 B) and <code>samplePalette()</code> linear interpolation. No FastLED dependency</td>
+<td><code>GradientStop</code> struct (pos+RGB, 4 B) and <code>samplePalette()</code> in <code>Core/Common/Palette.hpp</code></td>
 </tr>
 </tbody>
 </table>
@@ -2460,7 +2482,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Animations/</strong></p>
+<p><strong>Animations/</strong> (device glue — demos only)</p>
 <table>
 <thead>
 <tr>
@@ -2470,20 +2492,31 @@
 </thead>
 <tbody>
 <tr>
-<td><code>AnimationScheduler</code></td>
-<td><code>playOnPanels()</code> PREPARE+START sequence; <code>sendPrepareToPanel()</code>/<code>sendGroupStart()</code> for compiled runners; <code>tick()</code> drives any streaming demo runners</td>
-</tr>
-<tr>
 <td><code>AnimationRunner</code></td>
-<td>Base class for the streaming runner classes (<code>WaveRunner</code>/<code>RippleRunner</code>/<code>ChaseRunner</code>) — used by demos; scenes compile runners to per-panel pulses instead</td>
-</tr>
-<tr>
-<td><code>RunnerCompile.hpp</code></td>
-<td>Inverts the runner envelopes to a per-panel local PULSE (onset + shape)</td>
+<td>Base class for the streaming runner classes (<code>WaveRunner</code>/<code>RippleRunner</code>/<code>ChaseRunner</code>) — used by built-in demos only; scenes compile runners instead</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Scenes/</strong></p>
+<p><strong>Scenes/</strong> (device glue)</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SceneStore</code></td>
+<td>Filesystem persistence for scene files at <code>/scenes/&lt;name&gt;.json</code></td>
+</tr>
+<tr>
+<td><code>AnimationService</code></td>
+<td>Orchestrates save / play-by-name / play-inline / one-shot / stop. Split into <code>prepare*</code> (parse/validate/persist — safe on the AsyncTCP task) and <code>playParsed*</code> (emits packets — main loop only) so HTTP handlers can defer playback (see §8)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="corecontroller-portable-scene-engine-esp-native-mobile-c-abi">Core/Controller/ — portable scene engine (ESP + native + mobile C ABI)<a class="headerlink" href="#corecontroller-portable-scene-engine-esp-native-mobile-c-abi" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2501,12 +2534,20 @@
 <td>Parses scene <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> into <code>SceneLayer[]</code> structs</td>
 </tr>
 <tr>
-<td><code>SceneStore</code></td>
-<td>Filesystem persistence for scene files at <code>/scenes/&lt;name&gt;.json</code></td>
+<td><code>AnimationScheduler</code></td>
+<td><code>playOnPanels()</code> PREPARE+START sequence; <code>sendPrepareToPanel()</code>/<code>sendGroupStart()</code> for compiled runners; <code>tick()</code> drives any streaming demo runners</td>
 </tr>
 <tr>
-<td><code>AnimationService</code></td>
-<td>Orchestrates save / play-by-name / play-inline / one-shot / stop. Split into <code>prepare*</code> (parse/validate/persist — safe on the AsyncTCP task) and <code>playParsed*</code> (emits packets — main loop only) so HTTP handlers can defer playback (see §8)</td>
+<td><code>RunnerCompile.hpp</code></td>
+<td>Inverts runner envelopes to a per-panel local PULSE (onset + shape)</td>
+</tr>
+<tr>
+<td><code>PanelSelector</code> / <code>PanelSelectorParser</code></td>
+<td>Panel targeting grammar → RPN → resolved indices</td>
+</tr>
+<tr>
+<td><code>TopologyIndex</code> / <code>PanelGraph</code> / <code>PanelGeometry</code> / <code>PanelField</code></td>
+<td>Topology views, geometric layout, runner directionality</td>
 </tr>
 </tbody>
 </table>
@@ -2575,6 +2616,21 @@
 <td><code>GET /api/topology</code>, <code>PUT /api/topology/root</code>, <code>GET/PUT /api/panel-tags</code></td>
 <td>Logical root + panel tags (backed by <code>TopologyConfigStore</code>)</td>
 </tr>
+<tr>
+<td><code>PanelServer</code></td>
+<td><code>GET /api/panels</code>, <code>GET /api/panels/edges</code>, <code>PUT /api/panels/*</code></td>
+<td>Per-panel on/color control</td>
+</tr>
+<tr>
+<td><code>StateServer</code></td>
+<td><code>GET /api/state</code>, <code>POST /api/state/power</code></td>
+<td>Runtime power state + scene playback status</td>
+</tr>
+<tr>
+<td><code>ConfigurationServer</code></td>
+<td><code>GET /api/configuration</code>, <code>PATCH /api/configuration</code></td>
+<td>Persistent boot behaviour (<code>powerStateOnBoot</code>)</td>
+</tr>
 </tbody>
 </table>
 <div class="admonition note">
@@ -2631,7 +2687,7 @@ synchronous (<code>200</code>). See <a href="#8-concurrency-task-model-deferred-
 </tr>
 <tr>
 <td><code>AnimationPlayer</code></td>
-<td>Layer compositor: <code>slots[4]</code> composited each ~16 ms tick (blend modes + <code>animates</code> modifier targets + background base). Resolves <code>ColorRef</code> → RGB against panel's current palette + base colors</td>
+<td>Layer compositor: <code>slots[MAX_ANIM_SLOTS]</code> (18) composited each ~16 ms tick (blend modes + <code>animates</code> modifier targets + background base). Resolves <code>ColorRef</code> → RGB against panel's current palette + base colors</td>
 </tr>
 <tr>
 <td><code>BootloaderBridge</code></td>
@@ -2849,8 +2905,9 @@ synchronous (<code>200</code>). See <a href="#8-concurrency-task-model-deferred-
 <hr />
 <h2 id="5-animation-framework-internals">5. Animation Framework Internals<a class="headerlink" href="#5-animation-framework-internals" title="Permanent link">&para;</a></h2>
 <h3 id="animationplayer-panel-side-layer-compositor-shared-with-mobile">AnimationPlayer (panel side) — layer compositor, shared with mobile<a class="headerlink" href="#animationplayer-panel-side-layer-compositor-shared-with-mobile" title="Permanent link">&para;</a></h3>
-<p><code>lib/Lightnet/Core/Anim/AnimationPlayer.{hpp,cpp}</code> (+ its pure deps <code>AnimationTypes</code>, <code>ColorCompose</code>,
-<code>ColorRef</code>, <code>Palette</code>, <code>LightnetConfig</code>, <code>ProtocolTypes</code>) is <strong>portable, host-compilable C++</strong> — no
+<p><code>lib/Lightnet/Core/Panel/AnimationPlayer.{hpp,cpp}</code> (+ its pure deps in <code>Core/Common/</code>:
+<code>AnimationTypes</code>, <code>ColorRef</code>, <code>Palette</code>, <code>LightnetConfig</code>, <code>ProtocolTypes</code>, and
+<code>Core/Panel/ColorCompose.hpp</code>) is <strong>portable, host-compilable C++</strong> — no
 Arduino/FastLED, time passed as <code>uint16_t now</code>, output pulled via <code>currentColor()</code>/<code>takeDirty()</code>.
 It is the <strong>single implementation</strong> of panel-local animation math, compiled into:</p>
 <ul>
@@ -2878,7 +2935,7 @@ It is the <strong>single implementation</strong> of panel-local animation math, 
   slots hold their last value.</li>
 <li><code>PACKET_SET_BACKGROUND</code> sets the compositor base (default black; idle panels display it).</li>
 <li>Progress interpolation: <code>progress_q8 = (elapsed * 256) / durationMs</code> (q8 fixed-point). The pure
-  compose/HSV/fold math lives in <code>Core/Anim/ColorCompose.hpp</code> (natively tested, shared with mobile
+  compose/HSV/fold math lives in <code>Core/Panel/ColorCompose.hpp</code> (natively tested, shared with mobile
   via <code>Core/CApi</code>).</li>
 <li><code>resolveColorRef()</code> called every tick — palette/colour changes take effect next frame with no re-prepare.</li>
 </ul>
@@ -2929,7 +2986,7 @@ traffic that previously grew with panel count.</p>
 <code>compile*</code> geometry feeds <code>compileRepeating()</code>, which <strong>swaps <code>colorFrom</code>/<code>colorTo</code></strong> (lit↔dark) so
 the rise→hold→fall envelope reads departing→dark-hold→approaching with <code>FLAG_LOOP</code> — true dark gaps
 using only the existing PULSE/loop mechanism. WHEEL always uses this engine (<code>compileWheel</code> via
-<code>compileRepeatingAsym</code>). <code>SCENE_SCHEMA_VERSION</code> is 7.</p>
+<code>compileRepeatingAsym</code>). <code>SCENE_SCHEMA_VERSION</code> is 8.</p>
 <p>The streaming <code>WaveRunner</code>/<code>RippleRunner</code>/<code>ChaseRunner</code> classes remain for the built-in demos.</p>
 <h3 id="controller-runners-rain-sparkle-particle-spawners-v7">Controller runners — RAIN / SPARKLE particle spawners (v7)<a class="headerlink" href="#controller-runners-rain-sparkle-particle-spawners-v7" title="Permanent link">&para;</a></h3>
 <p>RAIN and SPARKLE are <strong>not</strong> compiled — they are stochastic particle spawners. The compiled-pulse
@@ -2984,7 +3041,7 @@ natively tested in <code>test_runner_spawn</code>; the stateful real-time behavi
 <td><strong>~140 µs per beat</strong> (0 µs between beats)</td>
 </tr>
 <tr>
-<td>3-wide WaveRunner</td>
+<td>3-wide WaveRunner (demo streaming path only)</td>
 <td><strong>≤ 600 µs/frame</strong></td>
 </tr>
 <tr>
@@ -3014,7 +3071,7 @@ natively tested in <code>test_runner_spawn</code>; the stateful real-time behavi
 <li><code>PanelsInitializer::start()</code> — initialises <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> as master, attaches CHANGE interrupt on the edge <abbr title="General-Purpose Input/Output — a pin on the microcontroller that can be driven high or low or read as a signal.">GPIO</abbr></li>
 <li><code>PanelsInitializer::boot()</code> runs every main-loop iteration:</li>
 <li>Drives <code>LightnetPanelEdge</code> state machines</li>
-<li>While a panel is in <code>STATE_BOOTING</code>, pulls address <code>0x78</code> every 25 ms</li>
+<li>While a panel is in <code>STATE_BOOTING</code>, pulls address <code>0x78</code> every 20 ms</li>
 <li>Panel: detects HANDSHAKE → replies HANDSHAKE → enters <code>STATE_REGISTER_EDGES</code> → calls <code>LNBus.begin(0x78)</code></li>
 <li>Controller pull delivers <code>PACKET_INITIALIZATION_PULL</code>; panel responds with <code>PacketRegisterEdge</code> (panel index + edge index)</li>
 <li>Panel repeats steps 3–4 for each non-parent edge, then sends DONE to its parent</li>

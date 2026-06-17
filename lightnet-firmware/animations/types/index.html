@@ -2517,9 +2517,9 @@ to the <code>max</code> blend so its dark phase is transparent over the backgrou
 <td>Band / ring / tail / fade width (also settable as <code>params[0]</code>) — see each runner's table for what <code>width</code> means for it</td>
 </tr>
 <tr>
-<td><code>density</code></td>
-<td>0–255</td>
-<td>WAVE/RIPPLE/CHASE: spawn density of the continuous sweep train (<code>params[5]</code>, default 0). <code>0</code> = one sweep in flight at a time, gapless; <code>255</code> = up to <code>MAX_CONCURRENT_SWEEPS</code> sweeps in flight. Linear in between (<code>spawnSweepIntervalMs</code> in <code>RunnerSpawn.hpp</code>). Ignored by BOUNCE/WHEEL/RAIN/SPARKLE/MATRIX.</td>
+<td><code>count</code></td>
+<td>1–30</td>
+<td>WAVE/RIPPLE/CHASE: how many sweeps fire during the step window (<code>params[5]</code>, default 1). Spawn at <code>duration / count * spawnIndex</code> (zero-based). Ignored by BOUNCE/WHEEL/RAIN/SPARKLE/MATRIX.</td>
 </tr>
 <tr>
 <td><code>repeatCount</code> / <code>waves</code></td>

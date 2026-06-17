@@ -1696,7 +1696,7 @@
 <h1 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h1>
 <p>Serial debug macros, common user-facing symptoms, and how to inspect panel state over WebSocket.</p>
 <h2 id="serial-debugging">Serial debugging<a class="headerlink" href="#serial-debugging" title="Permanent link">&para;</a></h2>
-<p><code>DEBUG=1</code> is set globally in <code>common_env_data.build_flags</code>, so the firmware is verbose by default. All debug macros compile to <strong>no-ops</strong> when <code>DEBUG=0</code>, so there is no cost in production builds.</p>
+<p><code>DEBUG=0</code> by default in <code>src/controller.config.hpp</code> / <code>src/panel.config.hpp</code> (copied from the <code>*.example</code> files). Set <code>#define DEBUG 1</code> in your config header to enable verbose serial output. All debug macros compile to <strong>no-ops</strong> when <code>DEBUG=0</code>, so there is no cost in production builds.</p>
 <table>
 <thead>
 <tr>
@@ -1727,7 +1727,7 @@
 <div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pio<span class="w"> </span>device<span class="w"> </span>monitor<span class="w"> </span>-e<span class="w"> </span>controller_wemos
 </span></code></pre></div>
 <h3 id="per-frame-panel-led-log">Per-frame panel LED log<a class="headerlink" href="#per-frame-panel-led-log" title="Permanent link">&para;</a></h3>
-<p>For per-frame LED output logging on the panel, set <code>RGBC_DEBUG 1</code> in <code>Panel/RGBController.cpp</code>. <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr> only; adds ~200 bytes of flash.</p>
+<p>For per-frame LED output logging on the panel, set <code>RGBC_DEBUG 1</code> in <code>lib/Lightnet/Panel/RGBController.cpp</code>. <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr> only; adds ~200 bytes of flash.</p>
 <h3 id="inspecting-panel-state-from-a-client">Inspecting panel state from a client<a class="headerlink" href="#inspecting-panel-state-from-a-client" title="Permanent link">&para;</a></h3>
 <p>The fastest way to confirm a panel's live state is the <code>GET_PANELS_STATES</code> WebSocket command (type 5). The packet structure and <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> algorithm live in <a href="../api/">API Reference</a>. A minimal browser-side example:</p>
 <div class="language-javascript highlight"><span class="filename">JavaScript</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">ws</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">WebSocket</span><span class="p">(</span><span class="s1">&#39;ws://lightnet-XXXX.local/ws&#39;</span><span class="p">);</span>

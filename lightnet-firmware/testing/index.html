@@ -1784,18 +1784,48 @@
 <td><code>RunnerMath</code> wave/ripple/chase envelopes + sweep positions, including zero-width (no divide)</td>
 </tr>
 <tr>
+<td><code>test_runner_compile</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_runner_compile/test_main.cpp"><code>test/test_runner_compile/test_main.cpp</code></a></td>
+<td><code>RunnerCompile</code> — WAVE/CHASE/RIPPLE/REPEATING/WHEEL/BOUNCE onset/peak/end timing and lit-coord, zero-width/zero-period edge cases</td>
+</tr>
+<tr>
+<td><code>test_runner_spawn</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_runner_spawn/test_main.cpp"><code>test/test_runner_spawn/test_main.cpp</code></a></td>
+<td><code>RunnerSpawn</code> — deterministic RNG, due-count rate/burst-cap, sweep spawn schedule (<code>count</code>), pool round-robin, path building, SPARKLE/RAIN spawn timing</td>
+</tr>
+<tr>
+<td><code>test_compositor</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_compositor/test_main.cpp"><code>test/test_compositor/test_main.cpp</code></a></td>
+<td><code>Core/Panel/ColorCompose</code> — blend modes (opaque/add/multiply/screen/darken/overlay/difference/subtract/max), HSV roundtrip, dim/desaturate/brighten/saturate/hue-shift/invert modifiers, layer fold</td>
+</tr>
+<tr>
 <td><code>test_panel_anim</code></td>
 <td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_panel_anim/test_main.cpp"><code>test/test_panel_anim/test_main.cpp</code></a></td>
-<td>Portable <code>Core/Anim/AnimationPlayer</code> — time-as-parameter (deterministic FADE), <code>setColorDirect</code> ungated (delta-gate regression), <code>FLAG_CURRENT_COLOR_*</code> reads current output, SOLID hold</td>
+<td>Portable <code>Core/Panel/AnimationPlayer</code> — time-as-parameter (deterministic FADE), <code>setColorDirect</code> ungated (delta-gate regression), <code>FLAG_CURRENT_COLOR_*</code> reads current output, SOLID hold</td>
 </tr>
 <tr>
 <td><code>test_spsc_queue</code></td>
 <td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_spsc_queue/test_main.cpp"><code>test/test_spsc_queue/test_main.cpp</code></a></td>
-<td>Lock-free <code>Core/Util/SpscByteQueue</code> — FIFO order, full/empty edges, wrap-boundary straddle integrity, panel-sized (70 B) max record, 200k-iteration fuzz vs. a reference model</td>
+<td>Lock-free <code>Core/Common/SpscByteQueue</code> — FIFO order, full/empty edges, wrap-boundary straddle integrity, panel-sized (70 B) max record, 200k-iteration fuzz vs. a reference model</td>
+</tr>
+<tr>
+<td><code>test_main_loop_queue</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_main_loop_queue/test_main.cpp"><code>test/test_main_loop_queue/test_main.cpp</code></a></td>
+<td><code>Utils/MainLoopQueue</code> — FIFO post/drain, POD arg round-trip, zero-length args, null-fn and oversized-args rejection, full-queue recovery</td>
+</tr>
+<tr>
+<td><code>test_scene_player</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_scene_player/test_main.cpp"><code>test/test_scene_player/test_main.cpp</code></a></td>
+<td><code>ScenePlayer</code> end-to-end via a mock <code>IPacketSink</code> — SOLID scene emits PREPARE+START, <code>stop()</code> emits control packet and clears playing state</td>
+</tr>
+<tr>
+<td><code>test_scene_capi</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_scene_capi/test_main.cpp"><code>test/test_scene_capi/test_main.cpp</code></a></td>
+<td>Scene C ABI (<code>Core/CApi/controller_core_c.h</code>) — load+play emits packets, bad-<abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> rejection, stop emits control, mirror-batch drain</td>
 </tr>
 </tbody>
 </table>
-<p>241 tests total, ~9 s wall time.</p>
+<p>255 tests total, ~11 s wall time.</p>
 <hr />
 <h2 id="what-is-testable-natively-what-isnt">What is testable natively, what isn't<a class="headerlink" href="#what-is-testable-natively-what-isnt" title="Permanent link">&para;</a></h2>
 <table>
@@ -1823,7 +1853,7 @@
 <td>Pure C string helpers, split out of <code>HttpHelpers.hpp</code></td>
 </tr>
 <tr>
-<td><code>Core/Anim/Palette.hpp</code> (sampler)</td>
+<td><code>Core/Common/Palette.hpp</code> (<code>samplePalette</code>)</td>
 <td>✅</td>
 <td>Pure interpolation math — not yet tested but eligible</td>
 </tr>
@@ -1838,9 +1868,9 @@
 <td>Need <code>AsyncWebServerRequest</code> mocks; not worth the effort</td>
 </tr>
 <tr>
-<td><code>AnimationScheduler</code>, <code>ScenePlayer</code></td>
-<td>❌</td>
-<td>Time-driven, talk to panels over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr></td>
+<td><code>Core/Controller/ScenePlayer.hpp</code> + <code>AnimationScheduler</code></td>
+<td>✅</td>
+<td>Decoupled via <code>IPacketSink</code>/<code>IPaletteResolver</code>/<code>ITopologyProvider</code>; driven with synthetic <code>millis()</code> against a mock sink (<code>test_scene_player</code>, <code>test_scene_capi</code>)</td>
 </tr>
 <tr>
 <td>Panel firmware (<abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr> side)</td>

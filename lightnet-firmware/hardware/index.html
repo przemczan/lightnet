@@ -1762,7 +1762,7 @@
 <h1 id="hardware-reference">Hardware Reference<a class="headerlink" href="#hardware-reference" title="Permanent link">&para;</a></h1>
 <p>The physical side of Lightnet — topology, pin assignments, fuses. For wiring schematics and a parts list, see the (future) hardware design files; this page covers what the firmware expects to see.</p>
 <h2 id="topology">Topology<a class="headerlink" href="#topology" title="Permanent link">&para;</a></h2>
-<p>Panels form a <strong>tree</strong> rooted at the controller. Each panel exposes up to 3 edges (physical connectors); each edge carries power and a single-wire ping line. On boot the controller pings each edge over <abbr title="General-Purpose Input/Output — a pin on the microcontroller that can be driven high or low or read as a signal.">GPIO</abbr>, triggering a <abbr title="Pin Change Interrupt — AVR feature that triggers an ISR whenever a watched pin changes state.">PCINT</abbr> on the receiving <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr>. After discovery completes, all communication runs over <strong><abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr></strong> (<code>LightnetBus</code>) carrying structured <code>Protocol</code> packets, addressed by the per-panel index assigned during discovery.</p>
+<p>Panels form a <strong>tree</strong> rooted at the controller. Each panel exposes up to 5 edges (physical connectors); each edge carries power and a single-wire ping line. On boot the controller pings each edge over <abbr title="General-Purpose Input/Output — a pin on the microcontroller that can be driven high or low or read as a signal.">GPIO</abbr>, triggering a <abbr title="Pin Change Interrupt — AVR feature that triggers an ISR whenever a watched pin changes state.">PCINT</abbr> on the receiving <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr>. After discovery completes, all communication runs over <strong><abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr></strong> (<code>LightnetBus</code>) carrying structured <code>Protocol</code> packets, addressed by the per-panel index assigned during discovery.</p>
 <pre class="mermaid"><code>graph TD
   C[🎛️ Controller]
   C --&gt; A[Panel A — edge 0]
@@ -1770,7 +1770,7 @@
   A --&gt; Pc[Panel C — edge 2]
   C --&gt; D[Panel D — edge 1]
   D --&gt; E[Panel E — edge 0]</code></pre>
-<p>The firmware caps a single controller at <strong>100 panels</strong> (<code>LIGHTNET_MAX_PANELS</code> in <code>LightnetConfig.hpp</code>). The <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> 7-bit address space allows up to 254 in theory; the cap leaves headroom in <abbr title="Static RAM — runtime memory on the microcontroller; very limited on ATmega panels.">SRAM</abbr> and on the bus.</p>
+<p>The firmware caps a single controller at <strong>100 panels</strong> on <abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr> (<code>LIGHTNET_MAX_PANELS</code> in <code>lib/Lightnet/Core/Common/LightnetConfig.hpp</code>; <strong>32 on <abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr></strong> to fit heap/stack budgets). The <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> 7-bit address space allows up to 254 in theory; the cap leaves headroom in <abbr title="Static RAM — runtime memory on the microcontroller; very limited on ATmega panels.">SRAM</abbr> and on the bus.</p>
 <hr />
 <h2 id="pin-assignments">Pin assignments<a class="headerlink" href="#pin-assignments" title="Permanent link">&para;</a></h2>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Controller</label><label for="__tabbed_1_2">Panel (<abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr>)</label></div>
@@ -1817,7 +1817,7 @@
 </tr>
 </tbody>
 </table>
-<p>Defined in <code>src/controller/main.cpp</code>.</p>
+<p>Defaults in <code>src/controller/config.hpp</code> (override in <code>src/controller.config.hpp</code>).</p>
 </div>
 <div class="tabbed-block">
 <table>
@@ -1868,7 +1868,7 @@
 <h2 id="panel-sram-budget-max_anim_slots">Panel <abbr title="Static RAM — runtime memory on the microcontroller; very limited on ATmega panels.">SRAM</abbr> budget &amp; <code>MAX_ANIM_SLOTS</code><a class="headerlink" href="#panel-sram-budget-max_anim_slots" title="Permanent link">&para;</a></h2>
 <p>The ATmega328P/PB has <strong>2048 B <abbr title="Static RAM — runtime memory on the microcontroller; very limited on ATmega panels.">SRAM</abbr> total</strong>, shared statically between everything below — there
 is no separate heap budget worth relying on. <code>MAX_ANIM_SLOTS</code>
-(<code>lib/Lightnet/Core/Anim/AnimationTypes.hpp</code>) is the one constant most likely to push the panel
+(<code>lib/Lightnet/Core/Common/AnimationTypes.hpp</code>) is the one constant most likely to push the panel
 over that limit, because it's the only one that scales with a number the firmware author picks
 freely.</p>
 <h3 id="whats-eating-panel-ram">What's eating panel RAM<a class="headerlink" href="#whats-eating-panel-ram" title="Permanent link">&para;</a></h3>

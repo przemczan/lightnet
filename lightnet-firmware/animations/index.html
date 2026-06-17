@@ -1609,14 +1609,14 @@
 
 
 <h1 id="animations-scenes">Animations &amp; Scenes<a class="headerlink" href="#animations-scenes" title="Permanent link">&para;</a></h1>
-<p>Lightnet's animation system lets you compose multi-layer light shows in <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> and play them across any number of panels. Panel-local animations run entirely on the <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr> after a single setup packet — zero per-frame <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> traffic. Controller runners are computed on the ESP each frame and stream color values over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr>.</p>
+<p>Lightnet's animation system lets you compose multi-layer light shows in <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> and play them across any number of panels. Panel-local animations run entirely on the <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr> after a single setup packet — zero per-frame <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> traffic. Most controller runners compile to per-panel local pulses (one setup burst); RAIN, SPARKLE, and MATRIX spawn stochastic drops over the step window.</p>
 <hr />
 <h2 id="how-it-fits-together">How it fits together<a class="headerlink" href="#how-it-fits-together" title="Permanent link">&para;</a></h2>
 <div class="language-text highlight"><span class="filename">Text Only</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Scene
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>└── Layer (group ID, panel target, optional palette)
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    └── Step  →  Step  →  Step …
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>        ├── Panel-local  (BREATHE, PULSE, WAVE …)  runs on ATmega
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        └── Controller runner  (WAVE, RIPPLE, CHASE, WHEEL, BOUNCE, RAIN, SPARKLE, MATRIX)  on ESP
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        └── Controller runner  (WAVE, RIPPLE, CHASE, WHEEL, BOUNCE, RAIN, SPARKLE, MATRIX)  compiled/spawned on ESP
 </span></code></pre></div>
 <p>Multiple layers within a scene run in parallel. Each layer targets its own set of panels and belongs to a <strong>group ID</strong> so the controller can start them simultaneously with a single <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> broadcast.</p>
 <hr />
@@ -1669,7 +1669,7 @@
 </tbody>
 </table>
 <h2 id="controller-runners">Controller runners<a class="headerlink" href="#controller-runners" title="Permanent link">&para;</a></h2>
-<p>Computed on the ESP each frame. Scaled color values are streamed over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr>.</p>
+<p>Most runners compile to one local PULSE per panel at step start (zero per-frame <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr>). RAIN, SPARKLE, and MATRIX are particle spawners that emit drop packets over the step window.</p>
 <table>
 <thead>
 <tr>
@@ -1689,6 +1689,18 @@
 <tr>
 <td><code>CHASE</code></td>
 <td>A single lit panel travels through the panel list</td>
+</tr>
+<tr>
+<td><code>WHEEL</code></td>
+<td>Rotating-blade sweep from a pivot</td>
+</tr>
+<tr>
+<td><code>BOUNCE</code></td>
+<td>Wave band whose peak reflects at field edges</td>
+</tr>
+<tr>
+<td><code>RAIN</code> / <code>SPARKLE</code> / <code>MATRIX</code></td>
+<td>Stochastic particle spawners (drops/flashes/matrix rain)</td>
 </tr>
 </tbody>
 </table>

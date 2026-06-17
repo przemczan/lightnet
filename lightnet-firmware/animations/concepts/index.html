@@ -2336,7 +2336,7 @@
 
 
 <h1 id="concepts">Concepts<a class="headerlink" href="#concepts" title="Permanent link">&para;</a></h1>
-<p>The Lightnet animation system lets you define multi-layer, palette-driven light shows in <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> and send them to panels over HTTP. Panel-local animations run entirely on the <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr> after a single setup packet — zero per-frame <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> traffic. Controller runners are computed on the ESP and stream per-panel color values each frame.</p>
+<p>The Lightnet animation system lets you define multi-layer, palette-driven light shows in <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> and send them to panels over HTTP. Panel-local animations run entirely on the <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr> after a single setup packet — zero per-frame <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> traffic. Most controller runners compile to per-panel local pulses at step start; RAIN, SPARKLE, and MATRIX spawn stochastic drops over the step window.</p>
 <p>The palette and scene model draws inspiration from the <a href="https://github.com/Aircoookie/WLED">WLED</a> project.</p>
 <p>Core building blocks of the Lightnet animation system — scenes, layers, steps, groups, palettes, color references, and how steps advance over time.</p>
 <hr />
@@ -2344,8 +2344,8 @@
 <p>A <strong>scene</strong> is the top-level playback unit. It groups one or more layers that run simultaneously. A scene can loop indefinitely or play once and stop.</p>
 <pre class="mermaid"><code>graph TD
   S[Scene] --&gt; L1["Layer 1\ngroup 1 · all panels"]
-  S --&gt; L2["Layer 2\ngroup 2 · panels 0–5"]
-  S --&gt; L3["Layer 3\ngroup 3 · panels 6–11"]
+  S --&gt; L2["Layer 2\ngroup 2 · panels 1–6"]
+  S --&gt; L3["Layer 3\ngroup 3 · panels 7–12"]
   L1 --&gt; S1[Step: TRANSITION]
   L1 --&gt; S2[Step: BREATHE loop]
   L2 --&gt; S3[Step: WAVE runner]
@@ -2391,7 +2391,7 @@ step (the named step, or the sequence's last step if none is named) is infinite
 <p>A <strong>step</strong> is a single animation segment within a layer's sequence. Steps are executed in order, advancing automatically when <code>durationMs</code> elapses. A step can be:</p>
 <ul>
 <li>A <strong>panel-local animation</strong> (<code>"type": "BREATHE"</code>, etc.) — runs entirely on the <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr> with zero per-frame <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> traffic</li>
-<li>A <strong>controller runner</strong> (<code>"runner": "WAVE"</code>, etc.) — computed on the ESP each frame, sends per-panel color values over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr></li>
+<li>A <strong>controller runner</strong> (<code>"runner": "WAVE"</code>, etc.) — compiled to per-panel local pulses (WAVE/RIPPLE/CHASE/WHEEL/BOUNCE) or driven as a particle spawner over the step window (RAIN/SPARKLE/MATRIX)</li>
 <li>A <strong>gap</strong> (no <code>type</code> and no <code>runner</code>, only <code>duration</code>) — a timed no-op used to offset a layer's start or pause between animations</li>
 </ul>
 <h3 id="gap-steps">Gap steps<a class="headerlink" href="#gap-steps" title="Permanent link">&para;</a></h3>
@@ -2439,7 +2439,11 @@ in <code>layers[]</code> is the bottom of the stack). Each layer is one of:</p>
 </thead>
 <tbody>
 <tr>
-<td><code>opaque</code> (default)</td>
+<td><em>(absent <code>blend</code>)</em></td>
+<td>firmware default — <code>opaque</code> for normal layers, <code>max</code> for runners</td>
+</tr>
+<tr>
+<td><code>opaque</code></td>
 <td>the layer's colour replaces what's below</td>
 </tr>
 <tr>
@@ -2477,8 +2481,8 @@ in <code>layers[]</code> is the bottom of the stack). Each layer is one of:</p>
 </tbody>
 </table>
 <p><code>max</code>/<code>add</code>/<code>screen</code> treat black as transparent, so they layer an accent over a background without
-clobbering it. <strong>Runner layers default to <code>max</code></strong> for exactly this reason (a runner's off-phase is
-black); a standalone runner over a black background looks identical to before.</p>
+clobbering it. <strong>Omit <code>blend</code> on runner layers</strong> to get <code>max</code> (a runner's off-phase is black and
+shows layers below); set <code>"blend": "opaque"</code> explicitly to force top-wins even on runners.</p>
 <h3 id="modifier-layers">Modifier layers<a class="headerlink" href="#modifier-layers" title="Permanent link">&para;</a></h3>
 <p>A modifier is a panel-local step (any <code>type</code> except <code>HUE_CYCLE</code>) with <code>animates</code> set to <code>dim</code>,
 <code>desaturate</code>, <code>hue</code>, <code>invert</code>, <code>brighten</code>, or <code>saturate</code>. It animates a scalar from <code>from</code> → <code>to</code>
@@ -2509,7 +2513,7 @@ black); a standalone runner over a black background looks identical to before.</
 </tr>
 <tr>
 <td><code>invert</code></td>
-<td>cross-fade toward RGB-inverted colour (255 = fully inverted)</td>
+<td>cross-fade toward RGB-inverted colour (always ramps 0→255; <code>from</code>/<code>to</code> ignored)</td>
 <td>0</td>
 </tr>
 <tr>
@@ -2611,7 +2615,7 @@ displays it. This is the clean way to put a static ambient colour under animated
 <p>A layer can specify its own palette, overriding the scene-level default for the panels it targets:</p>
 <div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">],</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">],</span>
 </span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ocean&quot;</span><span class="p">,</span>
 </span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">...</span><span class="p">]</span>
 </span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="p">}</span>
@@ -2756,7 +2760,7 @@ displays it. This is the clean way to put a static ambient colour under animated
 <tr>
 <td><code>blend</code></td>
 <td>No</td>
-<td><code>opaque</code> (runners: <code>max</code>)</td>
+<td>firmware default (<code>opaque</code>; runners: <code>max</code>)</td>
 <td>How this layer composites with the layers below it (see <a href="#layer-compositing">Layer compositing</a>).</td>
 </tr>
 <tr>
@@ -2775,7 +2779,7 @@ displays it. This is the clean way to put a static ambient colour under animated
 <td><code>async</code></td>
 <td>No</td>
 <td><code>false</code></td>
-<td>When <code>true</code>, the layer loops on its own, independent of the scene-cycle barrier (see below). Ignored if <code>startAfter</code> is set.</td>
+<td>When <code>true</code> or <code>"loop"</code>, the layer loops on its own, independent of the scene-cycle barrier (see below). <code>"free"</code> opts the layer out of the barrier entirely. Ignored if <code>startAfter</code> is set.</td>
 </tr>
 <tr>
 <td><code>sequence</code></td>
@@ -2813,7 +2817,7 @@ tree so a scene adapts to different devices. See
 </span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;useColor&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">}</span><span class="w">   </span><span class="c1">// secondary</span>
 </span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;useColor&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">}</span><span class="w">   </span><span class="c1">// tertiary</span>
 </span></code></pre></div>
-<p>References one of the three scene (or global) base colours. The panel resolves against its current <code>baseColors</code> state. Updating base colours via <code>PUT /api/appearance/colors</code> while an animation using <code>useColor</code> is running will change the displayed colour on the next frame. This is <code>ColorRef{kind=2}</code>.</p>
+<p>References one of the three scene (or global) base colours. The panel resolves against its current <code>baseColors</code> state. Updating base colours via <code>PATCH /api/appearance</code> while an animation using <code>useColor</code> is running will change the displayed colour on the next frame. This is <code>ColorRef{kind=2}</code>.</p>
 <hr />
 <h2 id="sequencing-timing">Sequencing &amp; Timing<a class="headerlink" href="#sequencing-timing" title="Permanent link">&para;</a></h2>
 <h3 id="step-advancement">Step advancement<a class="headerlink" href="#step-advancement" title="Permanent link">&para;</a></h3>
@@ -2861,17 +2865,37 @@ durations drifted apart. The scene-cycle barrier replaces that: the whole scene
 is the loop unit, keeping multi-group shows synchronised.</p>
 </div>
 <h3 id="async-layers">Async layers<a class="headerlink" href="#async-layers" title="Permanent link">&para;</a></h3>
-<p>A layer marked <code>"async": true</code> opts <strong>out</strong> of the barrier and loops on its own
-cadence — restarting its sequence the moment it finishes, regardless of what the
-other groups are doing. Use it for an independent background effect alongside a
-choreographed foreground.</p>
+<p>A layer's <code>async</code> field controls how it interacts with the scene-cycle barrier:</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>false</code> / absent (default)</td>
+<td>Participates in the barrier normally</td>
+</tr>
+<tr>
+<td><code>true</code> / <code>"loop"</code></td>
+<td>Loops on its own cadence — restarting its sequence the moment it finishes, regardless of other groups</td>
+</tr>
+<tr>
+<td><code>"free"</code></td>
+<td>Completely independent — the scene neither waits for it nor resets it at the barrier</td>
+</tr>
+</tbody>
+</table>
+<p>Use <code>"loop"</code> for an independent background effect alongside a choreographed foreground. Use
+<code>"free"</code> when a layer should run forever regardless of scene stop/loop (see
+<a href="../scene-authoring/#3-how-playback-works--timing--choreography">Scene Authoring → Async modes</a>).</p>
 <ul>
-<li>The barrier is governed only by the <strong>synchronous</strong> (non-async) layers. Async
-  layers neither block it nor get reset by it.</li>
-<li>A scene that contains an async layer keeps playing until explicitly stopped
-  (the async layer never "finishes"). With <code>loop:false</code>, the synchronous layers
+<li>The barrier is governed only by <strong>synchronous</strong> layers (those without async, or with async other than <code>"free"</code>). Async layers neither block it nor get reset by it (except <code>"free"</code> layers, which the barrier ignores entirely).</li>
+<li>A scene that contains a looping async layer keeps playing until explicitly stopped
+  (that layer never "finishes"). With <code>loop:false</code>, the synchronous layers
   play once and hold while the async layer keeps looping.</li>
-<li>A scene where <strong>every</strong> layer is async simply free-runs all of them forever.</li>
 <li><code>async</code> is ignored on a layer that also sets <code>startAfter</code> — a gated layer is
   part of the dependency graph, not independent.</li>
 </ul>

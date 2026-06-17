@@ -2856,7 +2856,7 @@ in §5 below.</p>
 <tr>
 <td><code>blend</code></td>
 <td>no</td>
-<td><code>opaque</code> (runners: <code>max</code>)</td>
+<td>firmware default (<code>opaque</code>; runners: <code>max</code>)</td>
 <td>How this layer composites with the layers below it — see §5.1.</td>
 </tr>
 <tr>
@@ -2936,9 +2936,14 @@ single panel can run at once and what happens beyond that.</p>
 </thead>
 <tbody>
 <tr>
+<td><em>(absent)</em></td>
+<td>firmware default</td>
+<td><code>opaque</code> for normal layers; <code>max</code> for runners</td>
+</tr>
+<tr>
 <td><code>opaque</code></td>
 <td>top wins</td>
-<td>default for non-runner layers</td>
+<td>explicit top-wins, including on runners</td>
 </tr>
 <tr>
 <td><code>add</code></td>
@@ -2948,7 +2953,7 @@ single panel can run at once and what happens beyond that.</p>
 <tr>
 <td><code>max</code></td>
 <td>per-channel lighten</td>
-<td>black is transparent; <strong>runner default</strong></td>
+<td>black is transparent</td>
 </tr>
 <tr>
 <td><code>multiply</code></td>
@@ -2982,9 +2987,10 @@ single panel can run at once and what happens beyond that.</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Runner layers default to <code>max</code></strong> so a runner's dark phase shows the background/layers below
-(a standalone runner over a black base is unchanged). To layer any source over a background, give
-it <code>add</code>/<code>max</code>/<code>screen</code>.</p>
+<p><strong>Omit <code>blend</code> on runner layers</strong> to get <code>max</code> so a runner's dark phase shows the background/layers
+below (a standalone runner over a black base is unchanged). To layer any source over a background,
+give it <code>add</code>/<code>max</code>/<code>screen</code>. Use explicit <code>"opaque"</code> when a runner should cover what's below during
+its dark phase too.</p>
 <p><strong>Modifier layers</strong> are panel-local steps (any <code>type</code> except <code>HUE_CYCLE</code>) with <code>animates</code> set to
 something other than <code>color</code> — <code>dim</code> / <code>desaturate</code> / <code>hue</code> / <code>invert</code> / <code>brighten</code> / <code>saturate</code>.
 Instead of producing a colour, they animate a scalar <code>from</code>→<code>to</code> (0–255) and reshape everything
@@ -3318,21 +3324,20 @@ ignored) and no <code>speed</code>. See
 </span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">  </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2500</span>
 </span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="p">}</span>
 </span></code></pre></div>
-<p><strong>Repeating sweeps — <code>density</code>.</strong> WAVE/RIPPLE/CHASE are always a continuous train of passes:
-each pass is a full one-shot sweep from the field's origin to its far edge, travelling over
-<code>duration</code>, and a new pass starts on a schedule controlled by <code>"density"</code> (0-255, default 0):</p>
+<p><strong>Repeating sweeps — <code>count</code>.</strong> WAVE/RIPPLE/CHASE fire a fixed number of passes during the
+step window. Each pass is a full one-shot sweep from the field's origin to its far edge,
+travelling over <code>duration</code>. Passes are scheduled at evenly spaced offsets:</p>
+<p><code>startMs = duration / count * spawnIndex</code> (spawnIndex zero-based, count 1–30, default 1).</p>
 <ul>
-<li><code>density: 0</code> — one pass in flight at a time, gapless (the next starts as the previous finishes).</li>
-<li><code>density: 128</code> — roughly two passes in flight at once.</li>
-<li><code>density: 255</code> — as many passes in flight as the implementation allows (capped, see
-  <a href="../types/"><code>types.md</code></a>).</li>
+<li><code>count: 1</code> — one sweep at the start of the step.</li>
+<li><code>count: 3</code> with <code>duration: 1000</code> — sweeps at 0 ms, 333 ms, and 666 ms.</li>
 </ul>
 <div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span>
 </span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">&quot;runner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;RIPPLE&quot;</span><span class="p">,</span>
 </span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;root&quot;</span><span class="p">,</span>
 </span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">96</span><span class="w"> </span><span class="p">},</span>
 </span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span><span class="nt">&quot;rippleWidth&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">  </span><span class="nt">&quot;density&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">  </span><span class="nt">&quot;count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
 </span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">  </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1500</span>
 </span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="p">}</span>
 </span></code></pre></div>
@@ -3631,7 +3636,7 @@ panels.</p>
 </tr>
 <tr>
 <td><code>schemaVersion</code></td>
-<td>≤ firmware version (currently <code>7</code>) — else <code>409 schema_too_new</code></td>
+<td>≤ firmware version (currently <code>8</code>) — else <code>409 schema_too_new</code></td>
 </tr>
 <tr>
 <td><code>speed</code></td>

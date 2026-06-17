@@ -3129,7 +3129,7 @@ filesystem/config mutations (scene/palette save &amp; delete, config PATCH, pane
 </tr>
 </tbody>
 </table>
-<p>Playback status (<code>playing</code>, <code>speed</code>) and <code>lastPlayedSceneIsStored</code> are reported via <code>GET /api/state</code> (§2.5).</p>
+<p>Playback status (<code>playing</code>, <code>speed</code>) and <code>lastPlayedSceneIsStored</code> are reported via <code>GET /api/state</code> (§2.9).</p>
 <hr />
 <h3 id="24-animations">2.4 Animations<a class="headerlink" href="#24-animations" title="Permanent link">&para;</a></h3>
 <h4 id="one-shot-animation">One-shot animation<a class="headerlink" href="#one-shot-animation" title="Permanent link">&para;</a></h4>
@@ -3395,7 +3395,7 @@ filesystem/config mutations (scene/palette save &amp; delete, config PATCH, pane
 <h3 id="29-state">2.9 State<a class="headerlink" href="#29-state" title="Permanent link">&para;</a></h3>
 <p>Runtime app state — power state, scene playback status, and the most recently played scene's
 name. Persisted in <code>/config/app_state.json</code> with a 5-second deferred-write window. The initial
-<code>isOn</code> value on boot is derived from <code>powerStateOnBoot</code> (see §2.7); <code>lastPlayedScene</code> /
+<code>isOn</code> value on boot is derived from <code>powerStateOnBoot</code> (see §2.8); <code>lastPlayedScene</code> /
 <code>lastPlayedSceneIsStored</code> are set whenever a scene is played via <code>POST /api/scenes/play/one-shot</code>
 or <code>POST /api/scenes/:name/play</code> (see §2.3 Scenes). <code>lastPlayedSceneIsStored</code> is <code>false</code> when
 <code>lastPlayedScene</code> refers to the hidden <code>@one-shot</code> scene rather than a device-stored scene.</p>
@@ -3484,7 +3484,7 @@ or <code>POST /api/scenes/:name/play</code> (see §2.3 Scenes). <code>lastPlayed
 <li><code>protocolVersion</code> is <code>0x0001</code></li>
 <li>Header <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> covers the first 7 bytes (<code>type</code> + <code>protocolVersion</code> + <code>nonce</code>)</li>
 <li>Payload <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> covers only the payload bytes (not <code>PacketMeta</code>)</li>
-<li>Panel address is a valid panel index (0-based, returned by GET_PANELS_STATES)</li>
+<li>Panel address is a valid panel index (1-based, as returned by GET_PANELS_STATES / <code>GET /api/panels</code>)</li>
 </ol>
 </div>
 
