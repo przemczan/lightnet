@@ -1562,8 +1562,12 @@ name so doc references don't need updating.</p>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>adb<span class="w"> </span>shell<span class="w"> </span>monkey<span class="w"> </span>-p<span class="w"> </span>com.lightnet<span class="w"> </span>-c<span class="w"> </span>android.intent.category.LAUNCHER<span class="w"> </span><span class="m">1</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>sleep<span class="w"> </span><span class="m">2</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># Take a screenshot</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># Take a screenshot (bash / Git Bash)</span>
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>adb<span class="w"> </span>exec-out<span class="w"> </span>screencap<span class="w"> </span>-p<span class="w"> </span>&gt;<span class="w"> </span>docs/assets/screenshots/NN-name.png
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="c1"># Take a screenshot (PowerShell — do NOT use `&gt;`; it writes UTF-16 and corrupts PNGs)</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>adb<span class="w"> </span>shell<span class="w"> </span>screencap<span class="w"> </span>-p<span class="w"> </span>//sdcard/lightnet_ss.png
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>adb<span class="w"> </span>pull<span class="w"> </span>//sdcard/lightnet_ss.png<span class="w"> </span>docs/assets/screenshots/NN-name.png
 </span></code></pre></div>
 <p>To find tap coordinates reliably, dump the UI hierarchy instead of guessing from
 screenshot pixels (screenshots are 1080x2424 — adb tap coordinates are in this
@@ -1621,25 +1625,35 @@ just the numbered showcase shots + this guide.</p>
 </span></code></pre></div></p>
 </li>
 <li>
-<p><strong>05-device-settings.png</strong> — <code>KEYCODE_BACK</code> to close the scenes sheet, then tap
-   the gear icon top-right (~1006,237) to open the device's <code>Settings</code> menu
-   (Device / Palettes / Scenes / Appearance / Debug console).
+<p><strong>05-scene-active.png</strong> — <code>KEYCODE_BACK</code> to close the scenes sheet (scene keeps
+   running), wait ~1s, screenshot <code>DeviceControllerScreen</code> with animated panels
+   and no overlay.
    <div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>adb<span class="w"> </span>shell<span class="w"> </span>input<span class="w"> </span>keyevent<span class="w"> </span>KEYCODE_BACK
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>sleep<span class="w"> </span><span class="m">1</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>adb<span class="w"> </span>shell<span class="w"> </span>input<span class="w"> </span>tap<span class="w"> </span><span class="m">1006</span><span class="w"> </span><span class="m">237</span>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>sleep<span class="w"> </span><span class="m">1</span>
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>adb<span class="w"> </span>exec-out<span class="w"> </span>screencap<span class="w"> </span>-p<span class="w"> </span>&gt;<span class="w"> </span>docs/assets/screenshots/05-device-settings.png
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>adb<span class="w"> </span>exec-out<span class="w"> </span>screencap<span class="w"> </span>-p<span class="w"> </span>&gt;<span class="w"> </span>docs/assets/screenshots/05-scene-active.png
 </span></code></pre></div></p>
 </li>
 <li>
-<p><strong>06-scene-editor.png</strong> — Tap "Scenes" row (~540,717) to open <code>ScenesSettingsScreen</code>
-   (Global/Device tabs), then tap the first scene row (not its play button,
-   e.g. ~300,545) to open <code>SceneEditorScreen</code> for that scene.
-   <div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>adb<span class="w"> </span>shell<span class="w"> </span>input<span class="w"> </span>tap<span class="w"> </span><span class="m">540</span><span class="w"> </span><span class="m">717</span>
+<p><strong>06-device-settings.png</strong> — Tap the gear icon top-right (~1006,237) to open
+   the device's <code>Settings</code> menu (Device / Palettes / Scenes / Appearance /
+   Debug console).
+   <div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>adb<span class="w"> </span>shell<span class="w"> </span>input<span class="w"> </span>tap<span class="w"> </span><span class="m">1006</span><span class="w"> </span><span class="m">237</span>
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>sleep<span class="w"> </span><span class="m">1</span>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>adb<span class="w"> </span>shell<span class="w"> </span>input<span class="w"> </span>tap<span class="w"> </span><span class="m">300</span><span class="w"> </span><span class="m">545</span>
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>sleep<span class="w"> </span><span class="m">1</span>
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>adb<span class="w"> </span>exec-out<span class="w"> </span>screencap<span class="w"> </span>-p<span class="w"> </span>&gt;<span class="w"> </span>docs/assets/screenshots/06-scene-editor.png
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>adb<span class="w"> </span>exec-out<span class="w"> </span>screencap<span class="w"> </span>-p<span class="w"> </span>&gt;<span class="w"> </span>docs/assets/screenshots/06-device-settings.png
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>07-scene-editor.png</strong> — Tap "Scenes" row (~540,717) to open <code>ScenesSettingsScreen</code>
+   (Global/Device tabs), switch to the Device tab if needed (~810,383), then tap
+   the first scene row (not its play button, e.g. ~300,541) to open
+   <code>SceneEditorScreen</code> for that scene.
+   <div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>adb<span class="w"> </span>shell<span class="w"> </span>input<span class="w"> </span>tap<span class="w"> </span><span class="m">540</span><span class="w"> </span><span class="m">714</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>sleep<span class="w"> </span><span class="m">1</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>adb<span class="w"> </span>shell<span class="w"> </span>input<span class="w"> </span>tap<span class="w"> </span><span class="m">810</span><span class="w"> </span><span class="m">383</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>sleep<span class="w"> </span><span class="m">1</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>adb<span class="w"> </span>shell<span class="w"> </span>input<span class="w"> </span>tap<span class="w"> </span><span class="m">300</span><span class="w"> </span><span class="m">541</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>sleep<span class="w"> </span><span class="m">1</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>adb<span class="w"> </span>exec-out<span class="w"> </span>screencap<span class="w"> </span>-p<span class="w"> </span>&gt;<span class="w"> </span>docs/assets/screenshots/07-scene-editor.png
 </span></code></pre></div></p>
 </li>
 </ol>

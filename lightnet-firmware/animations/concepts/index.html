@@ -1062,10 +1062,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#special-palette-usercolors" class="md-nav__link">
+  <a href="#special-palette-base-colors" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Special palette: userColors
+        Special palette: Base colors
       
     </span>
   </a>
@@ -2051,10 +2051,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#special-palette-usercolors" class="md-nav__link">
+  <a href="#special-palette-base-colors" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Special palette: userColors
+        Special palette: Base colors
       
     </span>
   </a>
@@ -2350,7 +2350,7 @@
   L1 --&gt; S2[Step: BREATHE loop]
   L2 --&gt; S3[Step: WAVE runner]
   L3 --&gt; S4[Step: SOLID]</code></pre>
-<p>Scenes are stored as <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> files on the controller's filesystem (<abbr title="Little Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">LittleFS</abbr>) at <code>/scenes/&lt;name&gt;.json</code>. The HTTP body and the stored file share the same <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> format.</p>
+<p>Scenes are stored in a binary database on the controller at <code>/data/scenes.db</code> (<code>SceneStore</code>). HTTP bodies use the same scene <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> format; the controller parses on save and serializes on <code>GET /api/scenes/:id</code>.</p>
 <hr />
 <h2 id="layer">Layer<a class="headerlink" href="#layer" title="Permanent link">&para;</a></h2>
 <p>A <strong>layer</strong> is an animation track inside a scene. Each layer:</p>
@@ -2542,7 +2542,7 @@ displays it. This is the clean way to put a static ambient colour under animated
 <h3 id="palette-json-schema">Palette <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> schema<a class="headerlink" href="#palette-json-schema" title="Permanent link">&para;</a></h3>
 <div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">&quot;schemaVersion&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lava&quot;</span><span class="p">,</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Lava&quot;</span><span class="p">,</span>
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="nt">&quot;stops&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;#000000&quot;</span><span class="p">],</span>
 </span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="p">[</span><span class="mi">46</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;#240000&quot;</span><span class="p">],</span>
@@ -2570,41 +2570,41 @@ displays it. This is the clean way to put a static ambient colour under animated
 </thead>
 <tbody>
 <tr>
-<td><code>rainbow</code></td>
+<td><code>Rainbow</code></td>
 <td>Full hue spectrum</td>
 </tr>
 <tr>
-<td><code>lava</code></td>
+<td><code>Lava</code></td>
 <td>Black → dark red → orange → white</td>
 </tr>
 <tr>
-<td><code>ocean</code></td>
+<td><code>Ocean</code></td>
 <td>Dark navy → teal → bright cyan/white</td>
 </tr>
 <tr>
-<td><code>forest</code></td>
+<td><code>Forest</code></td>
 <td>Dark green → bright lime</td>
 </tr>
 <tr>
-<td><code>party</code></td>
+<td><code>Party</code></td>
 <td>Purple → magenta → orange → yellow → cyan</td>
 </tr>
 <tr>
-<td><code>sunset</code></td>
+<td><code>Sunset</code></td>
 <td>Deep purple → warm red → golden orange</td>
 </tr>
 <tr>
-<td><code>aurora</code></td>
+<td><code>Aurora</code></td>
 <td>Dark teal → bright green → purple → pink</td>
 </tr>
 <tr>
-<td><code>embers</code></td>
+<td><code>Embers</code></td>
 <td>Black → dark red → bright orange-gold</td>
 </tr>
 </tbody>
 </table>
-<h3 id="special-palette-usercolors">Special palette: <code>userColors</code><a class="headerlink" href="#special-palette-usercolors" title="Permanent link">&para;</a></h3>
-<p><code>userColors</code> is a synthetic palette built from the current base colours at the moment it is pushed to the panels. It is not stored as a file. When selected:</p>
+<h3 id="special-palette-base-colors">Special palette: <code>Base colors</code><a class="headerlink" href="#special-palette-base-colors" title="Permanent link">&para;</a></h3>
+<p><code>Base colors</code> is a synthetic palette built from the current base colours at the moment it is pushed to the panels. It is not stored in the database. When selected:</p>
 <div class="language-text highlight"><span class="filename">Text Only</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>stop[0] = (position=0,   color=primary)
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>stop[1] = (position=128, color=secondary)
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>stop[2] = (position=255, color=tertiary)
@@ -2616,7 +2616,7 @@ displays it. This is the clean way to put a static ambient colour under animated
 <div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">],</span>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ocean&quot;</span><span class="p">,</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Ocean&quot;</span><span class="p">,</span>
 </span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">...</span><span class="p">]</span>
 </span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="p">}</span>
 </span></code></pre></div>
@@ -2636,7 +2636,7 @@ displays it. This is the clean way to put a static ambient colour under animated
 </span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="nt">&quot;secondary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FF8800&quot;</span><span class="p">,</span>
 </span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">    </span><span class="nt">&quot;tertiary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#000000&quot;</span>
 </span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">  </span><span class="p">},</span>
-</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lava&quot;</span><span class="p">,</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Lava&quot;</span><span class="p">,</span>
 </span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">  </span><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 </span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">    </span><span class="p">{</span>
 </span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">      </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
@@ -2712,7 +2712,7 @@ displays it. This is the clean way to put a static ambient colour under animated
 <td><code>colors</code></td>
 <td>No</td>
 <td>white/black/black</td>
-<td>Scene's base colours for <code>userColors</code> palette and <code>{"useColor":N}</code> references.</td>
+<td>Scene's base colours for <code>"Base colors"</code> palette and <code>{"useColor":N}</code> references.</td>
 </tr>
 <tr>
 <td><code>background</code></td>
@@ -2723,7 +2723,7 @@ displays it. This is the clean way to put a static ambient colour under animated
 <tr>
 <td><code>palette</code></td>
 <td>No</td>
-<td><code>"userColors"</code></td>
+<td><code>"Base colors"</code></td>
 <td>Active palette for all layers that don't have their own override.</td>
 </tr>
 <tr>

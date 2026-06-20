@@ -2508,11 +2508,11 @@
 <tbody>
 <tr>
 <td><code>SceneStore</code></td>
-<td>Filesystem persistence for scene files at <code>/scenes/&lt;name&gt;.json</code></td>
+<td>Scene persistence in <code>/data/scenes.db</code> (<code>SceneRecord</code> binary records via <code>Database</code>)</td>
 </tr>
 <tr>
-<td><code>AnimationService</code></td>
-<td>Orchestrates save / play-by-name / play-inline / one-shot / stop. Split into <code>prepare*</code> (parse/validate/persist — safe on the AsyncTCP task) and <code>playParsed*</code> (emits packets — main loop only) so HTTP handlers can defer playback (see §8)</td>
+<td><code>ScenesService</code></td>
+<td>Orchestrates save / play-by-id / play-inline / one-shot / stop. Split into <code>prepare*</code> (parse/validate/persist — safe on the AsyncTCP task) and <code>playParsed*</code> (emits packets — main loop only) so HTTP handlers can defer playback (see §8)</td>
 </tr>
 </tbody>
 </table>
@@ -2561,8 +2561,12 @@
 </thead>
 <tbody>
 <tr>
-<td><code>PaletteStore</code></td>
-<td>Built-in palettes compiled in; <code>resolve(name)</code> → <code>GradientStop[]</code></td>
+<td><code>PaletteRepository</code></td>
+<td>Wraps <code>PaletteStore</code> (<code>/data/palettes.db</code>); seeds built-ins on boot; <code>resolve(name)</code> → <code>GradientStop[]</code>; implements <code>IPaletteResolver</code></td>
+</tr>
+<tr>
+<td><code>Store/PaletteStore</code></td>
+<td>Typed store over <code>Database&lt;PaletteCodec&gt;</code> — create / update / remove by name</td>
 </tr>
 </tbody>
 </table>
@@ -2598,23 +2602,18 @@
 </tr>
 <tr>
 <td><code>PaletteServer</code></td>
-<td><code>GET/POST /api/palettes</code>, <code>GET/DELETE /api/palettes/*</code></td>
+<td><code>GET/POST /api/palettes</code>, <code>GET/PUT/DELETE /api/palettes/*</code></td>
 <td>Palette CRUD</td>
 </tr>
 <tr>
 <td><code>SceneServer</code></td>
-<td><code>GET/POST /api/scenes</code>, <code>GET/DELETE/POST /api/scenes/*</code>, <code>/api/scenes/stop</code>, <code>/api/scenes/speed</code>, <code>/api/scenes/play</code>, <code>/api/scenes/play/one-shot</code></td>
+<td><code>GET/POST /api/scenes</code>, <code>PATCH/GET/DELETE/POST /api/scenes/*</code>, <code>/api/scenes/stop</code>, <code>/api/scenes/speed</code>, <code>/api/scenes/play</code>, <code>/api/scenes/play/one-shot</code></td>
 <td>Scene CRUD + playback</td>
 </tr>
 <tr>
 <td><code>AnimationServer</code></td>
 <td><code>POST /api/animations/play</code>, <code>POST /api/animations/trigger</code></td>
 <td>One-shot play + reactive trigger</td>
-</tr>
-<tr>
-<td><code>TopologyServer</code></td>
-<td><code>GET /api/topology</code>, <code>PUT /api/topology/root</code>, <code>GET/PUT /api/panel-tags</code></td>
-<td>Logical root + panel tags (backed by <code>TopologyConfigStore</code>)</td>
 </tr>
 <tr>
 <td><code>PanelServer</code></td>
@@ -2629,14 +2628,14 @@
 <tr>
 <td><code>ConfigurationServer</code></td>
 <td><code>GET /api/configuration</code>, <code>PATCH /api/configuration</code></td>
-<td>Persistent boot behaviour (<code>powerStateOnBoot</code>)</td>
+<td>Boot behaviour, logical root, panel tags (<code>ConfigurationStore</code> + <code>TopologyConfigStore</code>)</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="admonition-title">Mutating endpoints defer to the main loop (§8)</p>
 <p>Every handler that emits <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> packets (scene play/stop/speed, one-shot/trigger, appearance,
-per-panel on/color, power, topology root) <strong>validates synchronously, then queues the
+per-panel on/color, power, configuration <code>logicalRoot</code>) <strong>validates synchronously, then queues the
 packet-emitting work onto the main loop via <code>MainLoopQueue</code> and returns <code>202 Accepted</code></strong>.
 They are injected with a <code>MainLoopQueue&amp;</code>. Read-only and pure filesystem/config endpoints stay
 synchronous (<code>200</code>). See <a href="#8-concurrency-task-model-deferred-execution">§8</a>.</p>
@@ -3083,7 +3082,7 @@ natively tested in <code>test_runner_spawn</code>; the stateful real-time behavi
 <pre class="mermaid"><code>flowchart TD
   A[Mount LittleFS] --&gt; B[sendConfiguration — gamma/color temp to all panels]
   B --&gt; C[selfTest — fade-in/out on every panel]
-  C --&gt; D[PaletteStore::seedBuiltInsIfMissing]
+  C --&gt; D[PaletteRepository::ensureSeeded]
   D --&gt; E[AppearanceStore::loadAndApply\nbrightness + colors + palette broadcast]
   E --&gt; F[AnimationScheduler init]
   F --&gt; G[setupWiFi — AsyncWiFiManager\nauto-connect or open captive portal]
@@ -3093,7 +3092,7 @@ natively tested in <code>test_runner_spawn</code>; the stateful real-time behavi
   J --&gt; K[Main loop]</code></pre>
 <div class="admonition info">
 <p class="admonition-title"><abbr title="Little Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">LittleFS</abbr> mounted before WiFi</p>
-<p><code>Fs::begin()</code> is hoisted before WiFi so <code>PaletteStore</code> and <code>AppearanceStore</code> can read <code>/palettes/</code> and <code>/config/</code> before the captive-portal blocks (which can take up to 120 s on first boot).</p>
+<p><code>Fs::begin()</code> is hoisted before WiFi so <code>PaletteRepository</code> and <code>AppearanceStore</code> can read <code>/data/palettes.db</code> and <code>/config/</code> before the captive-portal blocks (which can take up to 120 s on first boot).</p>
 </div>
 <p>Main loop (<code>case 1</code>), when no panel flash is in progress:
 <div class="language-cpp highlight"><span class="filename">C++</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">ArduinoOTA</span><span class="p">.</span><span class="n">handle</span><span class="p">();</span>
@@ -3220,7 +3219,7 @@ synchronous and return <code>200</code>.</p>
   Q-&gt;&gt;Loop: playParsed(parsed*) (frees parsed*)
   Loop-&gt;&gt;Bus: PREPARE × N + START — capture() on main loop
   Loop-&gt;&gt;Loop: serviceMirror() → flush ring to WS clients</code></pre>
-<p><code>AnimationService</code> is split to support this: <code>prepareInline()</code> / <code>prepareByName()</code> /
+<p><code>ScenesService</code> is split to support this: <code>prepareInline()</code> / <code>prepareByName()</code> /
 <code>prepareOneShot()</code> parse + persist (pure, safe on AsyncTCP, return a heap-ownable result), while
 <code>playParsed()</code> / <code>playParsedOneShot()</code> emit packets and are called from the queued task on the main
 loop. The legacy <code>playScene*</code> / <code>playOneShot</code> methods remain for callers that already run on the main
@@ -3256,7 +3255,7 @@ loop (the demos).</p>
 <td>per-panel packets</td>
 </tr>
 <tr>
-<td><code>PUT /api/topology/root</code></td>
+<td><code>PATCH /api/configuration</code> (<code>logicalRoot</code>)</td>
 <td><code>ScenePlayer::setLogicalRoot</code> re-aims a playing scene</td>
 </tr>
 </tbody>
@@ -3274,15 +3273,15 @@ loop (the demos).</p>
 <td>read-only</td>
 </tr>
 <tr>
-<td><code>POST /api/scenes</code>, <code>DELETE /api/scenes/:name</code></td>
+<td><code>POST /api/scenes</code>, <code>PATCH /api/scenes/:id</code>, <code>DELETE /api/scenes/:id</code></td>
+<td>database only</td>
+</tr>
+<tr>
+<td><code>POST /api/palettes</code>, <code>PUT /api/palettes/:name</code>, <code>DELETE /api/palettes/:name</code></td>
 <td>filesystem only</td>
 </tr>
 <tr>
-<td><code>POST /api/palettes</code>, <code>DELETE /api/palettes/:name</code></td>
-<td>filesystem only</td>
-</tr>
-<tr>
-<td><code>PATCH /api/configuration</code>, <code>PUT /api/panel-tags</code></td>
+<td><code>PATCH /api/configuration</code> (without <code>logicalRoot</code>)</td>
 <td>config/tag store only — no packets, no <code>ScenePlayer</code></td>
 </tr>
 </tbody>

@@ -1749,6 +1749,16 @@
 <td><code>parsePaletteJson</code> — happy paths (with/without name, pretty-printed <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr>, reverse key order), every documented failure mode, <code>PALETTE_STOPS</code> cap</td>
 </tr>
 <tr>
+<td><code>test_palette_codec</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_palette_codec/test_main.cpp"><code>test/test_palette_codec/test_main.cpp</code></a></td>
+<td><code>PaletteCodec</code> — <code>PaletteRecord</code> round-trip serialize/deserialize, empty-name and invalid-stops rejection</td>
+</tr>
+<tr>
+<td><code>test_database</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_database/test_main.cpp"><code>test/test_database/test_main.cpp</code></a></td>
+<td><code>Database&lt;Codec&gt;</code> + <code>DatabaseFormat</code> — create/open, insert/replace/remove, tombstone reuse, version mismatch, truncated file rejection (in-memory <code>IRandomAccessStorage</code>)</td>
+</tr>
+<tr>
 <td><code>test_panel_graph</code></td>
 <td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_panel_graph/test_main.cpp"><code>test/test_panel_graph/test_main.cpp</code></a></td>
 <td><code>PanelGraph</code> — the shared root-independent adjacency: slot↔panel-index round-trip, <code>lowestSlot</code>, degree/neighbour CSR walk, per-side connector indices, symmetry, single-panel/empty/over-capacity builds</td>

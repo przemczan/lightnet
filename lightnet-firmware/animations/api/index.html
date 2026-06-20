@@ -2133,12 +2133,12 @@
 <tr>
 <td><strong>Base Colors</strong></td>
 <td>3 × #RRGGBB</td>
-<td>Primary, secondary, tertiary colours used by the <code>userColors</code> palette</td>
+<td>Primary, secondary, tertiary colours used by the <code>"Base colors"</code> palette</td>
 </tr>
 <tr>
 <td><strong>Palette</strong></td>
 <td>name string</td>
-<td>Currently active gradient palette (e.g. <code>"lava"</code>)</td>
+<td>Currently active gradient palette (e.g. <code>"Lava"</code>)</td>
 </tr>
 </tbody>
 </table>
@@ -2148,7 +2148,7 @@
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">&quot;schemaVersion&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">&quot;brightness&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">192</span><span class="p">,</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">&quot;baseColors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;#FF4400&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;#FF8800&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;#000000&quot;</span><span class="p">],</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lava&quot;</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Lava&quot;</span>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">}</span>
 </span></code></pre></div>
 <div class="admonition info">
@@ -2157,7 +2157,7 @@
 </div>
 <h3 id="http-endpoints">HTTP endpoints<a class="headerlink" href="#http-endpoints" title="Permanent link">&para;</a></h3>
 <div class="language-http highlight"><span class="filename">HTTP</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="err">GET    /api/appearance</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="err">PATCH  /api/appearance        {&quot;brightness&quot;:192, &quot;baseColors&quot;:[&quot;#FF4400&quot;,&quot;#FF8800&quot;,&quot;#000000&quot;], &quot;palette&quot;:&quot;lava&quot;}</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="err">PATCH  /api/appearance        {&quot;brightness&quot;:192, &quot;baseColors&quot;:[&quot;#FF4400&quot;,&quot;#FF8800&quot;,&quot;#000000&quot;], &quot;palette&quot;:&quot;Lava&quot;}</span>
 </span></code></pre></div>
 <p>All fields are optional — omit any you don't want to change. Returns <code>202 {}</code> on success (validated synchronously; the broadcast to panels is applied on the next main-loop tick), <code>422 {"error":"..."}</code> on invalid input, and persists to the filesystem.</p>
 <hr />
@@ -2198,26 +2198,33 @@
 <tr>
 <td><code>GET</code></td>
 <td><code>/api/palettes</code></td>
-<td><code>{"rainbow":{...},"lava":{...},...}</code> — map of name → Palette <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr></td>
+<td>Full palette array with <code>stops</code> (Base colors stops synthesized from current appearance)</td>
 </tr>
 <tr>
 <td><code>GET</code></td>
 <td><code>/api/palettes/:name</code></td>
-<td>Palette <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr></td>
+<td>Full palette <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> with <code>stops</code></td>
 </tr>
 <tr>
 <td><code>POST</code></td>
 <td><code>/api/palettes</code></td>
-<td>Palette <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> body</td>
+<td>Create palette <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> — <code>{"name":"…"}</code>; <code>409</code> if name exists</td>
+</tr>
+<tr>
+<td><code>PUT</code></td>
+<td><code>/api/palettes/:name</code></td>
+<td>Update stops only (name in body must match path); <code>403</code> for built-ins</td>
 </tr>
 <tr>
 <td><code>DELETE</code></td>
 <td><code>/api/palettes/:name</code></td>
-<td>403 for built-ins</td>
+<td><code>204</code>; <code>403</code> for built-ins and <code>"Base colors"</code></td>
 </tr>
 </tbody>
 </table>
+<p>Path segment is URL-encoded (e.g. <code>Base%20colors</code>). Names are case-sensitive, max 30 chars.</p>
 <h3 id="scenes-scene-library">Scenes (scene library)<a class="headerlink" href="#scenes-scene-library" title="Permanent link">&para;</a></h3>
+<p>Stored in <code>/data/scenes.db</code> via <code>SceneStore</code>. See <a href="../../api/#23-scenes"><code>docs/api.md</code></a> for the canonical endpoint table.</p>
 <table>
 <thead>
 <tr>
@@ -2230,21 +2237,26 @@
 <tr>
 <td><code>POST</code></td>
 <td><code>/api/scenes</code></td>
-<td>Scene <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> body — saves to <code>/scenes/&lt;name&gt;.json</code></td>
+<td>Scene <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> body (no <code>"id"</code>) — returns <code>{"id":"…"}</code></td>
+</tr>
+<tr>
+<td><code>PATCH</code></td>
+<td><code>/api/scenes/:id</code></td>
+<td>Scene <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> body (no <code>"id"</code>) — returns <code>{"id":"…"}</code></td>
 </tr>
 <tr>
 <td><code>GET</code></td>
 <td><code>/api/scenes</code></td>
-<td><code>[{"name":"sunset","size":412},...]</code></td>
+<td><code>[{"schemaVersion":1,"id":"…","name":"…","layerCount":2,"duration":15000},…]</code></td>
 </tr>
 <tr>
 <td><code>GET</code></td>
-<td><code>/api/scenes/:name</code></td>
-<td>Scene <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> (raw file passthrough)</td>
+<td><code>/api/scenes/:id</code></td>
+<td>Scene <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> (serialized from stored record)</td>
 </tr>
 <tr>
 <td><code>DELETE</code></td>
-<td><code>/api/scenes/:name</code></td>
+<td><code>/api/scenes/:id</code></td>
 <td>—</td>
 </tr>
 </tbody>
@@ -2262,17 +2274,17 @@
 <tr>
 <td><code>POST</code></td>
 <td><code>/api/scenes/play/one-shot</code></td>
-<td>Full scene <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> body — stored under the hidden name <code>@one-shot</code>, then played by name (so it survives resume / power-cycle like a named scene; names starting with <code>@</code> are hidden from <code>GET /api/scenes</code> and cannot be used as a saved-scene name)</td>
+<td>Full scene <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> — stored under a fixed hidden one-shot id, then played</td>
 </tr>
 <tr>
 <td><code>POST</code></td>
 <td><code>/api/scenes/play</code></td>
-<td>— replays <code>lastPlayedScene</code> from <code>GET /api/state</code> (by name if it was a stored scene, or <code>@one-shot</code> if it was a one-shot play); <code>404</code> if nothing has been played yet</td>
+<td>— replays <code>lastPlayedSceneId</code> from <code>GET /api/state</code></td>
 </tr>
 <tr>
 <td><code>POST</code></td>
-<td><code>/api/scenes/:name/play</code></td>
-<td>— (plays stored scene by name)</td>
+<td><code>/api/scenes/:id/play</code></td>
+<td>— (plays stored scene by id)</td>
 </tr>
 <tr>
 <td><code>POST</code></td>
@@ -2378,7 +2390,7 @@
 </span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">&quot;colors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nt">&quot;primary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#FF8800&quot;</span>
 </span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="p">},</span>
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;userColors&quot;</span><span class="p">,</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Base colors&quot;</span><span class="p">,</span>
 </span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 </span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="p">{</span>
 </span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">      </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
@@ -2402,7 +2414,7 @@
 <div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lava-wave&quot;</span><span class="p">,</span>
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lava&quot;</span><span class="p">,</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Lava&quot;</span><span class="p">,</span>
 </span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 </span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="p">{</span>
 </span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">      </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
@@ -2440,7 +2452,7 @@
 <div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span>
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;fire-reactive&quot;</span><span class="p">,</span>
 </span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;embers&quot;</span><span class="p">,</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Embers&quot;</span><span class="p">,</span>
 </span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 </span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span><span class="p">{</span>
 </span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">      </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
@@ -2468,7 +2480,7 @@
 </span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="p">{</span>
 </span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">      </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">      </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">],</span>
-</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">      </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ocean&quot;</span><span class="p">,</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">      </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Ocean&quot;</span><span class="p">,</span>
 </span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">      </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 </span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">        </span><span class="p">{</span>
 </span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;HUE_CYCLE&quot;</span><span class="p">,</span>
@@ -2481,7 +2493,7 @@
 </span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">    </span><span class="p">{</span>
 </span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="w">      </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
 </span><span id="__span-7-20"><a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="w">      </span><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">],</span>
-</span><span id="__span-7-21"><a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="w">      </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lava&quot;</span><span class="p">,</span>
+</span><span id="__span-7-21"><a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="w">      </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Lava&quot;</span><span class="p">,</span>
 </span><span id="__span-7-22"><a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a><span class="w">      </span><span class="nt">&quot;sequence&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 </span><span id="__span-7-23"><a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a><span class="w">        </span><span class="p">{</span>
 </span><span id="__span-7-24"><a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a><span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BREATHE&quot;</span><span class="p">,</span>
@@ -2501,7 +2513,7 @@
 <div class="language-json highlight"><span class="filename">JSON</span><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span>
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;startup&quot;</span><span class="p">,</span>
 </span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nt">&quot;loop&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;rainbow&quot;</span><span class="p">,</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="nt">&quot;palette&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Rainbow&quot;</span><span class="p">,</span>
 </span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 </span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">    </span><span class="p">{</span>
 </span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">      </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
@@ -2649,7 +2661,7 @@ gantt
 </table>
 <hr />
 <h2 id="appendix-validation-rules">Appendix: Validation Rules<a class="headerlink" href="#appendix-validation-rules" title="Permanent link">&para;</a></h2>
-<p>These apply to <code>POST /api/scenes</code> and <code>POST /api/scenes/play/one-shot</code>. All violations return <code>HTTP 422</code>.</p>
+<p>These apply to <code>POST /api/scenes</code>, <code>PATCH /api/scenes/:id</code>, and <code>POST /api/scenes/play/one-shot</code>. All violations return <code>HTTP 422</code>.</p>
 <table>
 <thead>
 <tr>
@@ -2659,8 +2671,12 @@ gantt
 </thead>
 <tbody>
 <tr>
-<td>Scene name</td>
-<td><code>[a-zA-Z0-9_-]</code>, 1–18 chars; names cannot start with <code>@</code> (reserved for internal scenes such as <code>@one-shot</code>, used by <code>POST /api/scenes/play/one-shot</code>)</td>
+<td>Scene <code>name</code> (display)</td>
+<td>1–64 chars</td>
+</tr>
+<tr>
+<td>Scene <code>id</code> (when present)</td>
+<td>8–10 chars, lowercase <code>[a-z0-9]</code></td>
 </tr>
 <tr>
 <td>Layer count</td>
@@ -2753,7 +2769,7 @@ worked examples live in <a href="../scene-authoring/#6-targeting-panels-the-pane
   emanates from; <code>"reverse": true</code> flips it. The legacy <code>"originPanel"</code> is accepted and maps to
   <code>source:panel:N</code>. <code>SPARKLE</code> has no directionality — <code>source</code>/<code>reverse</code>/<code>directionality</code>/<code>angle</code>
   are ignored.</li>
-<li><strong>Per-device config</strong> (resolved against, set via the <a href="../../api/#27-topology-logical-root-panel-tags">Topology API</a>):
+<li><strong>Per-device config</strong> (resolved against, set via the <a href="../../api/#27-configuration">Configuration API</a>):
   the <strong>logical root</strong> re-centres <code>depth</code>/<code>subtree</code>/<code>source:root</code>; <strong>tags</strong> map <code>tag:&lt;name&gt;</code> to panels
   on this device. Both are device-local and not part of the shared scene.</li>
 </ul>
