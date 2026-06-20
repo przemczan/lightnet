@@ -1728,7 +1728,7 @@
 <li><strong><abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr></strong> (SDA / SCL) — the shared bus used for all commands after discovery</li>
 <li><strong>A single-wire ping line</strong> — used once at boot so the controller can map the topology</li>
 </ul>
-<p>Panels expose <strong>0–3 edges</strong>. One edge is the "parent" connection (back toward the controller); the others fan out to children. Topology is a tree — no cycles.</p>
+<p>Panels expose <strong>up to 5 edges</strong> (configurable via <code>NUMBER_OF_EDGES</code> in <code>panel.config.hpp</code>). One edge is the "parent" connection (back toward the controller); the others fan out to children. Topology is a tree — no cycles.</p>
 <hr />
 <h2 id="what-you-need">What you need<a class="headerlink" href="#what-you-need" title="Permanent link">&para;</a></h2>
 <div class="admonition warning">
@@ -1784,9 +1784,9 @@
 <td>Drop-in alternative; same flash, same firmware</td>
 </tr>
 <tr>
-<td><strong>Arduino Nano (ATmega328)</strong></td>
-<td><code>panel_nanoatmega328</code></td>
-<td>Useful for breadboard prototyping via the controller's serial bridge</td>
+<td><strong>ATmega328P (via controller serial)</strong></td>
+<td><code>panel_atmega328p_via_controller</code></td>
+<td>Upload a <code>.bin</code> over the controller's 57600-baud USB serial — useful for breadboard prototyping</td>
 </tr>
 </tbody>
 </table>
@@ -1801,9 +1801,9 @@
 <h2 id="topology-rules">Topology rules<a class="headerlink" href="#topology-rules" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Panels form a <strong>tree</strong> rooted at the controller — no rings or cross-links</li>
-<li>A panel always has exactly <strong>one parent edge</strong>; the remaining 0–2 edges can fan out</li>
+<li>A panel always has exactly <strong>one parent edge</strong>; the remaining 0–4 edges can fan out</li>
 <li>Panels are identified by an index assigned during discovery (tree-traversal order)</li>
-<li>The firmware caps a single controller at <strong>100 panels</strong> (<code>LIGHTNET_MAX_PANELS</code>)</li>
+<li>The firmware caps panel count at <strong>32 on <abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr></strong> and <strong>100 on <abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr></strong> (<code>LIGHTNET_MAX_PANELS</code> in <code>Core/Common/LightnetConfig.hpp</code>)</li>
 </ul>
 <p>Keep cable runs short enough that the <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> bus stays clean — long runs and high panel counts will eventually start dropping frames. The architecture details in <a href="../../lightnet-firmware/architecture/">Firmware → Architecture</a> cover the bus characteristics.</p>
 <hr />

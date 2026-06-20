@@ -1664,7 +1664,7 @@
 <h2 id="power-the-controller">Power the controller<a class="headerlink" href="#power-the-controller" title="Permanent link">&para;</a></h2>
 <p>Connect 5 V to the controller and panels. On first boot the controller:</p>
 <ol>
-<li>Mounts its on-chip flash filesystem (<abbr title="SPI Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">SPIFFS</abbr>)</li>
+<li>Mounts its on-chip flash filesystem (<abbr title="Little Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">LittleFS</abbr>)</li>
 <li><strong>Pings each edge</strong> to discover connected panels</li>
 <li>Assigns each discovered panel an index and a built-in self-test fade</li>
 <li>Starts a <strong>Wi-Fi captive portal</strong> because no credentials are saved yet</li>

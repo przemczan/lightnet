@@ -1883,7 +1883,7 @@
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">twibootClient</span><span class="o">-&gt;</span><span class="n">writePage</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">);</span><span class="w">  </span><span class="c1">// 2 × 64-byte chunks</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">twibootClient</span><span class="o">-&gt;</span><span class="n">startApp</span><span class="p">();</span>
 </span></code></pre></div>
-<p><code>PanelFlasher</code> reads <code>/panel_fw.bin</code> from LittleFS 128 bytes at a time — the full binary is never buffered in RAM.</p>
+<p><code>PanelFlasher</code> reads <code>/panel_fw.bin</code> from <abbr title="Little Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">LittleFS</abbr> 128 bytes at a time — the full binary is never buffered in RAM.</p>
 <h3 id="http-upload-flow">HTTP upload flow<a class="headerlink" href="#http-upload-flow" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>sequenceDiagram
   participant Client
@@ -1947,7 +1947,7 @@
 <p>Controller replies:</p>
 <ul>
 <li><code>READY\n</code> — after the header is received</li>
-<li><code>OK\n</code> — after <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> validates and binary is saved to LittleFS</li>
+<li><code>OK\n</code> — after <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> validates and binary is saved to <abbr title="Little Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">LittleFS</abbr></li>
 <li><code>ERR:&lt;message&gt;\n</code> — on any failure</li>
 </ul>
 <h3 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h3>

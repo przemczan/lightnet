@@ -1688,7 +1688,7 @@
 <dt>Controller</dt>
 <dd>The central device in a Lightnet network — an <abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr> or <abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr>. It discovers panels, exposes the HTTP and WebSocket APIs over Wi-Fi, runs the scene player, and brokers all <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> traffic. Defined in <a href="../../lightnet-firmware/architecture/">Firmware → Architecture</a>.</dd>
 <dt>Panel</dt>
-<dd>A leaf device — an ATmega328P or 328PB driving one <a href="#term-ws2812"><abbr title="Single-wire addressable RGB LED used on each panel.">WS2812</abbr></a> LED. Panels have 0–3 edge connectors and run animations locally between updates from the controller.</dd>
+<dd>A leaf device — an ATmega328P or 328PB driving one <a href="#term-ws2812"><abbr title="Single-wire addressable RGB LED used on each panel.">WS2812</abbr></a> LED. Panels have up to 5 edge connectors and run animations locally between updates from the controller.</dd>
 <dt>Edge</dt>
 <dd>A physical connector on a panel (or controller). Each edge carries power and a single-wire ping line used during discovery. After discovery, <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> handles all communication; the ping line goes idle until reset.</dd>
 <dt>Topology</dt>
@@ -1697,7 +1697,7 @@
 <h2 id="animation-system">Animation system<a class="headerlink" href="#animation-system" title="Permanent link">&para;</a></h2>
 <dl>
 <dt>Scene</dt>
-<dd>Top-level playback unit. A scene contains one or more layers, can loop, and is stored as <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> on the controller's <a href="#term-spiffs"><abbr title="SPI Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">SPIFFS</abbr></a> under <code>/scenes/&lt;name&gt;.json</code>. See <a href="../../lightnet-firmware/animations/concepts/">Firmware → Animations &amp; Scenes</a>.</dd>
+<dd>Top-level playback unit. A scene contains one or more layers, can loop, and is stored as <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> on the controller's <a href="#term-littlefs"><abbr title="Little Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">LittleFS</abbr></a> under <code>/scenes/&lt;name&gt;.json</code>. See <a href="../../lightnet-firmware/animations/concepts/">Firmware → Animations &amp; Scenes</a>.</dd>
 <dt>Layer</dt>
 <dd>An independent animation track inside a scene. Targets a set of panels, belongs to a <a href="#term-group">group</a>, and runs a sequence of <a href="#term-step">steps</a>. Up to 8 layers per scene.</dd>
 <dt id="term-step">Step</dt>
@@ -1705,7 +1705,7 @@
 <dt id="term-group">Group</dt>
 <dd>A synchronisation unit. Panels in the same group fire animations simultaneously (±2.5 µs jitter via <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> General Call). Group IDs 1–254 are valid; 0 is reserved.</dd>
 <dt>Palette</dt>
-<dd>A 1–16 stop gradient of (position, RGB) entries. The controller linearly interpolates between stops to produce a continuous 256-entry colour ramp. Built-in palettes (<code>rainbow</code>, <code>lava</code>, <code>ocean</code>, …) ship with the firmware; user palettes are saved to <a href="#term-spiffs"><abbr title="SPI Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">SPIFFS</abbr></a>.</dd>
+<dd>A 1–16 stop gradient of (position, RGB) entries. The controller linearly interpolates between stops to produce a continuous 256-entry colour ramp. Built-in palettes (<code>rainbow</code>, <code>lava</code>, <code>ocean</code>, …) ship with the firmware; user palettes are saved to <a href="#term-littlefs"><abbr title="Little Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">LittleFS</abbr></a>.</dd>
 <dt>ColorRef</dt>
 <dd>
 <p>The single tagged way to specify a colour in an animation. Three forms:</p>
@@ -1727,7 +1727,7 @@
 <dt>WebSocket</dt>
 <dd>Binary protocol at <code>ws://lightnet-&lt;chipid&gt;.local/ws</code>. Sub-millisecond panel control and reactive triggers. 14-byte header with <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16/IBM over header and payload. Full schema: <a href="../../lightnet-firmware/api/">Firmware → API Reference</a>.</dd>
 <dt><abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> protocol</dt>
-<dd>The internal bus between controller and panels. Custom packet format defined in <code>Common/Protocol.hpp</code> with packed structs and <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> validation. Documented in <a href="../../lightnet-firmware/architecture/">Firmware → Architecture</a>.</dd>
+<dd>The internal bus between controller and panels. Custom packet format defined in <code>Core/Common/ProtocolMeta.hpp</code> (included via <code>Common/Protocol.hpp</code>) with packed structs and <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> validation. Documented in <a href="../../lightnet-firmware/architecture/">Firmware → Architecture</a>.</dd>
 <dt>General Call</dt>
 <dd><abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> broadcast (address <code>0x00</code>) — every panel receives it simultaneously. Lightnet uses it for animation start, palette and brightness updates, and reactive triggers.</dd>
 <dt>Discovery</dt>
@@ -1735,8 +1735,8 @@
 </dl>
 <h2 id="persistence-updates">Persistence &amp; updates<a class="headerlink" href="#persistence-updates" title="Permanent link">&para;</a></h2>
 <dl>
-<dt id="term-spiffs"><abbr title="SPI Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">SPIFFS</abbr></dt>
-<dd>SPI Flash File System — the ESP's small on-chip filesystem. Lightnet stores scenes, palettes, appearance settings, and the staged panel firmware blob here.</dd>
+<dt id="term-littlefs"><abbr title="Little Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">LittleFS</abbr></dt>
+<dd>Little Flash File System — the ESP's small on-chip filesystem. Lightnet stores scenes, palettes, appearance settings, and the staged panel firmware blob here.</dd>
 <dt><abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr></dt>
 <dd>Wireless firmware update. <strong>Panel <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr></strong> uses the <a href="#term-twiboot">twiboot</a> bootloader and pushes pages over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr>. <strong>Controller <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr></strong> uses ArduinoOTA over Wi-Fi.</dd>
 <dt id="term-twiboot">twiboot</dt>

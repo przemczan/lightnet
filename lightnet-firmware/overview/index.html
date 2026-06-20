@@ -1729,7 +1729,7 @@
 <ul>
 <li><strong>Panel-local animations</strong> — BREATHE, FADE, PULSE, BLINK, HUE_CYCLE, STROBE, REACTIVE, TRANSITION, SOLID. Zero per-frame <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> traffic.</li>
 <li><strong>Controller runners</strong> — WAVE, RIPPLE, CHASE, WHEEL, BOUNCE compile to per-panel local pulses (one setup burst); RAIN, SPARKLE, MATRIX are particle spawners driven over the step window.</li>
-<li><strong>Scenes</strong> — multi-layer <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> containers stored on LittleFS, played back by <code>ScenePlayer</code>.</li>
+<li><strong>Scenes</strong> — multi-layer <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> containers stored on <abbr title="Little Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">LittleFS</abbr>, played back by <code>ScenePlayer</code>.</li>
 <li><strong>Palettes</strong> — 1–16 stop RGB gradients, sampled in 256 positions at frame time.</li>
 <li><strong>Groups</strong> — synchronisation units; panels in the same group fire simultaneously (±2.5 µs jitter via <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> General Call).</li>
 </ul>

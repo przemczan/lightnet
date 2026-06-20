@@ -3092,7 +3092,7 @@ natively tested in <code>test_runner_spawn</code>; the stateful real-time behavi
   I --&gt; J[mDNS: lightnet-chipid.local\n_lightnet._tcp]
   J --&gt; K[Main loop]</code></pre>
 <div class="admonition info">
-<p class="admonition-title">LittleFS mounted before WiFi</p>
+<p class="admonition-title"><abbr title="Little Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">LittleFS</abbr> mounted before WiFi</p>
 <p><code>Fs::begin()</code> is hoisted before WiFi so <code>PaletteStore</code> and <code>AppearanceStore</code> can read <code>/palettes/</code> and <code>/config/</code> before the captive-portal blocks (which can take up to 120 s on first boot).</p>
 </div>
 <p>Main loop (<code>case 1</code>), when no panel flash is in progress:

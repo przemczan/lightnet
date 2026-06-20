@@ -2350,7 +2350,7 @@
   L1 --&gt; S2[Step: BREATHE loop]
   L2 --&gt; S3[Step: WAVE runner]
   L3 --&gt; S4[Step: SOLID]</code></pre>
-<p>Scenes are stored as <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> files on the controller's filesystem (LittleFS) at <code>/scenes/&lt;name&gt;.json</code>. The HTTP body and the stored file share the same <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> format.</p>
+<p>Scenes are stored as <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> files on the controller's filesystem (<abbr title="Little Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">LittleFS</abbr>) at <code>/scenes/&lt;name&gt;.json</code>. The HTTP body and the stored file share the same <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> format.</p>
 <hr />
 <h2 id="layer">Layer<a class="headerlink" href="#layer" title="Permanent link">&para;</a></h2>
 <p>A <strong>layer</strong> is an animation track inside a scene. Each layer:</p>

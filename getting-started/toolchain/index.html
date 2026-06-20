@@ -1706,9 +1706,13 @@
 <div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/przemczan/lightnet-firmware.git
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">cd</span><span class="w"> </span>lightnet-firmware
 </span></code></pre></div>
+<p>Copy the example config headers before your first build (they are gitignored so each checkout keeps its own settings):</p>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cp<span class="w"> </span>src/controller.config.hpp.example<span class="w"> </span>src/controller.config.hpp
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>cp<span class="w"> </span>src/panel.config.hpp.example<span class="w">       </span>src/panel.config.hpp
+</span></code></pre></div>
 <p>The repository contains both controller and panel firmware in one tree. The active environment selects which one PlatformIO compiles:</p>
-<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_esp32<span class="w">          </span><span class="c1"># build controller for ESP32</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>panel_atmega328pb<span class="w">         </span><span class="c1"># build panel for ATmega328PB</span>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_esp32<span class="w">          </span><span class="c1"># build controller for ESP32</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>panel_atmega328pb<span class="w">         </span><span class="c1"># build panel for ATmega328PB</span>
 </span></code></pre></div>
 <p>A full list of environments lives in <a href="../../lightnet-firmware/getting-started/">Firmware → Getting Started</a>.</p>
 <h2 id="drivers">Drivers<a class="headerlink" href="#drivers" title="Permanent link">&para;</a></h2>
@@ -1727,13 +1731,13 @@
 </div>
 <h2 id="verify-the-toolchain">Verify the toolchain<a class="headerlink" href="#verify-the-toolchain" title="Permanent link">&para;</a></h2>
 <p>Before going further, do a dry-run compile of either target. This downloads the necessary toolchain and confirms everything is wired up.</p>
-<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_esp8266
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_esp8266
 </span></code></pre></div>
 <p>If the build finishes with <strong><code>SUCCESS</code></strong>, you're ready to flash.</p>
 <details class="tip">
 <summary>Optional: serial console</summary>
 <p>During development it's useful to keep a serial monitor open on the controller. The firmware logs at <strong>57600 baud</strong>:</p>
-<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>pio<span class="w"> </span>device<span class="w"> </span>monitor<span class="w"> </span>-e<span class="w"> </span>controller_esp8266
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>pio<span class="w"> </span>device<span class="w"> </span>monitor<span class="w"> </span>-e<span class="w"> </span>controller_esp8266
 </span></code></pre></div>
 </details>
 <hr />

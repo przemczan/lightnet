@@ -1670,10 +1670,10 @@
 <li><strong>Patch</strong> — bug fixes only</li>
 </ul>
 <h2 id="firmware-protocol-versions">Firmware protocol versions<a class="headerlink" href="#firmware-protocol-versions" title="Permanent link">&para;</a></h2>
-<p>The internal <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> protocol between controller and panels is versioned independently of the firmware version itself. The current version is <strong>v4</strong> (<code>Common/Protocol.hpp</code> → <code>VERSION</code>).</p>
+<p>The internal <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> protocol between controller and panels is versioned independently of the firmware version itself. The current version is <strong>v6</strong> (<code>Core/Common/ProtocolMeta.hpp</code> → <code>Protocol::VERSION</code>).</p>
 <div class="admonition warning">
 <p class="admonition-title">Flash controller and panels together</p>
-<p>The controller and every panel must agree on the <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> protocol version. When you cross a protocol bump (e.g. v3 → v4), flash the controller and <strong>all</strong> panels in the same session. Mismatched versions cause unpredictable behaviour after discovery completes.</p>
+<p>The controller and every panel must agree on the <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> protocol version. When you cross a protocol bump (e.g. v5 → v6), flash the controller and <strong>all</strong> panels in the same session. Mismatched versions cause unpredictable behaviour after discovery completes.</p>
 <p>The full protocol-version table lives in <a href="../../lightnet-firmware/architecture/#4-i2c-protocol-internal">Firmware → Architecture</a>.</p>
 </div>
 <h2 id="mobile-app-protocol">Mobile app protocol<a class="headerlink" href="#mobile-app-protocol" title="Permanent link">&para;</a></h2>
