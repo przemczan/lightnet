@@ -30,6 +30,13 @@ git clone https://github.com/przemczan/lightnet-firmware.git
 cd lightnet-firmware
 ```
 
+Copy the example config headers before your first build (they are gitignored so each checkout keeps its own settings):
+
+```bash
+cp src/controller.config.hpp.example src/controller.config.hpp
+cp src/panel.config.hpp.example       src/panel.config.hpp
+```
+
 The repository contains both controller and panel firmware in one tree. The active environment selects which one PlatformIO compiles:
 
 ```bash

@@ -30,7 +30,8 @@ There is no published build yet — you compile it yourself from the [mobile rep
 
     ```bash
     git clone https://github.com/przemczan/lightnet-mobile.git
-    open lightnet-mobile/iosApp/iosApp.xcodeproj
+    cd lightnet-mobile
+    open iosApp/iosApp.xcodeproj
     ```
 
     Run the `iosApp` scheme. The Kotlin Multiplatform shared module is compiled automatically by the Xcode build phase.

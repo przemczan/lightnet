@@ -10,7 +10,7 @@ With a freshly-flashed controller and at least one panel connected, you're ready
 
 Connect 5 V to the controller and panels. On first boot the controller:
 
-1. Mounts its on-chip flash filesystem (SPIFFS)
+1. Mounts its on-chip flash filesystem (LittleFS)
 2. **Pings each edge** to discover connected panels
 3. Assigns each discovered panel an index and a built-in self-test fade
 4. Starts a **Wi-Fi captive portal** because no credentials are saved yet

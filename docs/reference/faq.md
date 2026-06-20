@@ -29,7 +29,7 @@ No. The controller exposes HTTP and WebSocket APIs — `curl`, a web page, a Pyt
 
 ### How many panels can a controller drive?
 
-The firmware caps it at **100 panels** per controller (`LIGHTNET_MAX_PANELS` in `LightnetConfig.hpp`). In practice the real limit is whichever you hit first: physical layout, power supply, I²C bus quality, and controller SRAM for per-panel state. The I²C address space (7-bit) would allow up to 254, but the firmware reserves headroom.
+The firmware caps panel count at **32 on ESP8266** and **100 on ESP32** (`LIGHTNET_MAX_PANELS` in `Core/Common/LightnetConfig.hpp`). In practice the real limit is whichever you hit first: physical layout, power supply, I²C bus quality, and controller SRAM for per-panel state. The I²C address space (7-bit) would allow up to 254, but the firmware reserves headroom.
 
 See [Firmware → Architecture](../lightnet-firmware/architecture.md) for the bandwidth budget.
 
@@ -95,7 +95,7 @@ Open a serial monitor at **57600 baud**:
 pio device monitor -e controller_esp32
 ```
 
-`DEBUG=1` is set globally in the build flags, so the firmware is verbose by default. For panel state, use the `GET_PANELS_STATES` WebSocket command (see [Firmware → Troubleshooting](../lightnet-firmware/troubleshooting.md)).
+Serial debug output is off by default. To enable verbose logs, set `DEBUG=1` as a build flag for the controller environment in `platformio.ini`. Per-subsystem detail (API, bus, discovery, etc.) is then controlled by the `DEBUG_*` sub-switches in `controller.config.hpp`. For panel state, use the `GET_PANELS_STATES` WebSocket command or `GET /api/panels` (see [Firmware → API Reference](../lightnet-firmware/api.md)).
 
 ---
 

@@ -22,13 +22,22 @@ Each panel needs the [twiboot](https://github.com/orempel/twiboot) bootloader si
 !!! warning "Don't guess the fuses"
     Setting fuses by hand is the single easiest way to brick an ATmega — wrong values can lock the chip out of further programming. Use the PlatformIO targets below; they're known good.
 
-```bash
-# Fuses (also clears flash)
-pio run -e atmega328p_bootloader -t fuses
+Pick the bootloader environment that matches your panel MCU:
 
-# Burn the twiboot bootloader
-pio run -e atmega328p_bootloader -t upload
-```
+=== "ATmega328P"
+    ```bash
+    # Fuses (also clears flash)
+    pio run -e atmega328p_bootloader -t fuses
+
+    # Burn the twiboot bootloader
+    pio run -e atmega328p_bootloader -t upload
+    ```
+
+=== "ATmega328PB"
+    ```bash
+    pio run -e atmega328pb_bootloader -t fuses
+    pio run -e atmega328pb_bootloader -t upload
+    ```
 
 Repeat for every panel. The expected fuse values, where the bootloader lives in flash, and the OTA protocol it speaks are documented in [Firmware → Hardware](../lightnet-firmware/hardware.md) and [Firmware → OTA & Updates](../lightnet-firmware/ota.md).
 

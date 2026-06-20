@@ -20,7 +20,7 @@ Each edge cable carries:
 - **I²C** (SDA / SCL) — the shared bus used for all commands after discovery
 - **A single-wire ping line** — used once at boot so the controller can map the topology
 
-Panels expose **0–3 edges**. One edge is the "parent" connection (back toward the controller); the others fan out to children. Topology is a tree — no cycles.
+Panels expose **up to 5 edges** (configurable via `NUMBER_OF_EDGES` in `panel.config.hpp`). One edge is the "parent" connection (back toward the controller); the others fan out to children. Topology is a tree — no cycles.
 
 ---
 
@@ -45,7 +45,7 @@ Pin assignments are documented in the [Firmware → Hardware](../lightnet-firmwa
 |---|---|---|
 | **ATmega328PB** | `panel_atmega328pb` | Recommended — extra peripherals, identical footprint to 328P |
 | **ATmega328P** | `panel_atmega328p` | Drop-in alternative; same flash, same firmware |
-| **Arduino Nano (ATmega328)** | `panel_nanoatmega328` | Useful for breadboard prototyping via the controller's serial bridge |
+| **ATmega328P (via controller serial)** | `panel_atmega328p_via_controller` | Upload a `.bin` over the controller's 57600-baud USB serial — useful for breadboard prototyping |
 
 Each panel drives **one WS2812 LED** on `PD5`. The bootloader, fuses, and firmware are flashed once over a programmer (USBasp), then panels receive future updates wirelessly via the controller. See [Firmware → OTA & Updates](../lightnet-firmware/ota.md).
 
@@ -60,9 +60,9 @@ Each panel drives **one WS2812 LED** on `PD5`. The bootloader, fuses, and firmwa
 ## Topology rules
 
 - Panels form a **tree** rooted at the controller — no rings or cross-links
-- A panel always has exactly **one parent edge**; the remaining 0–2 edges can fan out
+- A panel always has exactly **one parent edge**; the remaining 0–4 edges can fan out
 - Panels are identified by an index assigned during discovery (tree-traversal order)
-- The firmware caps a single controller at **100 panels** (`LIGHTNET_MAX_PANELS`)
+- The firmware caps panel count at **32 on ESP8266** and **100 on ESP32** (`LIGHTNET_MAX_PANELS` in `Core/Common/LightnetConfig.hpp`)
 
 Keep cable runs short enough that the I²C bus stays clean — long runs and high panel counts will eventually start dropping frames. The architecture details in [Firmware → Architecture](../lightnet-firmware/architecture.md) cover the bus characteristics.
 

@@ -5,7 +5,7 @@
 *[ISR]: Interrupt Service Routine — a small function the CPU jumps into when a hardware event fires.
 *[PCINT]: Pin Change Interrupt — AVR feature that triggers an ISR whenever a watched pin changes state.
 *[SRAM]: Static RAM — runtime memory on the microcontroller; very limited on ATmega panels.
-*[SPIFFS]: SPI Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.
+*[LittleFS]: Little Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.
 *[WS2812]: Single-wire addressable RGB LED used on each panel.
 *[ATmega]: 8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.
 *[ESP8266]: Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.

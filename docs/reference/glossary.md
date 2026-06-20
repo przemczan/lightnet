@@ -12,7 +12,7 @@ Controller
 :   The central device in a Lightnet network — an ESP8266 or ESP32. It discovers panels, exposes the HTTP and WebSocket APIs over Wi-Fi, runs the scene player, and brokers all I²C traffic. Defined in [Firmware → Architecture](../lightnet-firmware/architecture.md).
 
 Panel
-:   A leaf device — an ATmega328P or 328PB driving one [WS2812](#term-ws2812) LED. Panels have 0–3 edge connectors and run animations locally between updates from the controller.
+:   A leaf device — an ATmega328P or 328PB driving one [WS2812](#term-ws2812) LED. Panels have up to 5 edge connectors and run animations locally between updates from the controller.
 
 Edge
 :   A physical connector on a panel (or controller). Each edge carries power and a single-wire ping line used during discovery. After discovery, I²C handles all communication; the ping line goes idle until reset.
@@ -23,7 +23,7 @@ Topology
 ## Animation system
 
 Scene
-:   Top-level playback unit. A scene contains one or more layers, can loop, and is stored as JSON on the controller's [SPIFFS](#term-spiffs) under `/scenes/<name>.json`. See [Firmware → Animations & Scenes](../lightnet-firmware/animations/concepts.md).
+:   Top-level playback unit. A scene contains one or more layers, can loop, and is stored as JSON on the controller's [LittleFS](#term-littlefs) under `/scenes/<name>.json`. See [Firmware → Animations & Scenes](../lightnet-firmware/animations/concepts.md).
 
 Layer
 :   An independent animation track inside a scene. Targets a set of panels, belongs to a [group](#term-group), and runs a sequence of [steps](#term-step). Up to 8 layers per scene.
@@ -35,7 +35,7 @@ Group { #term-group }
 :   A synchronisation unit. Panels in the same group fire animations simultaneously (±2.5 µs jitter via I²C General Call). Group IDs 1–254 are valid; 0 is reserved.
 
 Palette
-:   A 1–16 stop gradient of (position, RGB) entries. The controller linearly interpolates between stops to produce a continuous 256-entry colour ramp. Built-in palettes (`rainbow`, `lava`, `ocean`, …) ship with the firmware; user palettes are saved to [SPIFFS](#term-spiffs).
+:   A 1–16 stop gradient of (position, RGB) entries. The controller linearly interpolates between stops to produce a continuous 256-entry colour ramp. Built-in palettes (`rainbow`, `lava`, `ocean`, …) ship with the firmware; user palettes are saved to [LittleFS](#term-littlefs).
 
 ColorRef
 :   The single tagged way to specify a colour in an animation. Three forms:
@@ -59,7 +59,7 @@ WebSocket
 :   Binary protocol at `ws://lightnet-<chipid>.local/ws`. Sub-millisecond panel control and reactive triggers. 14-byte header with CRC-16/IBM over header and payload. Full schema: [Firmware → API Reference](../lightnet-firmware/api.md).
 
 I²C protocol
-:   The internal bus between controller and panels. Custom packet format defined in `Common/Protocol.hpp` with packed structs and CRC validation. Documented in [Firmware → Architecture](../lightnet-firmware/architecture.md).
+:   The internal bus between controller and panels. Custom packet format defined in `Core/Common/ProtocolMeta.hpp` (included via `Common/Protocol.hpp`) with packed structs and CRC validation. Documented in [Firmware → Architecture](../lightnet-firmware/architecture.md).
 
 General Call
 :   I²C broadcast (address `0x00`) — every panel receives it simultaneously. Lightnet uses it for animation start, palette and brightness updates, and reactive triggers.
@@ -69,8 +69,8 @@ Discovery
 
 ## Persistence & updates
 
-SPIFFS { #term-spiffs }
-:   SPI Flash File System — the ESP's small on-chip filesystem. Lightnet stores scenes, palettes, appearance settings, and the staged panel firmware blob here.
+LittleFS { #term-littlefs }
+:   Little Flash File System — the ESP's small on-chip filesystem. Lightnet stores scenes, palettes, appearance settings, and the staged panel firmware blob here.
 
 OTA
 :   Wireless firmware update. **Panel OTA** uses the [twiboot](#term-twiboot) bootloader and pushes pages over I²C. **Controller OTA** uses ArduinoOTA over Wi-Fi.
