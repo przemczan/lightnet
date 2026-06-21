@@ -2581,7 +2581,11 @@
 <tbody>
 <tr>
 <td><code>AppearanceStore</code></td>
-<td>Owns <code>/config/appearance.json</code>; atomic writes, broadcasts to panels on change</td>
+<td>Storage only: owns <code>/config/appearance.db</code> (single binary <code>Database</code> record) — getters/setters + deferred persistence</td>
+</tr>
+<tr>
+<td><code>AppearanceService</code></td>
+<td>Behaviour facade over <code>AppearanceStore</code>: validates the palette, broadcasts brightness/base-colours/palette to panels on change and on <code>reapply()</code></td>
 </tr>
 </tbody>
 </table>
@@ -2628,7 +2632,7 @@
 <tr>
 <td><code>ConfigurationServer</code></td>
 <td><code>GET /api/configuration</code>, <code>PATCH /api/configuration</code></td>
-<td>Boot behaviour, logical root, panel tags (<code>ConfigurationStore</code> + <code>TopologyConfigStore</code>)</td>
+<td>Boot behaviour, logical root (<code>ConfigurationStore</code> + <code>TopologyConfigStore</code>)</td>
 </tr>
 </tbody>
 </table>
@@ -2686,7 +2690,7 @@ synchronous (<code>200</code>). See <a href="#8-concurrency-task-model-deferred-
 </tr>
 <tr>
 <td><code>AnimationPlayer</code></td>
-<td>Layer compositor: <code>slots[MAX_ANIM_SLOTS]</code> (18) composited each ~16 ms tick (blend modes + <code>animates</code> modifier targets + background base). Resolves <code>ColorRef</code> → RGB against panel's current palette + base colors</td>
+<td>Layer compositor: <code>slots[MAX_ANIM_SLOTS]</code> composited each ~16 ms tick (blend modes + <code>animates</code> modifier targets + background base). Resolves <code>ColorRef</code> → RGB against panel's current palette + base colors</td>
 </tr>
 <tr>
 <td><code>BootloaderBridge</code></td>
@@ -2921,7 +2925,7 @@ It is the <strong>single implementation</strong> of panel-local animation math, 
 </ul>
 <h3 id="animationplayer-panel-side-layer-compositor">AnimationPlayer (panel side) — layer compositor<a class="headerlink" href="#animationplayer-panel-side-layer-compositor" title="Permanent link">&para;</a></h3>
 <ul>
-<li><code>slots[MAX_ANIM_SLOTS]</code> (18) — each an independent layer keyed by <code>group_id</code>, with its running
+<li><code>slots[MAX_ANIM_SLOTS]</code> (12) — each an independent layer keyed by <code>group_id</code>, with its running
   step + a 1-deep pending step (PREPARE buffers <code>pending</code>; START activates it).</li>
 <li><code>tick()</code> gated at 16 ms (60 fps), integer math only. Each tick resolves every started slot to one
   contribution (source colour or modifier value). <strong>Non-looping</strong> layers honour <code>startDelayMs</code>
@@ -3282,7 +3286,7 @@ loop (the demos).</p>
 </tr>
 <tr>
 <td><code>PATCH /api/configuration</code> (without <code>logicalRoot</code>)</td>
-<td>config/tag store only — no packets, no <code>ScenePlayer</code></td>
+<td>config store only — no packets, no <code>ScenePlayer</code></td>
 </tr>
 </tbody>
 </table>

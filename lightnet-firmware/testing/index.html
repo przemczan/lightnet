@@ -1759,6 +1759,11 @@
 <td><code>Database&lt;Codec&gt;</code> + <code>DatabaseFormat</code> — create/open, insert/replace/remove, tombstone reuse, version mismatch, truncated file rejection (in-memory <code>IRandomAccessStorage</code>)</td>
 </tr>
 <tr>
+<td><code>test_config_codecs</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_config_codecs/test_main.cpp"><code>test/test_config_codecs/test_main.cpp</code></a></td>
+<td>Single-record config codecs (<code>AppearanceCodec</code>/<code>ConfigurationCodec</code>/<code>AppStateCodec</code>) — fixed-slot <code>Database</code> round-trip, out-of-range rejection, string-field termination</td>
+</tr>
+<tr>
 <td><code>test_panel_graph</code></td>
 <td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_panel_graph/test_main.cpp"><code>test/test_panel_graph/test_main.cpp</code></a></td>
 <td><code>PanelGraph</code> — the shared root-independent adjacency: slot↔panel-index round-trip, <code>lowestSlot</code>, degree/neighbour CSR walk, per-side connector indices, symmetry, single-panel/empty/over-capacity builds</td>
@@ -1771,7 +1776,7 @@
 <tr>
 <td><code>test_panel_selector</code></td>
 <td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_panel_selector/test_main.cpp"><code>test/test_panel_selector/test_main.cpp</code></a></td>
-<td><code>resolveSelector</code> — every graph selector, <code>any</code>/<code>all</code>/<code>not</code> composition, <code>tag:</code> resolution via a mock <code>ITagResolver</code> (incl. bounded-read rejection), v2-form equivalence, malformed-program rejection</td>
+<td><code>resolveSelector</code> — every graph selector, <code>any</code>/<code>all</code>/<code>not</code> composition, v2-form equivalence, malformed-program rejection</td>
 </tr>
 <tr>
 <td><code>test_panel_selector_parser</code></td>

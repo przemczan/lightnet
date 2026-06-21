@@ -2973,7 +2973,7 @@ filesystem/config mutations (scene/palette save &amp; delete, configuration PATC
 </tr>
 </tbody>
 </table>
-<p>Persists to <code>/config/appearance.json</code> atomically and broadcasts the updated value to all panels immediately.</p>
+<p>Persists to <code>/config/appearance.db</code> (a single binary <code>Database</code> record) and broadcasts the updated value to all panels immediately.</p>
 <hr />
 <h3 id="22-palettes">2.2 Palettes<a class="headerlink" href="#22-palettes" title="Permanent link">&para;</a></h3>
 <p>Palettes are stored in a binary database at <code>/data/palettes.db</code> (via <code>PaletteStore</code> / <code>PaletteRepository</code>). Each palette is keyed by its <strong>name</strong> (unique, case-insensitive comparison; stored with original casing). Built-in palettes are seeded on first boot.</p>
@@ -3288,7 +3288,7 @@ filesystem/config mutations (scene/palette save &amp; delete, configuration PATC
 <p>These are the HTTP equivalents of the WebSocket <code>TOGGLE</code>, <code>SET_COLOR</code>, <code>GET_PANELS_STATES</code>, and <code>GET_EDGES_LIST</code> commands.</p>
 <hr />
 <h3 id="27-configuration">2.7 Configuration<a class="headerlink" href="#27-configuration" title="Permanent link">&para;</a></h3>
-<p>Persistent app-level and per-device topology settings. Boot behaviour is stored in <code>/config/configuration.json</code> (written atomically with a 5-second deferred-write window). Logical root and panel tags are stored in <code>/config/topology.json</code> (written immediately on change).</p>
+<p>Persistent app-level and per-device topology settings. Boot behaviour is stored in <code>/config/configuration.db</code> (a single binary <code>Database</code> record, written with a 5-second deferred-write window). Logical root is stored in <code>/config/topology.json</code> (written immediately on change).</p>
 <table>
 <thead>
 <tr>
@@ -3303,12 +3303,12 @@ filesystem/config mutations (scene/palette save &amp; delete, configuration PATC
 <td><code>GET</code></td>
 <td><code>/api/configuration</code></td>
 <td>—</td>
-<td><code>{"powerStateOnBoot":0,"logicalRoot":5,"tags":{"1":["accent"],"5":["accent"]}}</code></td>
+<td><code>{"powerStateOnBoot":0,"logicalRoot":5}</code></td>
 </tr>
 <tr>
 <td><code>PATCH</code></td>
 <td><code>/api/configuration</code></td>
-<td>Any subset of <code>powerStateOnBoot</code>, <code>logicalRoot</code>, <code>tags</code></td>
+<td>Any subset of <code>powerStateOnBoot</code>, <code>logicalRoot</code></td>
 <td><code>{}</code>, or <code>202 {"ok":true,"logicalRoot":N}</code> when <code>logicalRoot</code> is patched</td>
 </tr>
 </tbody>
@@ -3342,11 +3342,10 @@ filesystem/config mutations (scene/palette save &amp; delete, configuration PATC
 </table>
 <p>Values outside <code>0–2</code> return <code>422</code>.</p>
 <p><strong>Logical root</strong> re-centres the rooted topology view (<code>depth</code>/<code>subtree</code>/canonical order and the default runner <code>source:root</code>). Patching it persists <em>and</em> restarts a playing scene so the new rooting applies immediately (<code>202</code>). A <code>logicalRoot</code> that doesn't exist on this device falls back to the physical root. Use <code>0</code> to reset to the physical root.</p>
-<p><strong>Tags</strong> are validated <code>[a-zA-Z0-9_-]</code>, 1–15 chars; a scene targets them with <code>"panels":"tag:&lt;name&gt;"</code>. Patching <code>tags</code> replaces the entire map.</p>
 <hr />
 <h3 id="28-state">2.8 State<a class="headerlink" href="#28-state" title="Permanent link">&para;</a></h3>
 <p>Runtime app state — power state, scene playback status, and the most recently played scene id.
-Persisted in <code>/config/app_state.json</code> with a 5-second deferred-write window. The initial
+Persisted in <code>/config/app_state.db</code> (a single binary <code>Database</code> record) with a 5-second deferred-write window. The initial
 <code>isOn</code> value on boot is derived from <code>powerStateOnBoot</code> (see §2.7); <code>lastPlayedSceneId</code> /
 <code>lastPlayedSceneIsStored</code> are set whenever a scene is played via <code>POST /api/scenes/play/one-shot</code>
 or <code>POST /api/scenes/:id/play</code> (see §2.3 Scenes). <code>lastPlayedSceneIsStored</code> is <code>false</code> when

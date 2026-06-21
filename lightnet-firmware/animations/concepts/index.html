@@ -2796,9 +2796,9 @@ displays it. This is the clean way to put a static ambient colour under animated
 </span></code></pre></div>
 <p>Panel addresses are assigned during discovery in tree-traversal order, starting at <strong>1</strong> (address 0 is the <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> general-call broadcast and is rejected). Up to 32 panels per explicit targeting list.</p>
 <p>Beyond these explicit forms, <code>panels</code> also accepts <strong>graph selectors</strong> (<code>"root"</code>, <code>"leaves"</code>,
-<code>"depth:1-2"</code>, <code>"subtree:N"</code>, <code>"fraction:0-0.5"</code>, …), per-device <strong>tags</strong> (<code>"tag:accent"</code>), and
-<strong>composition</strong> (<code>{"any":[…]}</code> / <code>{"all":[…]}</code> / <code>{"not":…}</code>) — these resolve against the panel
-tree so a scene adapts to different devices. See
+<code>"depth:1-2"</code>, <code>"subtree:N"</code>, <code>"fraction:0-0.5"</code>, …) and <strong>composition</strong> (<code>{"any":[…]}</code> /
+<code>{"all":[…]}</code> / <code>{"not":…}</code>) — these resolve against the panel tree so a scene adapts to
+different devices. See
 <a href="../scene-authoring/#6-targeting-panels-the-panels-field">Scene Authoring → Targeting panels</a>.</p>
 <hr />
 <h2 id="color-references">Color References<a class="headerlink" href="#color-references" title="Permanent link">&para;</a></h2>
