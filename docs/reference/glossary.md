@@ -23,7 +23,7 @@ Topology
 ## Animation system
 
 Scene
-:   Top-level playback unit. A scene contains one or more layers, can loop, and is stored as JSON on the controller's [LittleFS](#term-littlefs) under `/scenes/<name>.json`. See [Firmware → Animations & Scenes](../lightnet-firmware/animations/concepts.md).
+:   Top-level playback unit. A scene contains one or more layers, can loop, and is stored as a binary record in `/data/scenes.db` on the controller (`SceneStore`). HTTP bodies use scene JSON. See [Firmware → Animations & Scenes](../lightnet-firmware/animations/concepts.md).
 
 Layer
 :   An independent animation track inside a scene. Targets a set of panels, belongs to a [group](#term-group), and runs a sequence of [steps](#term-step). Up to 8 layers per scene.
@@ -35,7 +35,7 @@ Group { #term-group }
 :   A synchronisation unit. Panels in the same group fire animations simultaneously (±2.5 µs jitter via I²C General Call). Group IDs 1–254 are valid; 0 is reserved.
 
 Palette
-:   A 1–16 stop gradient of (position, RGB) entries. The controller linearly interpolates between stops to produce a continuous 256-entry colour ramp. Built-in palettes (`rainbow`, `lava`, `ocean`, …) ship with the firmware; user palettes are saved to [LittleFS](#term-littlefs).
+:   A 1–16 stop gradient of (position, RGB) entries. The controller linearly interpolates between stops to produce a continuous 256-entry colour ramp. Built-in palettes (`Rainbow`, `Lava`, `Ocean`, …) ship with the firmware; user palettes are saved to `/data/palettes.db`.
 
 ColorRef
 :   The single tagged way to specify a colour in an animation. Three forms:

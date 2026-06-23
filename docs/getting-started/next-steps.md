@@ -36,7 +36,7 @@ You have a running Lightnet installation. From here, what you read depends on wh
 
     ---
 
-    Package layout, the device domain layer, the Compose visualiser, and the `MockConnector` test harness.
+    Package layout, the device domain layer, the Compose visualiser, and the `DemoConnector` test harness.
 
     [:material-arrow-right: App → Development](../lightnet-mobile/development.md)
 

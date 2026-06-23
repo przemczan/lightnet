@@ -50,7 +50,7 @@ Full build instructions, including running the test suite, live in [App → Gett
 The app fetches the panel topology from the controller, lays the panels out in 2-D space, and starts streaming live state.
 
 !!! tip "No hardware? Use the demo"
-    The discovery screen has a **Demo Device** entry. It connects to a built-in fake controller (`MockConnector`) that responds with correct, CRC-valid packets. Every UI flow works against it, so you can explore the app without physical hardware.
+    The discovery screen has a **Demo Device** entry. It connects to a built-in fake controller (`DemoConnector`) that responds with correct, CRC-valid packets. Every UI flow works against it, so you can explore the app without physical hardware.
 
 ## What you can do today
 
@@ -59,9 +59,12 @@ The app fetches the panel topology from the controller, lays the panels out in 2
 | **Tap a panel** | Toggles it on/off |
 | **Drag across panels** | Paint-toggles a row |
 | **Pick a color** | Sets the color of selected panels |
-| **Discover devices** | Browse the local network for controllers |
+| **Play scenes** | Browse, edit, and play scenes stored on the controller |
+| **Manage palettes** | View and edit colour gradients |
+| **Power on/off** | Global power state via `POST /api/state/power` |
+| **Discover devices** | Browse the local network for controllers (Android) |
 
-More controls (scenes, palettes, animation editor) are on the roadmap. The full HTTP and WebSocket API is already exposed by the controller — you can drive it from `curl`, a browser, your own script, or anything else that speaks HTTP or WebSocket.
+The controller also exposes the full HTTP and WebSocket API — you can drive it from `curl`, a browser, your own script, or anything else that speaks HTTP or WebSocket. See [Firmware → API Reference](../lightnet-firmware/api.md).
 
 ---
 

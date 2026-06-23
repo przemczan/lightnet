@@ -147,8 +147,8 @@ In short: HTTP for setup, WebSocket for live control. See [Firmware → API Refe
 Yes. Music sync, smart-home automations, weather feeds — anything that can hit HTTP works:
 
 ```bash
-# Play a stored scene
-curl -X POST http://lightnet-XXXX.local/api/scenes/my-scene/play
+# Play a stored scene (id is 8–10 lowercase alphanumeric chars)
+curl -X POST http://lightnet-XXXX.local/api/scenes/abcd1234/play
 
 # Fire a reactive beat (HTTP path; WebSocket is lower-latency)
 curl -X POST http://lightnet-XXXX.local/api/animations/trigger \

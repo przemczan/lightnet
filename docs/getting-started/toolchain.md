@@ -26,9 +26,11 @@ You don't need any other Arduino install. PlatformIO manages the compilers, boar
 ## Clone the firmware
 
 ```bash
-git clone https://github.com/przemczan/lightnet-firmware.git
+git clone --recurse-submodules https://github.com/przemczan/lightnet-firmware.git
 cd lightnet-firmware
 ```
+
+If you already cloned without submodules, run `git submodule update --init --recursive` (needed for the twiboot bootloader).
 
 Copy the example config headers before your first build (they are gitignored so each checkout keeps its own settings):
 

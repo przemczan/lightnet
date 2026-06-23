@@ -75,6 +75,11 @@ Plug the controller (ESP8266 or ESP32) into USB and pick the matching environmen
     pio run -e controller_esp32 -t upload
     ```
 
+=== "ESP32-S2 (Lolin S2 Mini)"
+    ```bash
+    pio run -e controller_s2_mini -t upload
+    ```
+
 Once Wi-Fi is configured (see the next step), the same command flashes over the network:
 
 ```bash
