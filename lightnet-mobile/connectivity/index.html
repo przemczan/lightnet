@@ -1925,7 +1925,7 @@
 <p>A <code>CancellationException</code> (from <code>disconnect()</code> or <code>close()</code>) breaks the loop immediately without a reconnect attempt.</p>
 <hr />
 <h2 id="democonnector">DemoConnector<a class="headerlink" href="#democonnector" title="Permanent link">&para;</a></h2>
-<p><code>DemoConnector</code> (<code>demo/</code>) is a self-contained fake controller that responds to all commands with properly encoded, <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-correct packets. It is used by the <strong>Demo Device</strong> entry in the device list and is the recommended harness for testing domain logic without physical hardware.</p>
+<p><code>DemoConnector</code> (<code>demo/</code>) is a self-contained fake controller that responds to all commands with properly encoded, <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-correct packets. Enable it in <strong>Settings → Enable demo device</strong>; the virtual device then appears at the top of the device list. It is the recommended harness for testing domain logic without physical hardware.</p>
 <hr />
 <h2 id="server-side-api">Server-side API<a class="headerlink" href="#server-side-api" title="Permanent link">&para;</a></h2>
 <p>For the full server-side API specification — HTTP endpoints, scene management, animation types, and palette control — see the <a href="../../lightnet-firmware/api/">Firmware API Reference</a>.</p>
