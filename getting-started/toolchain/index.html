@@ -1703,9 +1703,10 @@
 </div>
 <p>You don't need any other Arduino install. PlatformIO manages the compilers, board definitions, and library cache itself.</p>
 <h2 id="clone-the-firmware">Clone the firmware<a class="headerlink" href="#clone-the-firmware" title="Permanent link">&para;</a></h2>
-<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/przemczan/lightnet-firmware.git
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>clone<span class="w"> </span>--recurse-submodules<span class="w"> </span>https://github.com/przemczan/lightnet-firmware.git
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">cd</span><span class="w"> </span>lightnet-firmware
 </span></code></pre></div>
+<p>If you already cloned without submodules, run <code>git submodule update --init --recursive</code> (needed for the twiboot bootloader).</p>
 <p>Copy the example config headers before your first build (they are gitignored so each checkout keeps its own settings):</p>
 <div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cp<span class="w"> </span>src/controller.config.hpp.example<span class="w"> </span>src/controller.config.hpp
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>cp<span class="w"> </span>src/panel.config.hpp.example<span class="w">       </span>src/panel.config.hpp

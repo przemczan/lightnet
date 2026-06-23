@@ -2354,8 +2354,8 @@ Requires Android SDK with <strong>API 24+</strong> and a connected device or emu
 <p>In short: HTTP for setup, WebSocket for live control. See <a href="../../lightnet-firmware/api/">Firmware → API Reference</a>.</p>
 <h3 id="can-i-trigger-animations-from-an-external-service">Can I trigger animations from an external service?<a class="headerlink" href="#can-i-trigger-animations-from-an-external-service" title="Permanent link">&para;</a></h3>
 <p>Yes. Music sync, smart-home automations, weather feeds — anything that can hit HTTP works:</p>
-<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Play a stored scene</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://lightnet-XXXX.local/api/scenes/my-scene/play
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Play a stored scene (id is 8–10 lowercase alphanumeric chars)</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://lightnet-XXXX.local/api/scenes/abcd1234/play
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
 </span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># Fire a reactive beat (HTTP path; WebSocket is lower-latency)</span>
 </span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://lightnet-XXXX.local/api/animations/trigger<span class="w"> </span><span class="se">\</span>

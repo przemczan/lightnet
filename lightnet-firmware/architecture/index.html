@@ -2492,8 +2492,8 @@
 </thead>
 <tbody>
 <tr>
-<td><code>AnimationRunner</code></td>
-<td>Base class for the streaming runner classes (<code>WaveRunner</code>/<code>RippleRunner</code>/<code>ChaseRunner</code>) — used by built-in demos only; scenes compile runners instead</td>
+<td><code>CompiledSweep</code></td>
+<td>One-shot linear WAVE/RIPPLE/CHASE via compile-to-PULSE (boot self-test + verification demos)</td>
 </tr>
 </tbody>
 </table>
@@ -2989,8 +2989,8 @@ traffic that previously grew with panel count.</p>
 <code>compile*</code> geometry feeds <code>compileRepeating()</code>, which <strong>swaps <code>colorFrom</code>/<code>colorTo</code></strong> (lit↔dark) so
 the rise→hold→fall envelope reads departing→dark-hold→approaching with <code>FLAG_LOOP</code> — true dark gaps
 using only the existing PULSE/loop mechanism. WHEEL always uses this engine (<code>compileWheel</code> via
-<code>compileRepeatingAsym</code>). <code>SCENE_SCHEMA_VERSION</code> is 8.</p>
-<p>The streaming <code>WaveRunner</code>/<code>RippleRunner</code>/<code>ChaseRunner</code> classes remain for the built-in demos.</p>
+<code>compileRepeatingAsym</code>). <code>SCENE_SCHEMA_VERSION</code> is 8. Boot self-test and verification demos use the same compile path via
+<code>CompiledSweep</code> (list-order coordinates).</p>
 <h3 id="controller-runners-rain-sparkle-particle-spawners-v7">Controller runners — RAIN / SPARKLE particle spawners (v7)<a class="headerlink" href="#controller-runners-rain-sparkle-particle-spawners-v7" title="Permanent link">&para;</a></h3>
 <p>RAIN and SPARKLE are <strong>not</strong> compiled — they are stochastic particle spawners. The compiled-pulse
 model gives "seamless" only by <em>repeating forever</em>; a genuinely random, non-repeating effect
@@ -3044,8 +3044,8 @@ natively tested in <code>test_runner_spawn</code>; the stateful real-time behavi
 <td><strong>~140 µs per beat</strong> (0 µs between beats)</td>
 </tr>
 <tr>
-<td>3-wide WaveRunner (demo streaming path only)</td>
-<td><strong>≤ 600 µs/frame</strong></td>
+<td>N panels, WAVE/RIPPLE/CHASE (compiled PULSE)</td>
+<td><strong>0 µs/frame</strong> during sweep (one PREPARE burst per pass)</td>
 </tr>
 <tr>
 <td>Setup: PREPARE × 30 panels + 2 General Calls</td>
@@ -3105,11 +3105,10 @@ natively tested in <code>test_runner_spawn</code>; the stateful real-time behavi
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">websocketHandler</span><span class="o">-&gt;</span><span class="n">handleIncommingMessages</span><span class="p">();</span><span class="w">        </span><span class="c1">// drain WS commands   → main loop</span>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">mainLoopQueue</span><span class="o">-&gt;</span><span class="n">drain</span><span class="p">();</span><span class="w">                              </span><span class="c1">// drain HTTP-deferred work → main loop (§8)</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">appStateStore</span><span class="o">-&gt;</span><span class="n">isOn</span><span class="p">())</span><span class="w"> </span><span class="n">animScheduler</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span><span class="w">  </span><span class="c1">// controller-computed runners</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">appStateStore</span><span class="o">-&gt;</span><span class="n">isOn</span><span class="p">())</span><span class="w"> </span><span class="n">scenePlayer</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span><span class="w">    </span><span class="c1">// multi-layer scene playback</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="n">appearance</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span><span class="w"> </span><span class="n">configStore</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span><span class="w"> </span><span class="n">appStateStore</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="n">serviceMirror</span><span class="p">();</span><span class="w">                                    </span><span class="c1">// ≤30 fps flush of the mirror ring</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="n">MDNS</span><span class="p">.</span><span class="n">update</span><span class="p">();</span><span class="w">                                      </span><span class="c1">// ESP8266 only</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">appStateStore</span><span class="o">-&gt;</span><span class="n">isOn</span><span class="p">())</span><span class="w"> </span><span class="n">scenePlayer</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span><span class="w">    </span><span class="c1">// multi-layer scene playback</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">appearance</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span><span class="w"> </span><span class="n">configStore</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span><span class="w"> </span><span class="n">appStateStore</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="n">serviceMirror</span><span class="p">();</span><span class="w">                                    </span><span class="c1">// ≤30 fps flush of the mirror ring</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="n">MDNS</span><span class="p">.</span><span class="n">update</span><span class="p">();</span><span class="w">                                      </span><span class="c1">// ESP8266 only</span>
 </span></code></pre></div></p>
 <p>The ordering matters — see <a href="#main-loop-service-order">§8 Main-loop service order</a>.</p>
 <hr />
@@ -3128,7 +3127,7 @@ natively tested in <code>test_runner_spawn</code>; the stateful real-time behavi
 <tr>
 <td><strong>Main loop</strong> (Arduino <code>loop()</code>)</td>
 <td>The <code>case 1</code> body: scene/animation ticks, mirror flush, queue draining</td>
-<td><code>scenePlayer-&gt;tick()</code>, <code>animScheduler-&gt;tick()</code>, <code>serviceMirror()</code></td>
+<td><code>scenePlayer-&gt;tick()</code>, <code>serviceMirror()</code></td>
 </tr>
 <tr>
 <td><strong>AsyncTCP task</strong></td>
@@ -3145,7 +3144,7 @@ tasks run concurrently and share no implicit synchronization.</p>
 <code>LNBus.setOnPacketSent()</code>). <code>capture()</code> appends to a single shared ring buffer <strong>with no locks</strong> — it
 is written assuming exactly one caller. But <code>LNBus.sendPacket()</code> is reached from <strong>both</strong> tasks:</p>
 <ul>
-<li><strong>Main loop</strong> — <code>scenePlayer-&gt;tick()</code> / <code>animScheduler-&gt;tick()</code> emit per-frame <code>SET_COLOR</code> and
+<li><strong>Main loop</strong> — <code>scenePlayer-&gt;tick()</code> emits step PREPARE/START packets and services spawners;
   step PREPARE/START packets.</li>
 <li><strong>AsyncTCP</strong> — a synchronous HTTP handler such as <code>/api/scenes/play/one-shot</code> calls <code>loadAndPlay()</code>, which
   emits a burst of ~300 PREPARE/START packets <strong>inline on the AsyncTCP task</strong>.</li>
@@ -3310,10 +3309,9 @@ producer/consumer discipline to arbitrary function-pointer work for the HTTP lay
 <div class="language-cpp highlight"><span class="filename">C++</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1">// case 1, when no panel flash is in progress:</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">websocketHandler</span><span class="o">-&gt;</span><span class="n">handleIncommingMessages</span><span class="p">();</span><span class="w">        </span><span class="c1">// 1. drain WS commands      → main loop</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">mainLoopQueue</span><span class="o">-&gt;</span><span class="n">drain</span><span class="p">();</span><span class="w">                              </span><span class="c1">// 2. drain HTTP-deferred work → main loop</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">appStateStore</span><span class="o">-&gt;</span><span class="n">isOn</span><span class="p">())</span><span class="w"> </span><span class="n">animScheduler</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">appStateStore</span><span class="o">-&gt;</span><span class="n">isOn</span><span class="p">())</span><span class="w"> </span><span class="n">scenePlayer</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">appearance</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span><span class="w"> </span><span class="n">configStore</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span><span class="w"> </span><span class="n">appStateStore</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="n">serviceMirror</span><span class="p">();</span><span class="w">                                    </span><span class="c1">// 3. ≤30 fps flush of the mirror ring</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">appStateStore</span><span class="o">-&gt;</span><span class="n">isOn</span><span class="p">())</span><span class="w"> </span><span class="n">scenePlayer</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">appearance</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span><span class="w"> </span><span class="n">configStore</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span><span class="w"> </span><span class="n">appStateStore</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">serviceMirror</span><span class="p">();</span><span class="w">                                    </span><span class="c1">// 3. ≤30 fps flush of the mirror ring</span>
 </span></code></pre></div>
 <p>Draining HTTP work <strong>before</strong> the ticks means a scene queued this iteration is played and then ticked
 in the same pass. <code>serviceMirror()</code> runs <strong>last</strong> so any packets emitted by the drained work (or by an

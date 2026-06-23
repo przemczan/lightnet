@@ -1825,12 +1825,15 @@
 </tbody>
 </table>
 <h2 id="device-domain-layer">Device Domain Layer<a class="headerlink" href="#device-domain-layer" title="Permanent link">&para;</a></h2>
-<p><code>LightnetDevice</code> owns a <code>CoroutineScope</code> and composes four services:</p>
+<p><code>LightnetDevice</code> owns a <code>CoroutineScope</code> and composes several services:</p>
 <ul>
-<li><strong><code>MessageApiService</code></strong> — hot <code>MutableSharedFlow</code> fed by <code>connector.incoming</code>; exposes <code>edgesList</code> and <code>panelsStates</code> flows</li>
+<li><strong><code>MessageApiService</code></strong> — hot <code>MutableSharedFlow</code> fed by <code>connector.incoming</code>; exposes <code>edgesList</code>, <code>panelsStates</code>, <code>mirrorBatches</code>, and <code>pong</code> flows</li>
 <li><strong><code>PanelsListService</code></strong> — sends <code>GET_EDGES_LIST</code>, builds <code>PanelInfo</code> tree; uses <code>CoroutineStart.UNDISPATCHED</code> before sending to prevent a race condition with the response</li>
 <li><strong><code>PanelsStatesService</code></strong> — sends <code>GET_PANELS_STATES</code> after panels load; subscribes to live state pushes</li>
 <li><strong><code>PanelsLayoutService</code></strong> — pure geometry; converts edge topology to 2-D polygon coordinates</li>
+<li><strong><code>PanelMirrorService</code></strong> — when live preview is enabled, feeds <code>MIRROR_BATCH</code> frames into <code>PanelPacketRenderer</code> at ~30 fps</li>
+<li><strong><code>DeviceLivenessService</code></strong> — periodic <code>PING</code>/<code>PONG</code> checks; exposes <code>isOnline: StateFlow&lt;Boolean?&gt;</code></li>
+<li><strong><code>OfflineSceneService</code></strong> — offline scene preview via the shared C++ scene engine (<code>NativeSceneCore</code>); used by the demo device and the scene editor</li>
 </ul>
 <p><code>LightnetDevice.snapshot: StateFlow&lt;DeviceSnapshot?&gt;</code> is <code>null</code> while loading, set after the first edge list arrives, and cleared on disconnect so the UI returns to the loading indicator during reconnect.</p>
 <div class="admonition warning">

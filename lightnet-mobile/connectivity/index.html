@@ -1372,6 +1372,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#live-preview-mirror_batch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live preview (MIRROR_BATCH)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1389,10 +1400,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mockconnector" class="md-nav__link">
+  <a href="#democonnector" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MockConnector
+        DemoConnector
       
     </span>
   </a>
@@ -1675,6 +1686,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#live-preview-mirror_batch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live preview (MIRROR_BATCH)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1692,10 +1714,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mockconnector" class="md-nav__link">
+  <a href="#democonnector" class="md-nav__link">
     <span class="md-ellipsis">
       
-        MockConnector
+        DemoConnector
       
     </span>
   </a>
@@ -1804,13 +1826,9 @@
 </span></code></pre></div>
 <ul>
 <li>All multi-byte integers are <strong>little-endian</strong> — enforced by <code>ByteReader</code>/<code>ByteWriter</code></li>
-<li><abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16 is computed separately over the 7-byte header and over the payload</li>
+<li><abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16/IBM (reflected, poly <code>0xA001</code>, init <code>0xFFFF</code>) is computed separately over the 7-byte header and over the payload</li>
 <li><code>MessageParser.parse(ByteArray)</code> validates both CRCs and returns <code>Result.Success/Failure</code></li>
 </ul>
-<div class="admonition note">
-<p class="admonition-title"><abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> variant</p>
-<p>The firmware uses <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16/IBM (poly <code>0x8005</code>, no reflection). The mobile app uses the reflected equivalent (poly <code>0xA001</code>). Both produce the same result — the reflected poly is the standard software implementation of the same algorithm.</p>
-</div>
 <h3 id="outgoing-commands">Outgoing commands<a class="headerlink" href="#outgoing-commands" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -1822,6 +1840,16 @@
 </thead>
 <tbody>
 <tr>
+<td><code>TOGGLE</code></td>
+<td>1</td>
+<td><code>address:u8, state:u8</code></td>
+</tr>
+<tr>
+<td><code>SET_COLOR</code></td>
+<td>3</td>
+<td><code>address:u8, r:u8, g:u8, b:u8</code></td>
+</tr>
+<tr>
 <td><code>GET_EDGES_LIST</code></td>
 <td>4</td>
 <td>empty</td>
@@ -1832,24 +1860,19 @@
 <td>empty</td>
 </tr>
 <tr>
-<td><code>TOGGLE</code></td>
-<td>1</td>
-<td><code>address:u8, state:u8</code></td>
-</tr>
-<tr>
-<td><code>SET_BRIGHTNESS</code></td>
-<td>2</td>
-<td><code>address:u8, brightness:u8</code></td>
-</tr>
-<tr>
-<td><code>SET_COLOR</code></td>
-<td>3</td>
-<td><code>address:u8, r:u8, g:u8, b:u8</code></td>
-</tr>
-<tr>
 <td><code>ANIMATION_TRIGGER</code></td>
 <td>8</td>
 <td><code>groupId:u8, value:u8</code></td>
+</tr>
+<tr>
+<td><code>SET_MIRROR</code></td>
+<td>10</td>
+<td><code>enabled:u8</code> — opt in/out of live <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> packet mirroring</td>
+</tr>
+<tr>
+<td><code>PING</code></td>
+<td>11</td>
+<td>empty</td>
 </tr>
 </tbody>
 </table>
@@ -1874,9 +1897,21 @@
 <td>7</td>
 <td><code>decodeEdgesList(ByteArray)</code></td>
 </tr>
+<tr>
+<td><code>MIRROR_BATCH</code></td>
+<td>9</td>
+<td><code>decodeMirrorBatch(ByteArray)</code> — live preview stream</td>
+</tr>
+<tr>
+<td><code>PONG</code></td>
+<td>12</td>
+<td>empty — reply to <code>PING</code></td>
+</tr>
 </tbody>
 </table>
 <p>Inbound variable-length payloads are decoded by top-level functions in <code>api/websocket/protocol/</code>.</p>
+<h3 id="live-preview-mirror_batch">Live preview (<code>MIRROR_BATCH</code>)<a class="headerlink" href="#live-preview-mirror_batch" title="Permanent link">&para;</a></h3>
+<p>Mirroring is <strong>off by default</strong>. When the app enables it (<code>SET_MIRROR(1)</code>), the controller unicasts a state snapshot, then streams outbound <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> packets at up to ~30 fps. <code>PanelMirrorService</code> feeds these into <code>PanelPacketRenderer</code> so the visualiser shows live colours without polling.</p>
 <hr />
 <h2 id="reconnection">Reconnection<a class="headerlink" href="#reconnection" title="Permanent link">&para;</a></h2>
 <p><code>SocketConnector</code> uses exponential back-off to reconnect on failure:</p>
@@ -1889,8 +1924,8 @@
   C -- disconnect or close --&gt; E[Stop — no retry]</code></pre>
 <p>A <code>CancellationException</code> (from <code>disconnect()</code> or <code>close()</code>) breaks the loop immediately without a reconnect attempt.</p>
 <hr />
-<h2 id="mockconnector">MockConnector<a class="headerlink" href="#mockconnector" title="Permanent link">&para;</a></h2>
-<p><code>MockConnector</code> is a self-contained fake controller that responds to all commands with properly encoded, <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-correct packets. It is used by the <strong>Demo Device</strong> entry in <code>DeviceDiscoveryScreen</code> and is the recommended harness for testing domain logic without physical hardware.</p>
+<h2 id="democonnector">DemoConnector<a class="headerlink" href="#democonnector" title="Permanent link">&para;</a></h2>
+<p><code>DemoConnector</code> (<code>demo/</code>) is a self-contained fake controller that responds to all commands with properly encoded, <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-correct packets. It is used by the <strong>Demo Device</strong> entry in the device list and is the recommended harness for testing domain logic without physical hardware.</p>
 <hr />
 <h2 id="server-side-api">Server-side API<a class="headerlink" href="#server-side-api" title="Permanent link">&para;</a></h2>
 <p>For the full server-side API specification — HTTP endpoints, scene management, animation types, and palette control — see the <a href="../../lightnet-firmware/api/">Firmware API Reference</a>.</p>

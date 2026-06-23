@@ -1698,7 +1698,7 @@
 <p>The app fetches the panel topology from the controller, lays the panels out in 2-D space, and starts streaming live state.</p>
 <div class="admonition tip">
 <p class="admonition-title">No hardware? Use the demo</p>
-<p>The discovery screen has a <strong>Demo Device</strong> entry. It connects to a built-in fake controller (<code>MockConnector</code>) that responds with correct, <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-valid packets. Every UI flow works against it, so you can explore the app without physical hardware.</p>
+<p>The discovery screen has a <strong>Demo Device</strong> entry. It connects to a built-in fake controller (<code>DemoConnector</code>) that responds with correct, <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-valid packets. Every UI flow works against it, so you can explore the app without physical hardware.</p>
 </div>
 <h2 id="what-you-can-do-today">What you can do today<a class="headerlink" href="#what-you-can-do-today" title="Permanent link">&para;</a></h2>
 <table>
@@ -1722,12 +1722,24 @@
 <td>Sets the color of selected panels</td>
 </tr>
 <tr>
+<td><strong>Play scenes</strong></td>
+<td>Browse, edit, and play scenes stored on the controller</td>
+</tr>
+<tr>
+<td><strong>Manage palettes</strong></td>
+<td>View and edit colour gradients</td>
+</tr>
+<tr>
+<td><strong>Power on/off</strong></td>
+<td>Global power state via <code>POST /api/state/power</code></td>
+</tr>
+<tr>
 <td><strong>Discover devices</strong></td>
-<td>Browse the local network for controllers</td>
+<td>Browse the local network for controllers (Android)</td>
 </tr>
 </tbody>
 </table>
-<p>More controls (scenes, palettes, animation editor) are on the roadmap. The full HTTP and WebSocket API is already exposed by the controller — you can drive it from <code>curl</code>, a browser, your own script, or anything else that speaks HTTP or WebSocket.</p>
+<p>The controller also exposes the full HTTP and WebSocket API — you can drive it from <code>curl</code>, a browser, your own script, or anything else that speaks HTTP or WebSocket. See <a href="../../lightnet-firmware/api/">Firmware → API Reference</a>.</p>
 <hr />
 <p><a class="md-button md-button--primary" href="../next-steps/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg></span> Next: Where to go next</a></p>
 
