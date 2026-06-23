@@ -1704,7 +1704,7 @@
 
 
 <h1 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h1>
-<p>This page is the developer-side reference — clone, build, install, run, and test. For a higher-level user walkthrough see the hub's <strong><a href="../../getting-started/using-the-app/">Get Started → Use the app</a></strong>.</p>
+<p>This page is the developer-side reference — clone, build, install, run, and test. For end-user documentation see the <a href="https://github.com/przemczan/lightnet">Lightnet docs hub</a>.</p>
 <h2 id="clone">Clone<a class="headerlink" href="#clone" title="Permanent link">&para;</a></h2>
 <div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/przemczan/lightnet-mobile.git
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>lightnet-mobile
@@ -1716,12 +1716,15 @@
 <div class="tabbed-block">
 <ul>
 <li>Android SDK with <strong>API 24+</strong> platform installed</li>
-<li>A connected device or an emulator running</li>
+<li><strong>Android NDK</strong> (Android Studio → SDK Manager → SDK Tools → NDK)</li>
+<li><strong><a href="https://github.com/przemczan/lightnet-firmware">lightnet-firmware</a></strong> checkout — sibling at <code>../lightnet-firmware</code>, or set <code>lightnetFirmwareDir</code> in a gitignored <code>local.properties</code> at the repo root (see <code>composeApp/src/androidMain/cpp/README.md</code>)</li>
+<li>A connected device or an emulator</li>
 </ul>
 </div>
 <div class="tabbed-block">
 <ul>
 <li><strong>Xcode 14+</strong> on macOS</li>
+<li><strong>lightnet-firmware</strong> checkout + per-arch static lib build (see <code>composeApp/src/iosMain/README.md</code>)</li>
 <li>A simulator or physical device</li>
 </ul>
 </div>
@@ -1754,24 +1757,32 @@
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Build and install on the connected Android device</span>
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>./gradlew<span class="w"> </span>:composeApp:installDebug
 </span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1"># Run all tests</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1"># Run all tests (commonTest — protocol layer unit tests)</span>
 </span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>./gradlew<span class="w"> </span>:composeApp:allTests
 </span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1"># Clean build outputs</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>./gradlew<span class="w"> </span>clean
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1"># Run a single test class</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>./gradlew<span class="w"> </span>:composeApp:testDebugUnitTest<span class="w"> </span>--tests<span class="w"> </span><span class="s2">&quot;com.lightnet.protocol.MessageProtocolTest&quot;</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="c1"># Clean build outputs</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>./gradlew<span class="w"> </span>clean
 </span></code></pre></div>
 </div>
 </div>
 </div>
+<p>The debug APK is written to <code>composeApp/build/outputs/apk/debug/composeApp-debug.apk</code>.</p>
 <h2 id="run">Run<a class="headerlink" href="#run" title="Permanent link">&para;</a></h2>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Android</label><label for="__tabbed_3_2">iOS</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <ol>
 <li>Connect an Android device (API 24+) or start an emulator</li>
-<li><code>./gradlew :composeApp:installDebug</code></li>
+<li><code>./gradlew :composeApp:installDebug</code> (or <code>.\gradlew.bat</code> on Windows)</li>
 <li>Launch the <strong>Lightnet</strong> app on the device</li>
 </ol>
+<div class="admonition note">
+<p class="admonition-title"><abbr title="Multicast DNS — local-network discovery protocol that lets devices announce a hostname like `lightnet-xxxx.local` without DNS or static IP.">mDNS</abbr> on emulators</p>
+<p>Device discovery via <abbr title="Multicast DNS — local-network discovery protocol that lets devices announce a hostname like `lightnet-xxxx.local` without DNS or static IP.">mDNS</abbr> does not work reliably on Android emulators (multicast is blocked). Use a real device on the same Wi-Fi as the controller, or enable the demo device below.</p>
+</div>
 </div>
 <div class="tabbed-block">
 <ol>
@@ -1785,7 +1796,7 @@
 <h2 id="demo-device-develop-without-hardware">Demo device — develop without hardware<a class="headerlink" href="#demo-device-develop-without-hardware" title="Permanent link">&para;</a></h2>
 <div class="admonition tip">
 <p class="admonition-title">No controller required</p>
-<p>Open <strong>Settings</strong> (gear icon on the device list), turn on <strong>Enable demo device</strong>, then tap the <strong>Demo</strong> entry at the top of your device list. It connects to <code>DemoConnector</code> — a self-contained fake controller that responds with properly encoded, <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-correct protocol packets. Every UI flow exercises the full protocol path, including encode/decode, so it's also the recommended harness for testing domain logic.</p>
+<p>Open <strong>Settings</strong> (gear icon on the device list), turn on <strong>Enable demo device</strong>, then tap the <strong>Demo</strong> entry at the top of your device list. Adjust the virtual panel count in Settings while the demo is enabled. It connects to <code>DemoConnector</code> — a self-contained fake controller that responds with properly encoded, <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-correct protocol packets. Every UI flow exercises the full protocol path, including encode/decode, so it's also the recommended harness for testing domain logic.</p>
 </div>
 <hr />
 <ul>

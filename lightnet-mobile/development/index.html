@@ -1852,7 +1852,7 @@
 <p><strong><code>SocketConnector</code></strong> — Ktor WebSocket with exponential back-off reconnect (1 s → doubles → 30 s cap). <code>CancellationException</code> breaks the loop on explicit <code>disconnect()</code> / <code>close()</code>.</p>
 <p><strong><code>DemoConnector</code></strong> — in-memory fake device used by the demo device. Responds to <code>GET_EDGES_LIST</code>, <code>GET_PANELS_STATES</code>, <code>TOGGLE</code>, <code>SET_COLOR</code>, <code>PING</code> with properly <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-correct protocol packets. Persists topology and panel state in <code>Settings</code> across app restarts. Calling <code>resetLayout(newCount)</code> clears the stored topology so the next <code>connect()</code> generates a fresh random layout.</p>
 <h2 id="demo-device">Demo Device<a class="headerlink" href="#demo-device" title="Permanent link">&para;</a></h2>
-<p>The demo device (<code>com.lightnet.demo</code>) is a fully functional virtual device that runs without any physical hardware. It is enabled via <strong>Settings → Enable demo device</strong> and always appears at the top of the device list with a "Demo" badge.</p>
+<p>The demo device (<code>__demo__</code>, shown as <strong>Demo</strong>) is a fully functional virtual device that runs without any physical hardware. Enable it in <strong>Settings → Enable demo device</strong> (gear icon on the device list); it then appears at the top of the device list with a "Demo" badge.</p>
 <table>
 <thead>
 <tr>
@@ -1883,11 +1883,11 @@
 </tr>
 <tr>
 <td><code>DemoSettings</code></td>
-<td>Persists <code>demoEnabled</code> and <code>demoPanelCount</code> (1–50).</td>
+<td>Persists <code>demoEnabled</code> and <code>demoPanelCount</code> (1–100).</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Panel regeneration</strong>: changing the panel count clears the stored topology via <code>DemoConnector.resetLayout()</code> and triggers a reconnect — the next <code>connect()</code> call generates a fresh random layout. In <code>DeviceControllerScreen</code> the <strong>shuffle button</strong> (only shown for the demo) also triggers an immediate regeneration.</p>
+<p><strong>Panel regeneration</strong>: changing the panel count in Settings clears the stored topology via <code>DemoConnector.resetLayout()</code> and reloads panels. In <code>DeviceControllerScreen</code> the <strong>shuffle button</strong> (only shown for the demo) also triggers an immediate regeneration.</p>
 <p><strong>Scene playback</strong>: routes through <code>LightnetDevice.offlineSceneService</code> (<code>OfflineSceneService</code> + shared C++ scene engine) — no separate demo-specific player. Palettes must be registered (via <code>device.loadPalettes()</code>) before a scene is played; this happens automatically when <code>DeviceControllerScreen</code> opens.</p>
 <h2 id="navigation">Navigation<a class="headerlink" href="#navigation" title="Permanent link">&para;</a></h2>
 <p>State-based in <code>App.kt</code> — no navigation library, no sealed screen class. Three boolean/nullable vars drive routing: <code>showGlobalSettings</code>, <code>showDevice</code>, <code>activeDevice</code>. The default view is <code>MyDevicesScreen</code>; opening a device sets <code>activeDevice</code> and <code>showDevice = true</code>.</p>
