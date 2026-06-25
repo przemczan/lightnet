@@ -19,6 +19,10 @@ icon: material/home
 
     Due to time constraints, this project sat dormant for a long time. Fortunately, today's accessibility of AI tools gave it a second chance — AI helped solve blockers that were preventing further progress. At minimum, I'm aiming to bring it to a usable state as a complete system.
 
+## What is Lightnet
+
+Lightnet is a modular, DIY addressable lighting system — think Nanoleaf-style wall panels, but built from your own hardware. A Wi-Fi **controller** (ESP8266 or ESP32) drives many **panels** over I²C in a tree layout. The controller handles discovery, scene playback, and the HTTP/WebSocket APIs; each panel runs animations locally on its ATmega after a single setup packet. Control it from the Kotlin Multiplatform mobile app, or from any client that speaks the same APIs.
+
 ---
 
 ```mermaid
