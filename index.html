@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#what-do-you-want-to-do" class="md-skip">
+        <a href="#what-is-lightnet" class="md-skip">
           Skip to content
         </a>
       
@@ -292,6 +292,17 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-lightnet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is Lightnet
+      
+    </span>
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#what-do-you-want-to-do" class="md-nav__link">
@@ -1560,6 +1571,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#what-is-lightnet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is Lightnet
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#what-do-you-want-to-do" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1646,6 +1668,8 @@
 <p>Regarding the mobile app: initially, I decided a web app would be easiest since that's where my expertise lies. Mobile development was unfamiliar territory. Over time, I ported the web version to React Native, and later to Kotlin (the current version) with significant AI assistance. I don't have time to deeply learn Kotlin, so AI remains the primary executor for that part.</p>
 <p>Due to time constraints, this project sat dormant for a long time. Fortunately, today's accessibility of AI tools gave it a second chance — AI helped solve blockers that were preventing further progress. At minimum, I'm aiming to bring it to a usable state as a complete system.</p>
 </div>
+<h2 id="what-is-lightnet">What is Lightnet<a class="headerlink" href="#what-is-lightnet" title="Permanent link">&para;</a></h2>
+<p>Lightnet is a modular, DIY addressable lighting system — think Nanoleaf-style wall panels, but built from your own hardware. A Wi-Fi <strong>controller</strong> (<abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr> or <abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr>) drives many <strong>panels</strong> over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> in a tree layout. The controller handles discovery, scene playback, and the HTTP/WebSocket APIs; each panel runs animations locally on its <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr> after a single setup packet. Control it from the Kotlin Multiplatform mobile app, or from any client that speaks the same APIs.</p>
 <hr />
 <pre class="mermaid"><code>graph LR
   App["📱 Mobile App"] &lt;--&gt;|"HTTP + WebSocket"| C["🎛️ Controller&lt;br/&gt;ESP8266 / ESP32"]
