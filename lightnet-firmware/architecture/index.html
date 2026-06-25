@@ -2627,7 +2627,12 @@
 <tr>
 <td><code>StateServer</code></td>
 <td><code>GET /api/state</code>, <code>POST /api/state/power</code></td>
-<td>Runtime power state + scene playback status</td>
+<td>Runtime power state, scene playback status, <code>controllerFirmware</code> version string</td>
+</tr>
+<tr>
+<td><code>MqttServer</code></td>
+<td><code>GET /api/mqtt</code>, <code>PATCH /api/mqtt</code></td>
+<td>MQTT broker config + runtime discovery status (<abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr> only; see <a href="../api/"><code>docs/api.md</code></a> §2.9)</td>
 </tr>
 <tr>
 <td><code>ConfigurationServer</code></td>
@@ -2714,6 +2719,10 @@ synchronous (<code>200</code>). See <a href="#8-concurrency-task-model-deferred-
 <tr>
 <td><code>WebsocketHandler</code></td>
 <td>Decodes and dispatches commands: <code>TOGGLE</code>, <code>SET_COLOR</code>, <code>GET_PANELS_STATES</code>, <code>GET_EDGES_LIST</code>, <code>ANIMATION_TRIGGER</code>, <code>SET_MIRROR</code>, <code>PING</code></td>
+</tr>
+<tr>
+<td><code>AppStateBroadcaster</code></td>
+<td>Watches <code>GET /api/state</code> fields; broadcasts <code>APP_STATE</code> to all WS clients on change</td>
 </tr>
 <tr>
 <td><code>WebsocketApi</code></td>

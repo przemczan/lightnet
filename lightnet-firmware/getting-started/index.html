@@ -1706,17 +1706,19 @@
 <h1 id="build-flash-reference">Build &amp; Flash Reference<a class="headerlink" href="#build-flash-reference" title="Permanent link">&para;</a></h1>
 <p>This page is the PlatformIO reference: every environment, the fuses, and the day-to-day commands. For a guided first-time walkthrough, see the hub's <strong><a href="../../getting-started/">Get Started</a></strong> instead.</p>
 <h2 id="repository">Repository<a class="headerlink" href="#repository" title="Permanent link">&para;</a></h2>
-<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/przemczan/lightnet-firmware.git
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>--recurse-submodules<span class="w"> </span>https://github.com/przemczan/lightnet-firmware.git
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>lightnet-firmware
 </span></code></pre></div>
+<p>The twiboot bootloader lives in a submodule. If you already cloned without <code>--recurse-submodules</code>, run <code>git submodule update --init --recursive</code>.</p>
 <p>The same source tree builds both controller and panel binaries — the active PlatformIO environment selects which one.</p>
 <hr />
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
 <p>Before building, copy the example config files and edit them to match your hardware:</p>
 <div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>cp<span class="w"> </span>src/controller.config.hpp.example<span class="w"> </span>src/controller.config.hpp
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>cp<span class="w"> </span>src/panel.config.hpp.example<span class="w">       </span>src/panel.config.hpp
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>cp<span class="w"> </span>platformio_local.ini.example<span class="w">       </span>platformio_local.ini<span class="w">   </span><span class="c1"># optional: USB/monitor ports</span>
 </span></code></pre></div>
-<p>Both files ship with sane defaults, so no changes are required to do a first build. The <code>*.config.hpp</code> files are gitignored — keep per-device settings there without touching the tracked <code>*.example</code> files.</p>
+<p>Both <code>*.config.hpp</code> files ship with sane defaults, so no changes are required to do a first build. The <code>*.config.hpp</code> files and <code>platformio_local.ini</code> are gitignored — keep per-device and per-machine settings there without touching the tracked <code>*.example</code> files.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">controller.config.hpp</label><label for="__tabbed_1_2">panel.config.hpp</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -1822,7 +1824,7 @@
 <hr />
 <h2 id="platformio-environments">PlatformIO environments<a class="headerlink" href="#platformio-environments" title="Permanent link">&para;</a></h2>
 <p>All environments are defined in <code>platformio.ini</code>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Controller</label><label for="__tabbed_2_2">Panel</label><label for="__tabbed_2_3">Bootloader (one-time)</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:4"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><input id="__tabbed_2_4" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Controller</label><label for="__tabbed_2_2">Native tests</label><label for="__tabbed_2_3">Panel</label><label for="__tabbed_2_4">Bootloader (one-time)</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <table>
@@ -1840,7 +1842,7 @@
 <td>USB upload at 230400 baud</td>
 </tr>
 <tr>
-<td><code>controller_wemos</code></td>
+<td><code>controller_wemos_d1_mini_pro</code></td>
 <td>Wemos D1 Mini Pro (<abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr>)</td>
 <td>USB upload at 460800 baud</td>
 </tr>
@@ -1849,9 +1851,46 @@
 <td><abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr> DevKit</td>
 <td>USB upload at 460800 baud</td>
 </tr>
+<tr>
+<td><code>controller_s2_mini</code></td>
+<td>Lolin S2 Mini (<abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr>-S2)</td>
+<td>USB upload at 460800 baud</td>
+</tr>
+<tr>
+<td><code>controller_wemos_d1_mini_pro_sim</code></td>
+<td>Wemos D1 Mini (sim)</td>
+<td>Host-side sim — no hardware; mirrors <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> over serial</td>
+</tr>
+<tr>
+<td><code>controller_esp32_sim</code></td>
+<td><abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr> DevKit (sim)</td>
+<td>Same as <code>_sim</code> above</td>
+</tr>
+<tr>
+<td><code>controller_s2_mini_sim</code></td>
+<td>Lolin S2 Mini (sim)</td>
+<td>Same as <code>_sim</code> above</td>
+</tr>
 </tbody>
 </table>
-<p>All controller environments use <code>lib_ldf_mode = chain+</code>, FastLED, ESPAsyncWebServer, and ESPAsyncWiFiManager.</p>
+<p>All controller environments use <code>lib_ldf_mode = chain+</code>, FastLED, ESPAsyncWebServer, and ESPAsyncWiFiManager. <code>*_sim</code> targets define <code>SIM_MODE</code> and drive a virtual panel bus for development and live-preview testing without panels attached.</p>
+<p><strong>MQTT / Home Assistant</strong> is available on <abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr> controller targets only (<code>controller_esp32</code>, <code>controller_s2_mini</code>, and their <code>_sim</code> variants). <abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr> builds do not include MQTT. Enable it via the WiFi captive portal (MQTT section) or <code>PATCH /api/mqtt</code> after the controller is on the network. By default the controller <strong>auto-discovers</strong> the broker (<code>_mqtt._tcp</code> <abbr title="Multicast DNS — local-network discovery protocol that lets devices announce a hostname like `lightnet-xxxx.local` without DNS or static IP.">mDNS</abbr>, then <code>homeassistant.local</code> / <code>hassio.local</code>); set a manual broker host to skip discovery. Home Assistant discovers Lightnet entities automatically when its MQTT integration uses the same broker. See <a href="../api/"><code>docs/api.md</code></a> §2.9 for topic layout and discovery modes.</p>
+</div>
+<div class="tabbed-block">
+<table>
+<thead>
+<tr>
+<th>Environment</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>native</code></td>
+<td>Host-side unit tests — pure C++ logic, no Arduino (<code>pio test -e native</code>)</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="tabbed-block">
 <table>
@@ -1866,7 +1905,7 @@
 </thead>
 <tbody>
 <tr>
-<td><code>panel_atmega328p_via_controller</code></td>
+<td><code>panel_atmega328_via_controller</code></td>
 <td>ATmega328P</td>
 <td>Custom serial via controller</td>
 <td>—</td>
@@ -1933,13 +1972,13 @@
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_esp32
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
 </span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Build + upload over USB</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_wemos<span class="w"> </span>-t<span class="w"> </span>upload
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_wemos_d1_mini_pro<span class="w"> </span>-t<span class="w"> </span>upload
 </span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
 </span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># Upload over Wi-Fi (controller OTA via ArduinoOTA + mDNS)</span>
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_wemos<span class="w"> </span>-t<span class="w"> </span>upload<span class="w"> </span>--upload-port<span class="w"> </span>lightnet-XXXX.local
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_wemos_d1_mini_pro<span class="w"> </span>-t<span class="w"> </span>upload<span class="w"> </span>--upload-port<span class="w"> </span>lightnet-XXXX.local
 </span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
 </span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="c1"># Serial monitor — 57600 baud everywhere</span>
-</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>pio<span class="w"> </span>device<span class="w"> </span>monitor<span class="w"> </span>-e<span class="w"> </span>controller_wemos
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>pio<span class="w"> </span>device<span class="w"> </span>monitor<span class="w"> </span>-e<span class="w"> </span>controller_wemos_d1_mini_pro
 </span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>
 </span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="c1"># Build everything</span>
 </span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>pio<span class="w"> </span>run

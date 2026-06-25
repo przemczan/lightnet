@@ -1741,7 +1741,17 @@
 <tr>
 <td><code>test_http_url</code></td>
 <td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_http_url/test_main.cpp"><code>test/test_http_url/test_main.cpp</code></a></td>
-<td><code>Http::isSafeName</code> (path-traversal, special chars, length cap), <code>Http::nameFromUrl</code> (prefix match, overflow, null inputs)</td>
+<td><code>Http::isSafeName</code> / <code>Http::isSafeId</code> (path-traversal, special chars, length cap), <code>Http::nameFromUrl</code> / <code>Http::idFromUrl</code> (prefix match, overflow, null inputs)</td>
+</tr>
+<tr>
+<td><code>test_entry_id</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_entry_id/test_main.cpp"><code>test/test_entry_id/test_main.cpp</code></a></td>
+<td>Scene/palette id generation — deterministic ids, validation, random id helper</td>
+</tr>
+<tr>
+<td><code>test_json_inject</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_json_inject/test_main.cpp"><code>test/test_json_inject/test_main.cpp</code></a></td>
+<td><code>jsonUpsertId</code> — inject/replace top-level <code>"id"</code> in scene <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> blobs</td>
 </tr>
 <tr>
 <td><code>test_palette_parser</code></td>
@@ -1834,13 +1844,28 @@
 <td><code>ScenePlayer</code> end-to-end via a mock <code>IPacketSink</code> — SOLID scene emits PREPARE+START, <code>stop()</code> emits control packet and clears playing state</td>
 </tr>
 <tr>
+<td><code>test_scene_codec</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_scene_codec/test_main.cpp"><code>test/test_scene_codec/test_main.cpp</code></a></td>
+<td><code>SceneCodec</code> — <code>SceneRecord</code> round-trip serialize/deserialize, name validation, record-id matching</td>
+</tr>
+<tr>
+<td><code>test_scene_writer</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_scene_writer/test_main.cpp"><code>test/test_scene_writer/test_main.cpp</code></a></td>
+<td>Scene <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> parse → serialize → parse round-trip</td>
+</tr>
+<tr>
+<td><code>test_scene_duration</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_scene_duration/test_main.cpp"><code>test/test_scene_duration/test_main.cpp</code></a></td>
+<td>Scene duration calculation — single-layer sum, multi-layer max, zero-duration steps</td>
+</tr>
+<tr>
 <td><code>test_scene_capi</code></td>
 <td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_scene_capi/test_main.cpp"><code>test/test_scene_capi/test_main.cpp</code></a></td>
 <td>Scene C ABI (<code>Core/CApi/controller_core_c.h</code>) — load+play emits packets, bad-<abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> rejection, stop emits control, mirror-batch drain</td>
 </tr>
 </tbody>
 </table>
-<p>255 tests total, ~11 s wall time.</p>
+<p>287 tests total, ~41 s wall time.</p>
 <hr />
 <h2 id="what-is-testable-natively-what-isnt">What is testable natively, what isn't<a class="headerlink" href="#what-is-testable-natively-what-isnt" title="Permanent link">&para;</a></h2>
 <table>
