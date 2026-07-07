@@ -8,7 +8,7 @@ A Lightnet installation has two kinds of boards: **one controller** and **one or
 
 ```mermaid
 graph LR
-  C["🎛️ Controller<br/>ESP8266 / ESP32"] -->|edge cable| P1["💡 Panel<br/>ATmega328P/PB"]
+  C["🎛️ Controller<br/>ESP32"] -->|edge cable| P1["💡 Panel<br/>ATmega328P/PB"]
   P1 -->|edge cable| P2["💡 Panel"]
   P1 -->|edge cable| P3["💡 Panel"]
   P3 -->|edge cable| P4["💡 Panel"]
@@ -17,10 +17,9 @@ graph LR
 Each edge cable carries:
 
 - **Power** (V+ / GND) to the next panel
-- **I²C** (SDA / SCL) — the shared bus used for all commands after discovery
-- **A single-wire ping line** — used once at boot so the controller can map the topology
+- **UART** (TX / RX) — a point-to-point serial link to that one neighbour, used for both discovery and all runtime traffic. There's no shared bus and no separate ping/handshake phase: every panel is a store-and-forward repeater that only ever talks to its own physical neighbours.
 
-Panels expose **up to 5 edges** (configurable via `NUMBER_OF_EDGES` in `panel.config.hpp`). One edge is the "parent" connection (back toward the controller); the others fan out to children. Topology is a tree — no cycles.
+Panels expose **up to 5 edges** (configurable via `NUMBER_OF_EDGES` in `panel.config.hpp`; current hardware wires 3). One edge is the "parent" connection (back toward the controller); the others fan out to children. Topology is a tree — no cycles.
 
 ---
 
@@ -29,13 +28,12 @@ Panels expose **up to 5 edges** (configurable via `NUMBER_OF_EDGES` in `panel.co
 !!! warning "DIY status"
     Schematics, PCB layouts, and a full bill of materials are not yet published. This section will fill in once boards are released. For now, [the firmware repository](https://github.com/przemczan/lightnet-firmware) is the authoritative reference for pin assignments and target MCUs.
 
-### Controller — pick one
+### Controller
 
 | MCU | PlatformIO env | Notes |
 |---|---|---|
-| **ESP8266** (e.g. ESP-12E) | `controller_esp8266` | Lowest cost; single-core; works for typical installs |
-| **ESP8266** (Wemos D1 Mini Pro) | `controller_wemos` | Same chip, larger antenna option |
-| **ESP32 DevKit** | `controller_esp32` | More headroom for large installs; preferred if you can pick |
+| **ESP32 DevKit** | `controller_esp32` | Standard controller board |
+| **ESP32-S2** (Lolin S2 Mini) | `controller_s2_mini` | Smaller footprint alternative |
 
 Pin assignments are documented in the [Firmware → Hardware](../lightnet-firmware/hardware.md) reference.
 
@@ -62,9 +60,9 @@ Each panel drives **one WS2812 LED** on `PD5`. The bootloader, fuses, and firmwa
 - Panels form a **tree** rooted at the controller — no rings or cross-links
 - A panel always has exactly **one parent edge**; the remaining 0–4 edges can fan out
 - Panels are identified by an index assigned during discovery (tree-traversal order)
-- The firmware caps panel count at **32 on ESP8266** and **100 on ESP32** (`LIGHTNET_MAX_PANELS` in `Core/Common/LightnetConfig.hpp`)
+- The firmware caps panel count at **100** (`LIGHTNET_MAX_PANELS` in `Core/Common/LightnetConfig.hpp`)
 
-Keep cable runs short enough that the I²C bus stays clean — long runs and high panel counts will eventually start dropping frames. The architecture details in [Firmware → Architecture](../lightnet-firmware/architecture.md) cover the bus characteristics.
+Every inter-panel link is a point-to-point UART hop, so what scales with tree size is **hop count (depth)**, not bus contention — each hop's transit time accumulates across the depth. The architecture details in [Firmware → Architecture](../lightnet-firmware/architecture.md) cover the relay protocol.
 
 ---
 

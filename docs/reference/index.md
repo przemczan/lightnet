@@ -12,7 +12,7 @@ Shared vocabulary and quick lookups that span firmware and app.
 
     ---
 
-    Every term Lightnet uses — controller, panel, edge, group, scene, runner, palette, color reference, mDNS, twiboot — in one place.
+    Every term Lightnet uses — controller, panel, edge, group, scene, runner, palette, color reference, mDNS, RelayBootloader — in one place.
 
     [:material-arrow-right: Glossary](glossary.md)
 

@@ -11,18 +11,18 @@ icon: material/tag-outline
 
 Lightnet will follow [Semantic Versioning](https://semver.org/):
 
-- **Major** — breaking changes (e.g. I²C protocol bump, JSON schema bump)
+- **Major** — breaking changes (e.g. wire protocol bump, JSON schema bump)
 - **Minor** — additive features, backwards-compatible
 - **Patch** — bug fixes only
 
 ## Firmware protocol versions
 
-The internal I²C protocol between controller and panels is versioned independently of the firmware version itself. The current version is **v6** (`Core/Common/ProtocolMeta.hpp` → `Protocol::VERSION`).
+The internal wire protocol carried over the UART relay trunk between controller and panels is versioned independently of the firmware version itself. The current version is **v12** (`Core/Common/ProtocolMeta.hpp` → `Protocol::VERSION`).
 
 !!! warning "Flash controller and panels together"
-    The controller and every panel must agree on the I²C protocol version. When you cross a protocol bump (e.g. v5 → v6), flash the controller and **all** panels in the same session. Mismatched versions cause unpredictable behaviour after discovery completes.
+    The controller and every panel must agree on the wire protocol version. When you cross a protocol bump, flash the controller and **all** panels in the same session. Mismatched versions cause unpredictable behaviour after discovery completes — with the exception of a small set of version-exempt packet types (reset, enter-bootloader, discovery) that let a mismatched panel still be discovered, reset, and reflashed over the relay.
 
-    The full protocol-version table lives in [Firmware → Architecture](../lightnet-firmware/architecture.md#4-i2c-protocol-internal).
+    The full protocol-version table lives in [Firmware → Architecture](../lightnet-firmware/architecture.md#4-wire-protocol-internal).
 
 ## Mobile app protocol
 

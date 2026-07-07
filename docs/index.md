@@ -21,16 +21,16 @@ icon: material/home
 
 ## What is Lightnet
 
-Lightnet is a modular, DIY addressable lighting system — think Nanoleaf-style wall panels, but built from your own hardware. A Wi-Fi **controller** (ESP8266 or ESP32) drives many **panels** over I²C in a tree layout. The controller handles discovery, scene playback, and the HTTP/WebSocket APIs; each panel runs animations locally on its ATmega after a single setup packet. Control it from the Kotlin Multiplatform mobile app, or from any client that speaks the same APIs.
+Lightnet is a modular, DIY addressable lighting system — think Nanoleaf-style wall panels, but built from your own hardware. A Wi-Fi **controller** (ESP32) drives many **panels** daisy-chained over UART in a tree layout — every panel is a store-and-forward repeater, relaying packets to its neighbours. The controller handles discovery, scene playback, and the HTTP/WebSocket APIs; each panel runs animations locally on its ATmega after a single setup packet. Control it from the Kotlin Multiplatform mobile app, or from any client that speaks the same APIs.
 
 ---
 
 ```mermaid
 graph LR
-  App["📱 Mobile App"] <-->|"HTTP + WebSocket"| C["🎛️ Controller<br/>ESP8266 / ESP32"]
-  C <-->|I²C| P1["💡 Panel"]
-  C <-->|I²C| P2["💡 Panel"]
-  P1 <-->|I²C| P3["💡 Panel"]
+  App["📱 Mobile App"] <-->|"HTTP + WebSocket"| C["🎛️ Controller<br/>ESP32"]
+  C <-->|UART| P1["💡 Panel<br/>(root)"]
+  P1 <-->|UART| P2["💡 Panel"]
+  P1 <-->|UART| P3["💡 Panel"]
 ```
 
 The controller handles Wi-Fi, the HTTP and WebSocket APIs, scene playback, and discovery. Each panel runs animations entirely on its own ATmega after a single setup packet — no per-frame traffic until something changes.
@@ -75,7 +75,7 @@ The controller handles Wi-Fi, the HTTP and WebSocket APIs, scene playback, and d
 
 -   :material-chip: __Firmware__
 
-    Controller and panel firmware for ESP8266/ESP32 and ATmega328P/PB. PlatformIO build, HTTP + WebSocket APIs, scene system, panel OTA.
+    Controller and panel firmware for ESP32 and ATmega328P/PB. PlatformIO build, HTTP + WebSocket APIs, scene system, panel OTA.
 
     [:material-arrow-right: Firmware docs](lightnet-firmware/index.md)
 

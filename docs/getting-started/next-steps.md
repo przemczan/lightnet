@@ -28,7 +28,7 @@ You have a running Lightnet installation. From here, what you read depends on wh
 
     ---
 
-    Two-binary source layout, library structure, I²C protocol, discovery sequence, controller boot.
+    Two-binary source layout, library structure, the UART relay wire protocol, discovery sequence, controller boot.
 
     [:material-arrow-right: Firmware → Architecture](../lightnet-firmware/architecture.md)
 
@@ -44,7 +44,7 @@ You have a running Lightnet installation. From here, what you read depends on wh
 
     ---
 
-    Panel OTA via twiboot, serial firmware upload, and controller self-update over ArduinoOTA.
+    Panel OTA over the relay via `RelayBootloader`, serial firmware upload, and controller self-update over ArduinoOTA.
 
     [:material-arrow-right: Firmware → OTA & Updates](../lightnet-firmware/ota.md)
 

@@ -9,7 +9,7 @@ Two binaries to flash, in this order:
 1. **Each panel** gets a bootloader, fuses, and the panel firmware (over a programmer)
 2. **The controller** gets the controller firmware (over USB serial the first time, then Wi-Fi after that)
 
-After the very first flash, panels are updated **over I²C from the controller** — you only need a programmer once per panel.
+After the very first flash, panels are updated **over the UART relay trunk from the controller** — you only need a programmer once per panel.
 
 ---
 
@@ -17,7 +17,7 @@ After the very first flash, panels are updated **over I²C from the controller**
 
 ### a. Burn the bootloader and fuses
 
-Each panel needs the [twiboot](https://github.com/orempel/twiboot) bootloader sitting in the upper flash region, plus the right fuse settings for the 16 MHz crystal. This is a one-time operation done with a USBasp connected to the panel's ISP header.
+Each panel needs `RelayBootloader` — a from-scratch bootloader that speaks the relay's own framed wire protocol — sitting in the upper flash region, plus the right fuse settings for the 16 MHz crystal. This is a one-time operation done with a USBasp connected to the panel's ISP header.
 
 !!! warning "Don't guess the fuses"
     Setting fuses by hand is the single easiest way to brick an ATmega — wrong values can lock the chip out of further programming. Use the PlatformIO targets below; they're known good.
@@ -29,7 +29,7 @@ Pick the bootloader environment that matches your panel MCU:
     # Fuses (also clears flash)
     pio run -e atmega328p_bootloader -t fuses
 
-    # Burn the twiboot bootloader
+    # Burn the RelayBootloader
     pio run -e atmega328p_bootloader -t upload
     ```
 
@@ -58,17 +58,7 @@ The same binary works on both `328P` and `328PB`. The `-D` upload flag preserves
 
 ## Flash the controller
 
-Plug the controller (ESP8266 or ESP32) into USB and pick the matching environment:
-
-=== "ESP8266 (ESP-12E)"
-    ```bash
-    pio run -e controller_esp8266 -t upload
-    ```
-
-=== "ESP8266 (Wemos D1 Mini Pro)"
-    ```bash
-    pio run -e controller_wemos -t upload
-    ```
+Plug the controller (ESP32) into USB and pick the matching environment:
 
 === "ESP32 DevKit"
     ```bash

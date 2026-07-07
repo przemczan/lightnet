@@ -9,7 +9,7 @@ MkDocs hub site for the Lightnet project — a modular addressable lighting syst
 | Repo | Description |
 |---|---|
 | [lightnet](https://github.com/przemczan/lightnet) | This hub — landing page, shared glossary, FAQ, release notes |
-| [lightnet-firmware](https://github.com/przemczan/lightnet-firmware) | ESP8266/ESP32 controller + ATmega panel firmware |
+| [lightnet-firmware](https://github.com/przemczan/lightnet-firmware) | ESP32 controller + ATmega panel firmware |
 | [lightnet-mobile](https://github.com/przemczan/lightnet-mobile) | Kotlin Multiplatform app for Android and iOS |
 
 ## Building locally

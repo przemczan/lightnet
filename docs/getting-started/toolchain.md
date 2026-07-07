@@ -26,11 +26,9 @@ You don't need any other Arduino install. PlatformIO manages the compilers, boar
 ## Clone the firmware
 
 ```bash
-git clone --recurse-submodules https://github.com/przemczan/lightnet-firmware.git
+git clone https://github.com/przemczan/lightnet-firmware.git
 cd lightnet-firmware
 ```
-
-If you already cloned without submodules, run `git submodule update --init --recursive` (needed for the twiboot bootloader).
 
 Copy the example config headers before your first build (they are gitignored so each checkout keeps its own settings):
 
@@ -52,7 +50,7 @@ A full list of environments lives in [Firmware → Getting Started](../lightnet-
 
 === "Windows"
     - **USBasp** — install the libusb driver via [Zadig](https://zadig.akeo.ie/)
-    - **ESP8266 / ESP32 USB-serial** — most boards use CP210x or CH340; PlatformIO usually auto-installs drivers, otherwise grab them from Silicon Labs or WCH
+    - **ESP32 USB-serial** — most boards use CP210x or CH340; PlatformIO usually auto-installs drivers, otherwise grab them from Silicon Labs or WCH
 
 === "macOS / Linux"
     No driver install is normally required; PlatformIO talks to the programmer directly via `libusb`. On Linux you may need to add yourself to the `dialout` group for serial access.
@@ -62,7 +60,7 @@ A full list of environments lives in [Firmware → Getting Started](../lightnet-
 Before going further, do a dry-run compile of either target. This downloads the necessary toolchain and confirms everything is wired up.
 
 ```bash
-pio run -e controller_esp8266
+pio run -e controller_esp32
 ```
 
 If the build finishes with **`SUCCESS`**, you're ready to flash.
@@ -71,7 +69,7 @@ If the build finishes with **`SUCCESS`**, you're ready to flash.
     During development it's useful to keep a serial monitor open on the controller. The firmware logs at **57600 baud**:
 
     ```bash
-    pio device monitor -e controller_esp8266
+    pio device monitor -e controller_esp32
     ```
 
 ---

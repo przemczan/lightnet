@@ -8,7 +8,7 @@ icon: material/help-circle-outline
 
 ### What is Lightnet?
 
-A modular addressable lighting system: one **controller** drives many **panels** over I²C. The controller handles Wi-Fi, the HTTP and WebSocket APIs, and scene playback. Each panel runs animations locally on its ATmega after a single setup packet.
+A modular addressable lighting system: one **controller** drives many **panels** daisy-chained over UART — every panel is a store-and-forward repeater, not a node on a shared bus. The controller handles Wi-Fi, the HTTP and WebSocket APIs, and scene playback. Each panel runs animations locally on its ATmega after a single setup packet.
 
 See [Firmware Overview](../lightnet-firmware/overview.md) and [App Overview](../lightnet-mobile/overview.md) for the design tour.
 
@@ -29,7 +29,7 @@ No. The controller exposes HTTP and WebSocket APIs — `curl`, a web page, a Pyt
 
 ### How many panels can a controller drive?
 
-The firmware caps panel count at **32 on ESP8266** and **100 on ESP32** (`LIGHTNET_MAX_PANELS` in `Core/Common/LightnetConfig.hpp`). In practice the real limit is whichever you hit first: physical layout, power supply, I²C bus quality, and controller SRAM for per-panel state. The I²C address space (7-bit) would allow up to 254, but the firmware reserves headroom.
+The firmware caps panel count at **100** (`LIGHTNET_MAX_PANELS` in `Core/Common/LightnetConfig.hpp`) — a purely SRAM limit, comfortable on any ESP32-class controller. In practice the real limit is whichever you hit first: physical layout, power supply, and per-hop latency — traffic to panel N relays through every panel between it and the controller, so deeper trees mean more accumulated hop latency.
 
 See [Firmware → Architecture](../lightnet-firmware/architecture.md) for the bandwidth budget.
 
@@ -51,20 +51,6 @@ pio run -e controller_esp32 -t upload
 
 Full walkthrough: [Get Started → Flash the firmware](../getting-started/flashing.md). Per-environment details: [Firmware → Getting Started](../lightnet-firmware/getting-started.md).
 
-### ESP8266 vs ESP32?
-
-=== "ESP8266"
-    - Cheaper, lower-power, single-core
-    - Plenty for typical installs
-    - Slightly different pin map
-
-=== "ESP32"
-    - Dual-core, more SRAM
-    - Better headroom for large installs and heavy I²C load
-    - Recommended if you can pick
-
-Pin assignments: [Firmware → Hardware](../lightnet-firmware/hardware.md).
-
 ### How do I update panel firmware after the first flash?
 
 Three ways, in order of convenience:
@@ -74,7 +60,7 @@ Three ways, in order of convenience:
     curl -X POST http://lightnet-XXXX.local/api/firmware/panels \
       --data-binary @panel_fw.bin
     ```
-    The controller streams the binary to its flash, then reflashes every panel one at a time over I²C.
+    The controller streams the binary to its flash, then reflashes every panel one at a time over the relay trunk.
 
 === "Serial"
     ```bash
