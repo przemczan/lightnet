@@ -25,8 +25,8 @@ Panels expose **up to 5 edges** (configurable via `NUMBER_OF_EDGES` in `panel.co
 
 ## What you need
 
-!!! warning "DIY status"
-    Schematics, PCB layouts, and a full bill of materials are not yet published. This section will fill in once boards are released. For now, [the firmware repository](https://github.com/przemczan/lightnet-firmware) is the authoritative reference for pin assignments and target MCUs.
+!!! info "DIY status"
+    Example schematics and PCB layouts are published on EasyEDA: [Controller](https://oshwlab.com/przemczan/project_loftjneo) and [Panel](https://oshwlab.com/przemczan/project_dqjlfkzg). [The firmware repository](https://github.com/przemczan/lightnet-firmware) remains the authoritative reference for pin assignments and target MCUs.
 
 ### Controller
 
