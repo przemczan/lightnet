@@ -1,0 +1,97 @@
+name: Deploy Preview Docs
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gh-pages
+  cancel-in-progress: false
+
+on:
+  workflow_dispatch:
+    inputs:
+      firmware_ref:
+        description: 'Branch, tag, or commit SHA to check out in lightnet-firmware'
+        required: false
+        default: 'main'
+        type: string
+      mobile_ref:
+        description: 'Branch, tag, or commit SHA to check out in lightnet-mobile'
+        required: false
+        default: 'main'
+        type: string
+      version:
+        description: 'mike version label to deploy under (e.g. 0.9-beta, pr-123)'
+        required: true
+        type: string
+      alias:
+        description: 'Optional mike alias for this version (leave blank for none). Must not be "latest".'
+        required: false
+        default: ''
+        type: string
+      set_default:
+        description: 'Point the default redirect (mike set-default) at this version?'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  build-and-deploy-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Guard against clobbering the stable alias
+        run: |
+          if [ "${{ inputs.alias }}" = "latest" ]; then
+            echo "::error::alias must not be 'latest' - that would redirect the stable default to this preview."
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch gh-pages branch
+        run: git fetch origin gh-pages --depth=1 || true
+
+      - name: Setup SSH Key
+        uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: |
+            ${{ secrets.SSH_FIRMWARE_DEPLOY_PRIVATE_KEY }}
+            ${{ secrets.SSH_MOBILE_DEPLOY_PRIVATE_KEY }}
+
+      - name: Checkout firmware and mobile docs at requested refs
+        run: |
+          cd ..
+          git clone ssh://git@github.com/przemczan/lightnet-firmware.git
+          git -C lightnet-firmware checkout "${{ inputs.firmware_ref }}"
+          git clone ssh://git@github.com/przemczan/lightnet-mobile.git
+          git -C lightnet-mobile checkout "${{ inputs.mobile_ref }}"
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build
+        run: mkdocs build
+
+      - name: Configure git identity for mike
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Deploy preview version with mike
+        run: |
+          if [ -n "${{ inputs.alias }}" ]; then
+            mike deploy --push --update-aliases "${{ inputs.version }}" "${{ inputs.alias }}"
+          else
+            mike deploy --push "${{ inputs.version }}"
+          fi
+
+      - name: Optionally set as default
+        if: ${{ inputs.set_default }}
+        run: mike set-default --push "${{ inputs.version }}"

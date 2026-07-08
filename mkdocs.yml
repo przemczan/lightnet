@@ -1,6 +1,6 @@
 site_name: 'Lightnet'
 site_description: Modular addressable lighting — build, use, and develop
-site_url: https://przemczan.github.io/lightnet
+site_url: https://przemczan.github.io/lightnet/
 repo_url: https://github.com/przemczan/lightnet
 repo_name: przemczan/lightnet
 docs_dir: docs
@@ -29,6 +29,8 @@ theme:
     - content.tooltips
     - navigation.instant.preview
 extra:
+  version:
+    provider: mike
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/przemczan/lightnet

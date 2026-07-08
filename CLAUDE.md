@@ -31,6 +31,10 @@ mkdocs serve
 
 Requires `../lightnet-firmware/` and `../lightnet-mobile/` to exist at their expected relative paths.
 
+## Versioning
+
+Docs are versioned with [mike](https://github.com/jimporter/mike) (`extra.version.provider: mike` in `mkdocs.yml`). `mkdocs serve` is unversioned; use `mike serve` (after `git fetch origin gh-pages:gh-pages`) to preview the versioned site with the version switcher. Stable deploys happen automatically via `.github/workflows/deploy.yml` on push to `main` (rolling `current`/`latest`) and on `v*` tags (permanent version). Beta/preview builds — pinning the hub and/or `lightnet-firmware`/`lightnet-mobile` to feature branches — are published manually via the `Deploy Preview Docs` workflow (`workflow_dispatch`), under a version label that never touches the `latest` alias. Preview versions aren't auto-expired; clean up with `mike delete <version> --push`.
+
 ## What lives where
 
 | Content | Location |

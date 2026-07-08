@@ -34,6 +34,27 @@ mkdocs serve
 
 Open [http://localhost:8000](http://localhost:8000).
 
+### Previewing the versioned site
+
+`mkdocs serve` is the normal editing loop — fast rebuilds, live reload — but it
+renders only your working tree and doesn't show the version switcher or
+aliases. To preview the site as it appears on GitHub Pages:
+
+```bash
+git fetch origin gh-pages:gh-pages
+mike serve
+```
+
+This serves the already-committed `gh-pages` branch, not uncommitted edits.
+To try out a new version locally before publishing, run
+`mike deploy <version> <alias>` without `--push` first, then `mike serve`.
+Never run `mike deploy ... --push` locally against `origin` unless you mean
+to publish for real.
+
+Preview/beta versions published via the `Deploy Preview Docs` GitHub Action
+are not auto-expired — remove them once obsolete with
+`mike delete <version> --push`.
+
 ## License
 
 Firmware and mobile app are licensed under [GPL-3.0](https://www.gnu.org/licenses/gpl-3.0.html).
