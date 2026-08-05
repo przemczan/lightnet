@@ -17,7 +17,7 @@ Lightnet will follow [Semantic Versioning](https://semver.org/):
 
 ## Firmware protocol versions
 
-The internal wire protocol carried over the UART relay trunk between controller and panels is versioned independently of the firmware version itself. The current version is **v12** (`Core/Common/ProtocolMeta.hpp` → `Protocol::VERSION`).
+The internal wire protocol carried over the UART relay trunk between controller and panels is versioned independently of the firmware version itself. The current version is **v14** (`Core/Common/ProtocolMeta.hpp` → `Protocol::VERSION`).
 
 !!! warning "Flash controller and panels together"
     The controller and every panel must agree on the wire protocol version. When you cross a protocol bump, flash the controller and **all** panels in the same session. Mismatched versions cause unpredictable behaviour after discovery completes — with the exception of a small set of version-exempt packet types (reset, enter-bootloader, discovery) that let a mismatched panel still be discovered, reset, and reflashed over the relay.
