@@ -1,0 +1,3905 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Modular addressable lighting — build, use, and develop">
+      
+      
+      
+        <link rel="canonical" href="https://przemczan.github.io/lightnet/1.0.0/lightnet-firmware/architecture/">
+      
+      
+        <link rel="prev" href="../hardware/panel-relay-signal-path/">
+      
+      
+        <link rel="next" href="../api/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Architecture - Lightnet</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/common.css">
+    
+      <link rel="stylesheet" href="../../stylesheets/donation.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#system-architecture" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Lightnet" class="md-header__button md-logo" aria-label="Lightnet" data-md-component="logo">
+      
+  <img src="../../assets/images/logo-full.light.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Lightnet
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Architecture
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/przemczan/lightnet" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    przemczan/lightnet
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Lightnet" class="md-nav__button md-logo" aria-label="Lightnet" data-md-component="logo">
+      
+  <img src="../../assets/images/logo-full.light.svg" alt="logo">
+
+    </a>
+    Lightnet
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/przemczan/lightnet" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    przemczan/lightnet
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../getting-started/" class="md-nav__link ">
+              
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m13.13 22.19-1.63-3.83c1.57-.58 3.04-1.36 4.4-2.27zM5.64 12.5l-3.83-1.63 6.1-2.77C7 9.46 6.22 10.93 5.64 12.5M19.22 4c.28 0 .53 0 .74.05.17 1.39-.02 4.25-3.3 7.53-1.7 1.71-3.73 3.02-6.01 3.89l-2.15-2.1c.92-2.31 2.23-4.34 3.92-6.03C15.18 4.58 17.64 4 19.22 4m0-2c-1.98 0-4.98.69-8.22 3.93-2.19 2.19-3.5 4.6-4.35 6.71-.28.75-.09 1.57.46 2.13l2.13 2.12c.38.38.89.61 1.42.61.23 0 .47-.06.7-.15A19.1 19.1 0 0 0 18.07 13c5.66-5.66 3.54-10.61 3.54-10.61S20.7 2 19.22 2m-4.68 7.46c-.78-.78-.78-2.05 0-2.83s2.05-.78 2.83 0c.77.78.78 2.05 0 2.83s-2.05.78-2.83 0m-5.66 7.07-1.41-1.41zM6.24 22l3.64-3.64c-.34-.09-.67-.24-.97-.45L4.83 22zM2 22h1.41l4.77-4.76-1.42-1.41L2 20.59zm0-2.83 4.09-4.08c-.21-.3-.36-.62-.45-.97L2 17.76z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Get Started
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Get Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/hardware/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m21.71 20.29-1.42 1.42a1 1 0 0 1-1.41 0L7 9.85A3.8 3.8 0 0 1 6 10a4 4 0 0 1-3.78-5.3l2.54 2.54.53-.53 1.42-1.42.53-.53L4.7 2.22A4 4 0 0 1 10 6a3.8 3.8 0 0 1-.15 1l11.86 11.88a1 1 0 0 1 0 1.41M2.29 18.88a1 1 0 0 0 0 1.41l1.42 1.42a1 1 0 0 0 1.41 0l5.47-5.46-2.83-2.83M20 2l-4 2v2l-2.17 2.17 2 2L18 8h2l2-4Z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Build the hardware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/toolchain/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 8h-3V6c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v10h20V10c0-1.1-.9-2-2-2M9 6h6v2H9zm11 12H4v-3h2v1h2v-1h8v1h2v-1h2zm-2-5v-1h-2v1H8v-1H6v1H4v-3h16v3z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Prepare your tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/flashing/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Flash the firmware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/first-boot/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12 21 3.6-4.8c-1-.75-2.25-1.2-3.6-1.2s-2.6.45-3.6 1.2zm0-18C7.95 3 4.21 4.34 1.2 6.6L3 9c2.5-1.88 5.62-3 9-3s6.5 1.12 9 3l1.8-2.4C19.79 4.34 16.05 3 12 3m0 6c-2.7 0-5.19.89-7.2 2.4l1.8 2.4C8.1 12.67 9.97 12 12 12s3.9.67 5.4 1.8l1.8-2.4C17.19 9.89 14.7 9 12 9"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    4. First boot & Wi-Fi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/using-the-app/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 19H7V5h10m0-4H7c-1.11 0-2 .89-2 2v18a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Use the app
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/next-steps/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m7 17 3.2-6.8L17 7l-3.2 6.8zm5-5.9a.9.9 0 0 0-.9.9.9.9 0 0 0 .9.9.9.9 0 0 0 .9-.9.9.9 0 0 0-.9-.9M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2m0 2a8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8 8 8 0 0 0-8-8"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Where to go next
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 4h12v1h3v2h-3v2h3v2h-3v2h3v2h-3v2h3v2h-3v1H6v-1H3v-2h3v-2H3v-2h3v-2H3V9h3V7H3V5h3zm5 11v3h1v-3zm2 0v3h1v-3zm2 0v3h1v-3z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Firmware
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 9h2V7h-2m1 13c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m0-18A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2m-1 15h2v-6h-2z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m13.13 22.19-1.63-3.83c1.57-.58 3.04-1.36 4.4-2.27zM5.64 12.5l-3.83-1.63 6.1-2.77C7 9.46 6.22 10.93 5.64 12.5M19.22 4c.28 0 .53 0 .74.05.17 1.39-.02 4.25-3.3 7.53-1.7 1.71-3.73 3.02-6.01 3.89l-2.15-2.1c.92-2.31 2.23-4.34 3.92-6.03C15.18 4.58 17.64 4 19.22 4m0-2c-1.98 0-4.98.69-8.22 3.93-2.19 2.19-3.5 4.6-4.35 6.71-.28.75-.09 1.57.46 2.13l2.13 2.12c.38.38.89.61 1.42.61.23 0 .47-.06.7-.15A19.1 19.1 0 0 0 18.07 13c5.66-5.66 3.54-10.61 3.54-10.61S20.7 2 19.22 2m-4.68 7.46c-.78-.78-.78-2.05 0-2.83s2.05-.78 2.83 0c.77.78.78 2.05 0 2.83s-2.05.78-2.83 0m-5.66 7.07-1.41-1.41zM6.24 22l3.64-3.64c-.34-.09-.67-.24-.97-.45L4.83 22zM2 22h1.41l4.77-4.76-1.42-1.41L2 20.59zm0-2.83 4.09-4.08c-.21-.3-.36-.62-.45-.97L2 17.76z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Build & Flash
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hardware/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 9V7h-2V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2h2v-2h-2v-2h2v-2h-2V9zm-4 10H4V5h14zM6 13h5v4H6zm6-6h4v3h-4zM6 7h5v5H6zm6 4h4v6h-4z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hardware/panel-relay-signal-path/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Panel Relay Signal Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 2v6h2v3H5c-1.11 0-2 .89-2 2v3H1v6h6v-6H5v-3h6v3H9v6h6v-6h-2v-3h6v3h-2v6h6v-6h-2v-3c0-1.11-.89-2-2-2h-6V8h2V2z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 2v6h2v3H5c-1.11 0-2 .89-2 2v3H1v6h6v-6H5v-3h6v3H9v6h6v-6h-2v-3h6v3h-2v6h6v-6h-2v-3c0-1.11-.89-2-2-2h-6V8h2V2z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-physical-topology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Physical Topology
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-two-build-source-tree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Two-Build Source Tree
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-library-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Library Structure
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Library Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-shared-by-both-targets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common/ — shared by both targets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controller-esp32-only-esp8266-retired-didnt-meet-the-relay-designs-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller/ — ESP32 only (ESP8266 retired — didn't meet the relay design's requirements)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#corecontroller-portable-scene-engine-esp-native-mobile-c-abi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core/Controller/ — portable scene engine (ESP + native + mobile C ABI)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#panel-atmega-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Panel/ — ATmega only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controllerapiwebsocket-websocket-controller-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller/API/websocket/ — WebSocket (controller only)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#utils" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Utils/
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-wire-protocol-internal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Wire Protocol (Internal)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Wire Protocol (Internal)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#versions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Versions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#packet-catalogue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Packet catalogue
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#broadcast-flood" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Broadcast (Flood)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#link-arq-per-hop-acknowledgment-v13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Link-ARQ (per-hop acknowledgment, v13)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-animation-framework-internals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Animation Framework Internals
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Animation Framework Internals">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#animationplayer-panel-side-layer-compositor-shared-with-mobile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AnimationPlayer (panel side) — layer compositor, shared with mobile
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#animationplayer-panel-side-layer-compositor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AnimationPlayer (panel side) — layer compositor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#animationscheduler-controller-side" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AnimationScheduler (controller side)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controller-runners-compiled-to-per-panel-local-pulses-v6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller runners — compiled to per-panel local pulses (v6)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controller-runners-rain-sparkle-particle-spawners-v7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller runners — RAIN / SPARKLE particle spawners (v7)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bandwidth-budget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bandwidth budget
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-discovery-sequence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Discovery Sequence
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Discovery Sequence">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#depth-first-walk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Depth-first walk
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loop-rejection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loop rejection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#full-discovery-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full discovery flow
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Full discovery flow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#worked-example-two-panels-in-series" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Worked example: two panels in series
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#topology-capture-discoverytreebuilder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Topology capture — DiscoveryTreeBuilder
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-controller-boot-startup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Controller Boot &amp; Startup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-concurrency-task-model-deferred-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Concurrency: Task Model &amp; Deferred Execution
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Concurrency: Task Model &amp; Deferred Execution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-two-execution-contexts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Two execution contexts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-the-hazard-outbound-packets-must-be-single-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 The hazard: outbound packets must be single-task
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-mainloopqueue-generic-deferred-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 MainLoopQueue — generic deferred execution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-http-handler-pattern-validate-sync-execute-deferred" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 HTTP handler pattern: validate sync, execute deferred
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85-packetmirror-flush-on-overflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5 PacketMirror flush-on-overflow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#86-ws-command-queue-sibling-mechanism" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6 WS command queue (sibling mechanism)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#main-loop-service-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Main-loop service order
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#87-requestreply-over-the-relay-trunk-controllerrelaypacketsink" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.7 Request/reply over the relay trunk (ControllerRelayPacketSink)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 7H5a2 2 0 0 0-2 2v8h2v-4h2v4h2V9a2 2 0 0 0-2-2m0 4H5V9h2m7-2h-4v10h2v-4h2a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2m0 4h-2V9h2m6 0v6h1v2h-4v-2h1V9h-1V7h4v2Z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_8" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../animations/" class="md-nav__link ">
+              
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10.6 9.6 9 15 7.4 9.6 2 8l5.4-1.6L9 1l1.6 5.4L16 8zm6.4 4.6 4-2.2-2.2 4 2.2 4-4-2.2-4 2.2 2.2-4-2.2-4zM10 16l-1.7 3 1.7 3-3-1.7L4 22l1.7-3L4 16l3 1.7z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Animations & Scenes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_8" id="__nav_3_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Animations & Scenes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../animations/concepts/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 4H3a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2M3 19V6h8v13zm18 0h-8V6h8zm-7-9.5h6V11h-6zm0 2.5h6v1.5h-6zm0 2.5h6V16h-6z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../animations/scene-authoring/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.75 7.46 12 3.93l1.97-.39 2.74 3.53zm6.87-1.36-.78-3.92-3.93.78 2.74 3.54zM4 12h14.13l2-2H2v10a2 2 0 0 0 2 2h7v-2H4zm7.81-3.95L9.07 4.5l-1.97.41 2.75 3.53zM4.16 5.5l-.98.19a1.995 1.995 0 0 0-1.57 2.35L2 10l4.9-.97zM13 19.96V22h2.04l6.13-6.12-2.04-2.05zm9.85-6.49-1.32-1.32c-.2-.2-.53-.2-.72 0l-.98.98 2.04 2.04.98-.98c.2-.19.2-.52 0-.72"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Scene Authoring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../animations/types/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4zm16-2v12H8V4zm0-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2m-8 12.5v-9l6 4.5z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Animation Types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../animations/api/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 7H5a2 2 0 0 0-2 2v8h2v-4h2v4h2V9a2 2 0 0 0-2-2m0 4H5V9h2m7-2h-4v10h2v-4h2a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2m0 4h-2V9h2m6 0v6h1v2h-4v-2h1V9h-1V7h4v2Z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    API & Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ota/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.43-1.8 2.13-3.42Q9.07 4.1 11 4.1q.83 0 1.41.59.59.59.59 1.41v6.05l1.6-1.55L16 12l-4 4-4-4 1.4-1.4 1.6 1.55V6.1q-1.9.35-2.95 1.84T7 11h-.5q-1.45 0-2.47 1.03Q3 13.05 3 14.5T4.03 17q1.02 1 2.47 1h12q1.05 0 1.77-.73.73-.72.73-1.77t-.73-1.77Q19.55 13 18.5 13H17v-2q0-1.2-.55-2.24Q15.9 7.73 15 7V4.68q1.85.87 2.93 2.58Q19 9 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20M12 11.05"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    OTA & Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 8h-2.81c-.45-.8-1.07-1.5-1.82-2L17 4.41 15.59 3l-2.17 2.17a6 6 0 0 0-2.83 0L8.41 3 7 4.41 8.62 6c-.75.5-1.36 1.21-1.81 2H4v2h2.09c-.06.33-.09.66-.09 1v1H4v2h2v1c0 .34.03.67.09 1H4v2h2.81A5.99 5.99 0 0 0 15 20.18c.91-.52 1.67-1.28 2.19-2.18H20v-2h-2.09c.06-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.03-.67-.09-1H20zm-4 7a4 4 0 0 1-4 4 4 4 0 0 1-4-4v-4a4 4 0 0 1 4-4 4 4 0 0 1 4 4zm-2-5v2h-4v-2zm-4 4h4v2h-4z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1c0-.21-.07-.41-.18-.57L13 8.35V4h-2v4.35L5.18 18.43c-.11.16-.18.36-.18.57m1 3a3 3 0 0 1-3-3c0-.6.18-1.16.5-1.63L9 7.81V6a1 1 0 0 1-1-1V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1v1.81l5.5 9.56c.32.47.5 1.03.5 1.63a3 3 0 0 1-3 3zm7-6 1.34-1.34L16.27 18H7.73l2.66-4.61zm-.5-4a.5.5 0 0 1 .5.5.5.5 0 0 1-.5.5.5.5 0 0 1-.5-.5.5.5 0 0 1 .5-.5"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../lightnet-mobile/" class="md-nav__link ">
+              
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 19H7V5h10m0-4H7c-1.11 0-2 .89-2 2v18a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    App
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    App
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lightnet-mobile/overview/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 9h2V7h-2m1 13c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m0-18A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2m-1 15h2v-6h-2z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lightnet-mobile/screenshots/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 1a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm0 3h10v16H7zm2 2v4h1.5V7.5H13V6zm4.5 8v2.5H11V18h4v-4z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Screenshots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lightnet-mobile/getting-started/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m13.13 22.19-1.63-3.83c1.57-.58 3.04-1.36 4.4-2.27zM5.64 12.5l-3.83-1.63 6.1-2.77C7 9.46 6.22 10.93 5.64 12.5M19.22 4c.28 0 .53 0 .74.05.17 1.39-.02 4.25-3.3 7.53-1.7 1.71-3.73 3.02-6.01 3.89l-2.15-2.1c.92-2.31 2.23-4.34 3.92-6.03C15.18 4.58 17.64 4 19.22 4m0-2c-1.98 0-4.98.69-8.22 3.93-2.19 2.19-3.5 4.6-4.35 6.71-.28.75-.09 1.57.46 2.13l2.13 2.12c.38.38.89.61 1.42.61.23 0 .47-.06.7-.15A19.1 19.1 0 0 0 18.07 13c5.66-5.66 3.54-10.61 3.54-10.61S20.7 2 19.22 2m-4.68 7.46c-.78-.78-.78-2.05 0-2.83s2.05-.78 2.83 0c.77.78.78 2.05 0 2.83s-2.05.78-2.83 0m-5.66 7.07-1.41-1.41zM6.24 22l3.64-3.64c-.34-.09-.67-.24-.97-.45L4.83 22zM2 22h1.41l4.77-4.76-1.42-1.41L2 20.59zm0-2.83 4.09-4.08c-.21-.3-.36-.62-.45-.97L2 17.76z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lightnet-mobile/development/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 3a2 2 0 0 0-2 2v4a2 2 0 0 1-2 2H3v2h1a2 2 0 0 1 2 2v4a2 2 0 0 0 2 2h2v-2H8v-5a2 2 0 0 0-2-2 2 2 0 0 0 2-2V5h2V3m6 0a2 2 0 0 1 2 2v4a2 2 0 0 0 2 2h1v2h-1a2 2 0 0 0-2 2v4a2 2 0 0 1-2 2h-2v-2h2v-5a2 2 0 0 1 2-2 2 2 0 0 1-2-2V5h-2V3z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lightnet-mobile/connectivity/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12 21 3.6-4.8c-1-.75-2.25-1.2-3.6-1.2s-2.6.45-3.6 1.2zm0-18C7.95 3 4.21 4.34 1.2 6.6L3 9c2.5-1.88 5.62-3 9-3s6.5 1.12 9 3l1.8-2.4C19.79 4.34 16.05 3 12 3m0 6c-2.7 0-5.19.89-7.2 2.4l1.8 2.4C8.1 12.67 9.97 12 12 12s3.9.67 5.4 1.8l1.8-2.4C17.19 9.89 14.7 9 12 9"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Connectivity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../reference/" class="md-nav__link ">
+              
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.5c-1.35-.85-3.8-1.5-5.5-1.5-1.65 0-3.35.3-4.75 1.05-.1.05-.15.05-.25.05-.25 0-.5-.25-.5-.5V6c.6-.45 1.25-.75 2-1 1.11-.35 2.33-.5 3.5-.5 1.95 0 4.05.4 5.5 1.5 1.45-1.1 3.55-1.5 5.5-1.5 1.17 0 2.39.15 3.5.5.75.25 1.4.55 2 1v14.6c0 .25-.25.5-.5.5-.1 0-.15 0-.25-.05-1.4-.75-3.1-1.05-4.75-1.05-1.7 0-4.15.65-5.5 1.5M12 8v11.5c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5V7c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5m1 3.5c1.11-.68 2.6-1 4.5-1 .91 0 1.76.09 2.5.28V9.23c-.87-.15-1.71-.23-2.5-.23q-2.655 0-4.5.84zm4.5.17c-1.71 0-3.21.26-4.5.79v1.69c1.11-.65 2.6-.99 4.5-.99 1.04 0 1.88.08 2.5.24v-1.5c-.87-.16-1.71-.23-2.5-.23m2.5 2.9c-.87-.16-1.71-.24-2.5-.24-1.83 0-3.33.27-4.5.8v1.69c1.11-.66 2.6-.99 4.5-.99 1.04 0 1.88.08 2.5.24z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/glossary/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 11a2 2 0 0 1 2 2v4H4a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2zm-2 2v2h2v-2zm16 0v2h2v2h-2a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h2v2zm-8-6v4h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V7zm0 8h2v-2h-2z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/faq/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 18h2v-2h-2zm1-16A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m0-14a4 4 0 0 0-4 4h2a2 2 0 0 1 2-2 2 2 0 0 1 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5a4 4 0 0 0-4-4"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/release-notes/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m21.41 11.58-9-9A2 2 0 0 0 11 2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 .59 1.42l9 9A2 2 0 0 0 13 22a2 2 0 0 0 1.41-.59l7-7A2 2 0 0 0 22 13a2 2 0 0 0-.59-1.42M13 20l-9-9V4h7l9 9M6.5 5A1.5 1.5 0 1 1 5 6.5 1.5 1.5 0 0 1 6.5 5"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-physical-topology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Physical Topology
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-two-build-source-tree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Two-Build Source Tree
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-library-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Library Structure
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Library Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-shared-by-both-targets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common/ — shared by both targets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controller-esp32-only-esp8266-retired-didnt-meet-the-relay-designs-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller/ — ESP32 only (ESP8266 retired — didn't meet the relay design's requirements)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#corecontroller-portable-scene-engine-esp-native-mobile-c-abi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core/Controller/ — portable scene engine (ESP + native + mobile C ABI)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#panel-atmega-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Panel/ — ATmega only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controllerapiwebsocket-websocket-controller-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller/API/websocket/ — WebSocket (controller only)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#utils" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Utils/
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-wire-protocol-internal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Wire Protocol (Internal)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Wire Protocol (Internal)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#versions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Versions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#packet-catalogue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Packet catalogue
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#broadcast-flood" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Broadcast (Flood)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#link-arq-per-hop-acknowledgment-v13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Link-ARQ (per-hop acknowledgment, v13)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-animation-framework-internals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Animation Framework Internals
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Animation Framework Internals">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#animationplayer-panel-side-layer-compositor-shared-with-mobile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AnimationPlayer (panel side) — layer compositor, shared with mobile
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#animationplayer-panel-side-layer-compositor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AnimationPlayer (panel side) — layer compositor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#animationscheduler-controller-side" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AnimationScheduler (controller side)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controller-runners-compiled-to-per-panel-local-pulses-v6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller runners — compiled to per-panel local pulses (v6)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controller-runners-rain-sparkle-particle-spawners-v7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller runners — RAIN / SPARKLE particle spawners (v7)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bandwidth-budget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bandwidth budget
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-discovery-sequence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Discovery Sequence
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Discovery Sequence">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#depth-first-walk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Depth-first walk
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loop-rejection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loop rejection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#full-discovery-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full discovery flow
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Full discovery flow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#worked-example-two-panels-in-series" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Worked example: two panels in series
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#topology-capture-discoverytreebuilder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Topology capture — DiscoveryTreeBuilder
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-controller-boot-startup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Controller Boot &amp; Startup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-concurrency-task-model-deferred-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Concurrency: Task Model &amp; Deferred Execution
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Concurrency: Task Model &amp; Deferred Execution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-two-execution-contexts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Two execution contexts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-the-hazard-outbound-packets-must-be-single-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 The hazard: outbound packets must be single-task
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-mainloopqueue-generic-deferred-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 MainLoopQueue — generic deferred execution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-http-handler-pattern-validate-sync-execute-deferred" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 HTTP handler pattern: validate sync, execute deferred
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85-packetmirror-flush-on-overflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5 PacketMirror flush-on-overflow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#86-ws-command-queue-sibling-mechanism" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6 WS command queue (sibling mechanism)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#main-loop-service-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Main-loop service order
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#87-requestreply-over-the-relay-trunk-controllerrelaypacketsink" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.7 Request/reply over the relay trunk (ControllerRelayPacketSink)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../.." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Home
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Firmware
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="system-architecture">System Architecture<a class="headerlink" href="#system-architecture" title="Permanent link">&para;</a></h1>
+<p>Internal design reference for the Lightnet controller and panel firmware. Covers topology, library structure, relay protocol, animation framework internals, discovery, and boot sequence.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="#1-physical-topology">Physical Topology</a></li>
+<li><a href="#2-two-build-source-tree">Two-Build Source Tree</a></li>
+<li><a href="#3-library-structure">Library Structure</a></li>
+<li><a href="#4-wire-protocol-internal">Wire Protocol (Internal)</a></li>
+<li><a href="#5-animation-framework-internals">Animation Framework Internals</a></li>
+<li><a href="#6-discovery-sequence">Discovery Sequence</a></li>
+<li><a href="#7-controller-boot-startup">Controller Boot &amp; Startup</a></li>
+<li><a href="#8-concurrency-task-model-deferred-execution">Concurrency: Task Model &amp; Deferred Execution</a></li>
+</ol>
+<hr />
+<h2 id="1-physical-topology">1. Physical Topology<a class="headerlink" href="#1-physical-topology" title="Permanent link">&para;</a></h2>
+<p>Panels form a <strong>tree structure</strong> rooted at the controller, but each panel is a <strong>store-and-forward
+repeater</strong> rather than a node on a shared bus: it only ever talks to its own physical neighbours (up
+to 3 edges today), never directly to the controller or to a panel it isn't wired to. Every panel has
+a single hardware USART shared across all its edges through a <code>CD74HC4052</code> analog mux, carrying
+framed <code>Protocol</code> packets — there is no separate ping/handshake phase and no shared electrical bus
+anywhere in the tree (see <a href="../hardware/#topology"><code>docs/hardware.md</code></a> for the electrical rationale).</p>
+<pre class="mermaid"><code>graph TD
+  C[🎛️ Controller]
+  C --&gt; A[Panel A — edge 0]
+  A --&gt; B[Panel B — edge 1]
+  A --&gt; Pc[Panel C — edge 2]
+  B --&gt; D[Panel D — edge 1]
+  D --&gt; E[Panel E — edge 0]</code></pre>
+<p>Panels are assigned sequential indices during discovery (§6). Reaching panel N means flooding a
+packet downstream with N as an address filter (<code>Core/Relay/PanelRouter</code>), and every intermediate
+panel between the controller and N relays it one hop closer. Only the panel whose own index matches
+acts on it; everyone else just relays it further and ignores it locally.</p>
+<hr />
+<h2 id="2-two-build-source-tree">2. Two-Build Source Tree<a class="headerlink" href="#2-two-build-source-tree" title="Permanent link">&para;</a></h2>
+<p>The firmware compiles to two completely different binaries from a single source tree. The flag <code>LIGHTNET_TARGET_CONTROLLER</code> (set in <code>platformio.ini</code> build flags) selects the target:</p>
+<pre class="mermaid"><code>graph LR
+  M["src/main.cpp"] --&gt; CC{"LIGHTNET_TARGET_CONTROLLER?"}
+  CC -- defined --&gt; ESP["src/controller/main.hpp\n(ESP32 only — see §3)"]
+  CC -- not defined --&gt; ATM["src/panel/main.hpp\n(ATmega)"]</code></pre>
+<p>There is no runtime branching — the preprocessor eliminates the unused side entirely. Code that belongs to both targets lives in <code>lib/Lightnet/Common/</code>.</p>
+<hr />
+<h2 id="3-library-structure">3. Library Structure<a class="headerlink" href="#3-library-structure" title="Permanent link">&para;</a></h2>
+<p>All firmware code lives under <code>lib/Lightnet/</code>.</p>
+<h3 id="common-shared-by-both-targets">Common/ — shared by both targets<a class="headerlink" href="#common-shared-by-both-targets" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LightnetBus</code></td>
+<td>In-memory dispatch to <code>SimPanelManager</code>: <code>sendPacketAck()</code> / <code>sendPacketNack()</code> / <code>sendPacketWithResponse()</code>. <code>SIM_MODE</code>-only now (<code>#ifdef SIM_MODE</code>) — the relay trunk replaced I²C for discovery, application traffic, <code>fetchState()</code>, and <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> on real hardware; this survives only because sim panels only respond to <code>LightnetBus</code>-routed commands (see §6, §7, §8.7).</td>
+</tr>
+<tr>
+<td><code>Protocol</code></td>
+<td>All packet structs (<code>__packed__</code>), <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> validation, <code>setPacketMeta()</code></td>
+</tr>
+<tr>
+<td><code>LightnetConfig</code></td>
+<td>Cross-cutting constants in <code>Core/Common/LightnetConfig.hpp</code>: <code>LIGHTNET_MAX_PANELS</code> (100)</td>
+</tr>
+<tr>
+<td><code>ColorRef</code></td>
+<td>4-byte tagged union in <code>Core/Common/ColorRef.hpp</code>: <code>kind=0</code> inline RGB, <code>kind=1</code> palette position, <code>kind=2</code> base-color slot</td>
+</tr>
+<tr>
+<td><code>Palette</code></td>
+<td><code>GradientStop</code> struct (pos+RGB, 4 B) and <code>samplePalette()</code> in <code>Core/Common/Palette.hpp</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="controller-esp32-only-esp8266-retired-didnt-meet-the-relay-designs-requirements">Controller/ — <abbr title="Wi-Fi + BLE microcontroller — the supported controller MCU.">ESP32</abbr> only (ESP8266 retired — didn't meet the relay design's requirements)<a class="headerlink" href="#controller-esp32-only-esp8266-retired-didnt-meet-the-relay-designs-requirements" title="Permanent link">&para;</a></h3>
+<p><strong>Panels/</strong></p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PanelsInitializer</code></td>
+<td>Drives <code>ControllerDiscoveryService</code> over the relay trunk (<code>ControllerEdgeTransport</code>/<code>Serial1</code>) and converts the resulting <code>DiscoveryTreeBuilder</code> link list into the <code>Panel</code>/<code>Edge</code> graph below once discovery completes — the SIM_MODE build (<code>Sim/PanelsInitializerSim.cpp</code>) fabricates the same graph shape directly instead, with no wire protocol involved at all</td>
+</tr>
+<tr>
+<td><code>PanelsController</code></td>
+<td>Per-panel commands (color, on/off, configuration, enter-bootloader) via the shared <code>IPacketSink</code> (<code>ControllerRelayPacketSink</code> on real hardware, <code>ControllerPacketSink</code>/<code>LNBus</code> under <code>SIM_MODE</code> — main.cpp picks one at compile time). <code>fetchState()</code> needs a synchronous request/reply: on real hardware it uses <code>ControllerRelayPacketSink::requestReply()</code>, under <code>SIM_MODE</code> it stays directly on <code>LNBus</code></td>
+</tr>
+<tr>
+<td><code>Panel</code> / <code>Edge</code></td>
+<td>In-memory data model of discovered topology — same shape regardless of which side built it</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Animations/</strong> (device glue — demos only)</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CompiledSweep</code></td>
+<td>One-shot linear WAVE/RIPPLE/CHASE via compile-to-PULSE (boot self-test + verification demos)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Scenes/</strong> (device glue)</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SceneStore</code></td>
+<td>Scene persistence in <code>/data/scenes.db</code> (<code>SceneRecord</code> binary records via <code>Database</code>)</td>
+</tr>
+<tr>
+<td><code>ScenesService</code></td>
+<td>Orchestrates save / play-by-id / play-inline / one-shot / stop. Split into <code>prepare*</code> (parse/validate/persist — safe on the AsyncTCP task) and <code>playParsed*</code> (emits packets — main loop only) so HTTP handlers can defer playback (see §8)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="corecontroller-portable-scene-engine-esp-native-mobile-c-abi">Core/Controller/ — portable scene engine (ESP + native + mobile C ABI)<a class="headerlink" href="#corecontroller-portable-scene-engine-esp-native-mobile-c-abi" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ScenePlayer</code></td>
+<td>Loads and ticks multi-layer scenes; resolves palettes, fires steps</td>
+</tr>
+<tr>
+<td><code>SceneParser</code></td>
+<td>Parses scene <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> into <code>SceneLayer[]</code> structs</td>
+</tr>
+<tr>
+<td><code>AnimationScheduler</code></td>
+<td><code>playOnPanels()</code> PREPARE+START sequence; <code>sendPrepareToPanel()</code>/<code>sendGroupStart()</code> for compiled runners; <code>tick()</code> drives any streaming demo runners</td>
+</tr>
+<tr>
+<td><code>RunnerCompile.hpp</code></td>
+<td>Inverts runner envelopes to a per-panel local PULSE (onset + shape)</td>
+</tr>
+<tr>
+<td><code>PanelSelector</code> / <code>PanelSelectorParser</code></td>
+<td>Panel targeting grammar → RPN → resolved indices</td>
+</tr>
+<tr>
+<td><code>TopologyIndex</code> / <code>PanelGraph</code> / <code>PanelGeometry</code> / <code>PanelField</code></td>
+<td>Topology views, geometric layout, runner directionality</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Palettes/</strong></p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PaletteRepository</code></td>
+<td>Wraps <code>PaletteStore</code> (<code>/data/palettes.db</code>); seeds built-ins on boot; <code>resolve(name)</code> → <code>GradientStop[]</code>; implements <code>IPaletteResolver</code></td>
+</tr>
+<tr>
+<td><code>Store/PaletteStore</code></td>
+<td>Typed store over <code>Database&lt;PaletteCodec&gt;</code> — create / update / remove by name</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Appearance/</strong></p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AppearanceStore</code></td>
+<td>Storage only: owns <code>/config/appearance.db</code> (single binary <code>Database</code> record) — getters/setters + deferred persistence</td>
+</tr>
+<tr>
+<td><code>AppearanceService</code></td>
+<td>Behaviour facade over <code>AppearanceStore</code>: validates the palette, broadcasts brightness/base-colours/palette to panels on change and on <code>reapply()</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>API/http/</strong></p>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Routes</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AppearanceServer</code></td>
+<td><code>GET /api/appearance</code>, <code>PATCH /api/appearance</code></td>
+<td>Appearance read/write</td>
+</tr>
+<tr>
+<td><code>PaletteServer</code></td>
+<td><code>GET/POST /api/palettes</code>, <code>GET/PUT/DELETE /api/palettes/*</code></td>
+<td>Palette CRUD</td>
+</tr>
+<tr>
+<td><code>SceneServer</code></td>
+<td><code>GET/POST /api/scenes</code>, <code>PATCH/GET/DELETE/POST /api/scenes/*</code>, <code>/api/scenes/stop</code>, <code>/api/scenes/speed</code>, <code>/api/scenes/play</code>, <code>/api/scenes/play/one-shot</code></td>
+<td>Scene CRUD + playback</td>
+</tr>
+<tr>
+<td><code>AnimationServer</code></td>
+<td><code>POST /api/animations/play</code>, <code>POST /api/animations/trigger</code></td>
+<td>One-shot play + reactive trigger</td>
+</tr>
+<tr>
+<td><code>PanelServer</code></td>
+<td><code>GET /api/panels</code>, <code>GET /api/panels/edges</code>, <code>PUT /api/panels/*</code></td>
+<td>Per-panel on/color control</td>
+</tr>
+<tr>
+<td><code>StateServer</code></td>
+<td><code>GET /api/state</code>, <code>POST /api/state/power</code></td>
+<td>Runtime power state, scene playback status, <code>controllerFirmware</code> version string</td>
+</tr>
+<tr>
+<td><code>MqttServer</code></td>
+<td><code>GET /api/mqtt</code>, <code>PATCH /api/mqtt</code></td>
+<td>MQTT broker config + runtime discovery status (<abbr title="Wi-Fi + BLE microcontroller — the supported controller MCU.">ESP32</abbr> only; see <a href="../api/"><code>docs/api.md</code></a> §2.9)</td>
+</tr>
+<tr>
+<td><code>ConfigurationServer</code></td>
+<td><code>GET /api/configuration</code>, <code>PATCH /api/configuration</code></td>
+<td>Boot behaviour, logical root (<code>ConfigurationStore</code> + <code>TopologyConfigStore</code>)</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Mutating endpoints defer to the main loop (§8)</p>
+<p>Every handler that emits packets (scene play/stop/speed, one-shot/trigger, appearance,
+per-panel on/color, power, configuration <code>logicalRoot</code>) <strong>validates synchronously, then queues the
+packet-emitting work onto the main loop via <code>MainLoopQueue</code> and returns <code>202 Accepted</code></strong>.
+They are injected with a <code>MainLoopQueue&amp;</code>. Read-only and pure filesystem/config endpoints stay
+synchronous (<code>200</code>). See <a href="#8-concurrency-task-model-deferred-execution">§8</a>.</p>
+</div>
+<p><strong><abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr>/</strong></p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RelayBootloaderClient</code></td>
+<td>Drives <code>RelayBootloader.cpp</code> over the relay trunk via <code>ControllerRelayPacketSink::requestReply()</code>. <code>connect()</code> / <code>writePage()</code> / <code>startApp()</code>. Real hardware only — no wire to any panel exists, and <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> doesn't exist under <code>SIM_MODE</code></td>
+</tr>
+<tr>
+<td><code>PanelFlasher</code></td>
+<td>Non-blocking <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> state machine: <code>ENTER_BL → WAIT_BL → FLASHING → NEXT_PANEL</code></td>
+</tr>
+<tr>
+<td><code>FirmwareUpdateServer</code></td>
+<td><code>POST /api/firmware/panels</code>, <code>GET /api/firmware/status</code></td>
+</tr>
+<tr>
+<td><code>SerialFirmwareReceiver</code></td>
+<td>Firmware upload over 57600-baud USB serial (LNFW framing + <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="panel-atmega-only">Panel/ — <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr> only<a class="headerlink" href="#panel-atmega-only" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LightnetPanel</code></td>
+<td>Main panel state machine; handles relay packets, drives edge registration</td>
+</tr>
+<tr>
+<td><code>RGBController</code></td>
+<td><code>ClockedLed</code> (bit-banged APA102/SK9822-style) wrapper for the panel's LED on <code>LED_SCK</code>/<code>LED_MOSI</code>. Applies gamma/tint/<code>globalBrightness</code> in explicit <code>scale8</code>-style passes</td>
+</tr>
+<tr>
+<td><code>AnimationPlayer</code></td>
+<td>Layer compositor: <code>slots[MAX_ANIM_SLOTS]</code> composited each ~16 ms tick (blend modes + <code>animates</code> modifier targets + background base). Resolves <code>ColorRef</code> → RGB against panel's current palette + base colors</td>
+</tr>
+<tr>
+<td><code>BootloaderBridge</code></td>
+<td>Writes assigned index + parent edge + EEPROM boot-magic <code>0xB007</code> then software-jumps to <code>RelayBootloader.cpp</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="controllerapiwebsocket-websocket-controller-only">Controller/API/websocket/ — WebSocket (controller only)<a class="headerlink" href="#controllerapiwebsocket-websocket-controller-only" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>WebsocketServer</code></td>
+<td><code>AsyncWebSocket</code> on <code>/ws</code>; lock-free queue swap between <abbr title="Interrupt Service Routine — a small function the CPU jumps into when a hardware event fires.">ISR</abbr> and main loop; per-client <code>ClientSettings</code> (mirroring flag) with <abbr title="Wi-Fi + BLE microcontroller — the supported controller MCU.">ESP32</abbr>-safe locking</td>
+</tr>
+<tr>
+<td><code>WebsocketHandler</code></td>
+<td>Decodes and dispatches commands: <code>TOGGLE</code>, <code>SET_COLOR</code>, <code>GET_PANELS_STATES</code>, <code>GET_EDGES_LIST</code>, <code>ANIMATION_TRIGGER</code>, <code>SET_MIRROR</code>, <code>PING</code></td>
+</tr>
+<tr>
+<td><code>AppStateBroadcaster</code></td>
+<td>Watches <code>GET /api/state</code> fields; broadcasts <code>APP_STATE</code> to all WS clients on change</td>
+</tr>
+<tr>
+<td><code>WebsocketApi</code></td>
+<td>Binary packet structs and namespace for all commands/responses</td>
+</tr>
+<tr>
+<td><code>PacketMirror</code></td>
+<td>Captures outbound packets; maintains a live-stream ring (flushed at ~30 fps to mirroring clients) and a persistent snapshot (unicast to a client when it enables mirroring). <code>capture()</code> <strong>flushes inline on overflow instead of dropping</strong> — safe only because all callers now run on the main loop (§8); <code>setServer()</code> wires the WS server for that self-flush</td>
+</tr>
+</tbody>
+</table>
+<h3 id="utils">Utils/<a class="headerlink" href="#utils" title="Permanent link">&para;</a></h3>
+<p><code>CircularQueue</code>, <code>MainLoopQueue</code> (generic "run this on the main loop" deferral queue — see §8),
+<code>List</code>, <code>Crc</code> (<abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16/IBM), <code>Mem</code>, <code>Macros</code>, <code>Debug</code> (<code>PRINTLN</code>/<code>PRINTKV</code>/<code>PRINTF</code> — no-ops at
+<code>DEBUG=0</code>), <code>Gamma</code> (correction table in PROGMEM).</p>
+<hr />
+<h2 id="4-wire-protocol-internal">4. Wire Protocol (Internal)<a class="headerlink" href="#4-wire-protocol-internal" title="Permanent link">&para;</a></h2>
+<p>Defined in <code>Common/Protocol.hpp</code> (structs) and <code>Core/Common/ProtocolMeta.hpp</code> (version,
+<code>packetSizeForType()</code>, <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> validation). All packets use <code>__attribute__((__packed__))</code> structs and
+carry <code>PacketMeta</code>/<abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16 framing over the relay's shared <abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> (see <a href="../hardware/"><code>docs/hardware.md</code></a>).
+Since a <abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> byte stream has no out-of-band length field, <code>Protocol::packetSizeForType()</code> gives a
+receiver each type's fixed wire size so <code>Core/Relay/PacketFramer</code> can recover frame boundaries from
+a raw byte stream.</p>
+<h3 id="versions">Versions<a class="headerlink" href="#versions" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Branch</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>v3</strong></td>
+<td>master</td>
+<td>Original animation framework</td>
+</tr>
+<tr>
+<td><strong>v4</strong></td>
+<td>scenes</td>
+<td><code>PacketAnimationPrepare</code>: <code>colorFrom</code>/<code>colorTo</code> changed from <code>ColorRGB</code> (3 B) to <code>ColorRef</code> (4 B). Three new appearance packets.</td>
+</tr>
+<tr>
+<td><strong>v5</strong></td>
+<td>—</td>
+<td>Per-panel brightness removed (animations express brightness through colour).</td>
+</tr>
+<tr>
+<td><strong>v6</strong></td>
+<td>compositing</td>
+<td>Layer compositor. <code>PacketAnimationPrepare</code> gains <code>composeMode</code> + <code>composeOrder</code> + <code>startDelayMs</code> (25 B); <code>PacketAnimationControl</code> gains <code>group_id</code> (per-slot, 7 B); new <code>SET_BACKGROUND</code> packet. Runners are compiled to per-panel local PULSEs.</td>
+</tr>
+<tr>
+<td><strong>v7</strong></td>
+<td>relay</td>
+<td><code>FETCH_STATE</code>/<code>FETCH_ANIM_STATE</code> replies get their own wire types (<code>FETCH_STATE_REPLY</code>/<code>FETCH_ANIM_STATE_REPLY</code>) instead of reusing the request's — a byte-stream receiver can't otherwise size a frame from its type byte alone without knowing whether it's a request or reply.</td>
+</tr>
+<tr>
+<td><strong>v8</strong></td>
+<td>relay</td>
+<td>Discovery control plane: <code>PACKET_DISCOVERY_ADVANCE</code>/<code>PACKET_DISCOVERY_DONE</code> (see §6).</td>
+</tr>
+<tr>
+<td><strong>v9</strong></td>
+<td>relay</td>
+<td><code>PacketPanelConfiguration</code>'s <code>colorTemperature</code>/<code>colorCorrection</code> changed from FastLED's <code>ColorTemperature</code>/<code>LEDColorCorrection</code> enums to raw <code>ColorRGB</code> — moves the struct into the portable core (no FastLED dependency) and lets <code>packetSizeForType()</code> size it like every other packet.</td>
+</tr>
+<tr>
+<td><strong>v10</strong></td>
+<td>relay</td>
+<td><code>PacketHeader</code> gains <code>targetPanelIndex</code> (0 = broadcast, else one panel) — the relay's addressing field, since flooding has no physical-bus-address equivalent; without it a flooded <code>FETCH_STATE</code> query would make every panel reply at once. <code>PacketDiscoveryAdvance</code>'s own bespoke <code>targetPanelIndex</code> payload field folds into this. Every packet grows 2 B.</td>
+</tr>
+<tr>
+<td><strong>v11</strong></td>
+<td>relay</td>
+<td><code>PacketInitializationPull</code>/<code>PacketRegisterEdge</code> gain <code>parentEdgeIndex</code> — the probing panel's (or controller trunk's) own edge index for the link being offered, echoed back unchanged in the reply. Lets the controller learn <em>both</em> sides of every discovered link (needed to build <code>PanelGraph</code>'s <code>TopoLink[]</code>, see §6) without a second, independently-timed upstream frame that would race the single-active-flow invariant (§4). Both structs grow 2 B.</td>
+</tr>
+<tr>
+<td><strong>v12</strong></td>
+<td>relay</td>
+<td>Relay <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> bootloader control plane: <code>PACKET_BOOTLOADER_PING/PONG/WRITE_CHUNK/WRITE_ACK/START_APP</code> (see <a href="../ota/"><code>docs/ota.md</code></a>). An intermediate panel built before v12 can't frame/relay these new types at all (<code>packetSizeForType()</code> doesn't recognize them), so this still needs every panel between the controller and the flash target updated — even though the bootloader itself, once resident, deliberately skips <code>protocolVersion</code> validation (flashing is how a version mismatch gets resolved).</td>
+</tr>
+<tr>
+<td><strong>v13</strong></td>
+<td>relay</td>
+<td>Link-ARQ hop acknowledgments: <code>PACKET_LINK_ACK</code> + the <code>Protocol::isLinkAckedType()</code> policy table (see the <em>Link-ARQ</em> section below). Per-hop frame loss no longer compounds geometrically with tree depth for control/reply traffic. The resident bootloader's frozen wire contract is untouched — BL-bound types are deliberately not hop-acked.</td>
+</tr>
+<tr>
+<td><strong>v14</strong></td>
+<td>relay</td>
+<td><code>ANIMATION_START</code> moves out of <code>Protocol::isLinkAckedType()</code>. It floods to every panel and each relay panel forwards to all its children before dispatching locally, so hop-acking it compounded the ack/retransmit window with both tree depth and fan-out — working against every panel firing an animation at the same time. <code>AnimationScheduler::sendGroupStart()</code>'s existing redundant send (now 3 copies, up from 2) is the sole reliability mechanism for it, the same tradeoff already made for <code>SET_COLOR</code>.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Protocol compatibility</p>
+<p>Panel and controller must be flashed together when upgrading across protocol versions — versions are not interchangeable.</p>
+</div>
+<h3 id="packet-catalogue">Packet catalogue<a class="headerlink" href="#packet-catalogue" title="Permanent link">&para;</a></h3>
+<p>Not exhaustive — see <code>Core/Common/ProtocolTypes.hpp</code>'s <code>packetType_t</code> enum for the full list. <code>Dir</code>
+is who <em>authors</em> a packet. Over the relay, reaching a specific panel means flooding downstream with
+that panel's index as an address filter (<code>PanelRouter</code>).</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Dir</th>
+<th>Size</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td><code>INITIALIZATION_PULL</code></td>
+<td>C→P or P→P</td>
+<td>11 B</td>
+<td>Direct, single-hop probe — never routed. Sent by whoever is currently exploring one of its own edges (the controller down its trunk, or a registered panel down its next <code>Unexplored</code> edge), carrying <code>parentEdgeIndex</code> = the sender's own edge for this link (v11); panel replies with <code>PacketRegisterEdge</code> on the same edge</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>REGISTER_EDGE</code></td>
+<td>P→P or P→C</td>
+<td>13 B</td>
+<td>Reply to a probe: <code>panelIndex</code> = the assigned index (or <code>0</code> if this edge closes a wiring loop — see §6), <code>edgeIndex</code> = the replying panel's own edge for this link, <code>parentEdgeIndex</code> = echoed unchanged from the probe (v11) — together these give the controller both sides of the link for <code>DiscoveryTreeBuilder</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>TURN_ON_OFF</code></td>
+<td>C→P</td>
+<td>8 B</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>SET_COLOR</code></td>
+<td>C→P</td>
+<td>10 B</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>FETCH_STATE</code></td>
+<td>C→P</td>
+<td>7 B</td>
+<td>Meta-only request</td>
+</tr>
+<tr>
+<td>11</td>
+<td><code>PANEL_CONFIGURATION</code></td>
+<td>C→P</td>
+<td>14 B</td>
+<td>Gamma correction + color temp/correction tint (raw RGB, v9)</td>
+</tr>
+<tr>
+<td>12</td>
+<td><code>ANIMATION_PREPARE</code></td>
+<td>C→P</td>
+<td>28 B</td>
+<td>Unicast; buffers a layer (incl. <code>composeMode</code>/<code>composeOrder</code>/<code>startDelayMs</code>), arms for group start</td>
+</tr>
+<tr>
+<td>13</td>
+<td><code>ANIMATION_START</code></td>
+<td>Flood</td>
+<td>9 B</td>
+<td>Fires all panels with matching group_id. Not hop-acked (v14) — sent 3× (shared seq_id) instead, see <em>Link-ARQ</em> below</td>
+</tr>
+<tr>
+<td>14</td>
+<td><code>ANIMATION_CONTROL</code></td>
+<td>C→P</td>
+<td>9 B</td>
+<td>STOP / PAUSE / RESUME / CLEAR_QUEUE; <code>group_id</code>=0 → all slots</td>
+</tr>
+<tr>
+<td>15</td>
+<td><code>FETCH_ANIM_STATE</code></td>
+<td>C→P</td>
+<td>7 B</td>
+<td>Meta-only request</td>
+</tr>
+<tr>
+<td>16</td>
+<td><code>ANIMATION_UPDATE_PARAMS</code></td>
+<td>Flood</td>
+<td>12 B</td>
+<td>Trigger / brightness-mult / speed-scale</td>
+</tr>
+<tr>
+<td>17</td>
+<td><code>SET_PALETTE</code></td>
+<td>C→P or Flood</td>
+<td>72 B</td>
+<td>16-stop gradient; flood = all panels</td>
+</tr>
+<tr>
+<td>18</td>
+<td><code>SET_BASE_COLORS</code></td>
+<td>C→P or Flood</td>
+<td>16 B</td>
+<td>3 × RGB base colors</td>
+</tr>
+<tr>
+<td>19</td>
+<td><code>SET_GLOBAL_BRIGHTNESS</code></td>
+<td>Flood</td>
+<td>8 B</td>
+<td>0–255 multiplier</td>
+</tr>
+<tr>
+<td>20</td>
+<td><code>SET_BACKGROUND</code></td>
+<td>C→P or Flood</td>
+<td>10 B</td>
+<td>Scene compositor base colour (sent once at scene start)</td>
+</tr>
+<tr>
+<td>21</td>
+<td><code>FETCH_STATE_REPLY</code></td>
+<td>P→C</td>
+<td>13 B</td>
+<td>Panel state, in reply to <code>FETCH_STATE</code></td>
+</tr>
+<tr>
+<td>22</td>
+<td><code>FETCH_ANIM_STATE_REPLY</code></td>
+<td>P→C</td>
+<td>14 B</td>
+<td>Animation status, in reply to <code>FETCH_ANIM_STATE</code></td>
+</tr>
+<tr>
+<td>23</td>
+<td><code>DISCOVERY_ADVANCE</code></td>
+<td>C→P</td>
+<td>9 B</td>
+<td>Flooded; target now carried in <code>PacketHeader.targetPanelIndex</code> (v10) — see §6</td>
+</tr>
+<tr>
+<td>24</td>
+<td><code>DISCOVERY_DONE</code></td>
+<td>P→C</td>
+<td>9 B</td>
+<td>Routed upstream — see §6</td>
+</tr>
+<tr>
+<td>25</td>
+<td><code>LINK_ACK</code></td>
+<td>hop-local</td>
+<td>9 B</td>
+<td>Link-ARQ hop acknowledgment (v13): echoes a <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16 over the acked frame's full bytes. Never relayed, never itself acked, version-exempt — see <em>Link-ARQ</em> below</td>
+</tr>
+<tr>
+<td>200</td>
+<td><code>RESET_DEVICE</code></td>
+<td>C→P</td>
+<td>7 B</td>
+<td><abbr title="Watchdog Timer — a hardware safety timer that resets the MCU if firmware stops feeding it.">WDT</abbr> reset</td>
+</tr>
+<tr>
+<td>201</td>
+<td><code>ENTER_BOOTLOADER</code></td>
+<td>C→P</td>
+<td>8 B</td>
+<td>Token must be <code>0xB0</code></td>
+</tr>
+<tr>
+<td>202</td>
+<td><code>BOOTLOADER_PING</code></td>
+<td>C→bootloader</td>
+<td>7 B</td>
+<td>Meta-only; presence check once a panel is resident in <code>RelayBootloader.cpp</code> (v12)</td>
+</tr>
+<tr>
+<td>203</td>
+<td><code>BOOTLOADER_PONG</code></td>
+<td>bootloader→C</td>
+<td>12 B</td>
+<td>Bootloader version + flash page size + <code>BOOTLOADER_START</code></td>
+</tr>
+<tr>
+<td>204</td>
+<td><code>BOOTLOADER_WRITE_CHUNK</code></td>
+<td>C→bootloader</td>
+<td>76 B</td>
+<td>64 B of flash data + its own <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16 (<code>headerCrc</code> covers only <code>PacketHeader</code>, not payload) — two chunks per 128 B page</td>
+</tr>
+<tr>
+<td>205</td>
+<td><code>BOOTLOADER_WRITE_ACK</code></td>
+<td>bootloader→C</td>
+<td>12 B</td>
+<td>Per-chunk result: ok / bad <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> / bad address, plus a <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16 over its address+status payload (<code>headerCrc</code> covers only <code>PacketHeader</code>) so a corrupted status is retried, never misread</td>
+</tr>
+<tr>
+<td>206</td>
+<td><code>BOOTLOADER_START_APP</code></td>
+<td>C→bootloader</td>
+<td>7 B</td>
+<td>Meta-only; commits any pending page then jumps to the application</td>
+</tr>
+</tbody>
+</table>
+<p>Every packet above carries <code>PacketHeader.targetPanelIndex</code> (v10): <code>0</code> = broadcast/flood, any other
+value = one specific panel. <code>PanelRouter</code> routes an addressed downstream packet to the <strong>single
+branch</strong> containing the target: discovery assigns indices in pre-order DFS, so every subtree is a
+contiguous index range and each parent only stores each child's own index
+(<code>PanelDiscovery::childIndex()</code>, recorded from the child's <code>REGISTER_EDGE</code> reply) — the target lives
+behind the child with the largest index ≤ target. Any connected child without a recorded index
+(incomplete discovery) reverts that panel to the legacy full flood, so nothing reachable is ever cut
+off. Branch routing is what keeps a parent listening when the addressed panel replies — a parent
+mid-flood to a sibling edge is deaf (<code>EdgeUartTransport</code> masks RX + wakes per send) and would
+deterministically swallow a fast reply. The receiving panel's own dispatch still uses the target as
+a single type-independent "is this for me" gate before the type switch below.</p>
+<h3 id="broadcast-flood">Broadcast (Flood)<a class="headerlink" href="#broadcast-flood" title="Permanent link">&para;</a></h3>
+<p>Broadcast packets are delivered via <code>PanelRouter</code>'s ordinary flood rule (downstream to every
+connected edge except the one a packet arrived on). Used for:</p>
+<ul>
+<li><code>ANIMATION_START</code> — fires queued animations in lockstep</li>
+<li><code>ANIMATION_UPDATE_PARAMS</code> — reactive triggers, speed changes</li>
+<li><code>SET_PALETTE</code> / <code>SET_BASE_COLORS</code> / <code>SET_GLOBAL_BRIGHTNESS</code></li>
+</ul>
+<h3 id="link-arq-per-hop-acknowledgment-v13">Link-ARQ (per-hop acknowledgment, v13)<a class="headerlink" href="#link-arq-per-hop-acknowledgment-v13" title="Permanent link">&para;</a></h3>
+<p>Measured per-hop frame loss (per mux receive channel: X0/PORT1 ≈ 2 %, X1/PORT2 ≈ 8 %,
+X2/PORT3 ≈ 25 % at 250 k on the rev-1 panel board) compounds <strong>geometrically</strong> with tree depth —
+end-to-end retries alone can't make a 30-panel chain deliver control traffic. The link-ARQ layer
+converts that into a small per-link residual: with two hop retransmissions, an 8 %-lossy hop's
+residual is 0.05 %.</p>
+<p>Mechanics (<code>Core/Relay/LinkArq.hpp</code> for the pure pieces + rationale):</p>
+<ul>
+<li>After transmitting a frame whose type <code>Protocol::isLinkAckedType()</code> covers, the sender parks
+  its receiver on the egress edge and waits <code>LINK_ACK_TIMEOUT_MS</code> for a <code>PACKET_LINK_ACK</code> echoing
+  a <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16 over the frame's <strong>full bytes</strong>; on timeout it retransmits, up to <code>LINK_RETRANSMITS</code>
+  times, then gives up (end-to-end retries recover the residual). Panel side:
+  <code>Panel/ArqEdgeLink</code> (an <code>IEdgeLink</code> decorator between <code>PanelRouter</code> and the transport);
+  controller side: integrated into <code>ControllerRelayPacketSink</code>'s one receive loop, so a fast
+  end-to-end reply arriving before the hop ack is never lost to the ack window.</li>
+<li>A receiver completing a valid acked-type frame <strong>always acks first, then dispatches</strong> — and
+  consults a <code>LINK_DEDUP_WINDOW_MS</code> duplicate window (<code>LinkDedup</code>, keyed on the same full-frame
+  <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>): a hop retransmission whose previous ack was lost is re-acked but never re-relayed or
+  re-acted on. End-to-end retries arrive far outside the window and dispatch normally.</li>
+<li><strong>Not</strong> hop-acked: <code>SET_COLOR</code> (60 fps self-healing stream — ack turnarounds would eat the
+  trunk at depth), <code>ANIMATION_START</code> (v14 — a flood, and every relay panel forwards to all its
+  children before dispatching locally, so the ack/retransmit window compounded with both tree
+  depth and fan-out, working against every panel firing together; <code>AnimationScheduler::
+  sendGroupStart()</code> sends it 3× with a shared <code>seq_id</code> instead — the panel-side duplicate guard
+  absorbs the extra copies, and whichever copy arrives first is the one that fires it), the
+  discovery control plane (own per-hop retries), and the BL-bound bootloader types
+  (<code>PING</code>/<code>WRITE_CHUNK</code>/<code>START_APP</code> — the resident bootloader doesn't speak link-ARQ; its
+  <strong>replies</strong> <code>PONG</code>/<code>WRITE_ACK</code> <em>are</em> protected at every panel-to-panel hop, the BL simply
+  ignores the ack its own parent sends it).</li>
+</ul>
+<p>Per-panel <code>[DIAG]</code> counters (<code>lack</code>/<code>lrtx</code>/<code>lto</code>/<code>ldup</code>, see <code>LightnetPanel::flushRelayDiag</code>)
+expose the layer's live behavior for link-quality regression checks.</p>
+<hr />
+<h2 id="5-animation-framework-internals">5. Animation Framework Internals<a class="headerlink" href="#5-animation-framework-internals" title="Permanent link">&para;</a></h2>
+<h3 id="animationplayer-panel-side-layer-compositor-shared-with-mobile">AnimationPlayer (panel side) — layer compositor, shared with mobile<a class="headerlink" href="#animationplayer-panel-side-layer-compositor-shared-with-mobile" title="Permanent link">&para;</a></h3>
+<p><code>lib/Lightnet/Core/Panel/AnimationPlayer.{hpp,cpp}</code> (+ its pure deps in <code>Core/Common/</code>:
+<code>AnimationTypes</code>, <code>ColorRef</code>, <code>Palette</code>, <code>LightnetConfig</code>, <code>ProtocolTypes</code>, and
+<code>Core/Panel/ColorCompose.hpp</code>) is <strong>portable, host-compilable C++</strong> — no
+Arduino/FastLED, time passed as <code>uint16_t now</code>, output pulled via <code>currentColor()</code>/<code>takeDirty()</code>.
+It is the <strong>single implementation</strong> of panel-local animation math, compiled into:</p>
+<ul>
+<li>the <strong>Panel</strong> firmware (<code>LightnetPanel</code>),</li>
+<li>the <strong>Controller</strong>'s <code>SIM_MODE</code> virtual panels (<code>SimPanel</code>),</li>
+<li>native unit tests (<code>test/test_panel_anim</code>),</li>
+<li>and the <strong>mobile app</strong>, via <code>lib/Lightnet/Core/CApi</code> (a thin C ABI) — Android over JNI/NDK,
+  iOS over Kotlin/Native cinterop. The mobile <code>PanelAnimationPlayer</code> is a thin Kotlin wrapper that
+  feeds raw mirrored packet bytes to the native core and only owns mobile-specific clock-domain
+  translation (controller millis ↔ mobile monotonic clock). See <code>lib/Lightnet/Core/README.md</code> and
+  <code>lib/Lightnet/Core/CApi/README.md</code>.</li>
+</ul>
+<h3 id="animationplayer-panel-side-layer-compositor">AnimationPlayer (panel side) — layer compositor<a class="headerlink" href="#animationplayer-panel-side-layer-compositor" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>slots[MAX_ANIM_SLOTS]</code> (12) — each an independent layer keyed by <code>group_id</code>, with its running
+  step + a 1-deep pending step (PREPARE buffers <code>pending</code>; START activates it).</li>
+<li><code>tick()</code> gated at 16 ms (60 fps), integer math only. Each tick resolves every started slot to one
+  contribution (source colour or modifier value). <strong>Non-looping</strong> layers honour <code>startDelayMs</code>
+  (transparent before onset); <strong>looping</strong> layers (<code>FLAG_LOOP</code>) treat <code>startDelayMs</code> as an initial
+  phase offset so they start immediately and re-fire/sync seamlessly. After onset, the layer
+  composites until finish→hold (or repeats if looping), then <code>ColorCompose::foldLayers()</code> sorts by
+  <code>composeOrder</code> and folds onto the <strong>background base</strong> — one write to the LED.</li>
+<li>Source layers blend via <code>composeMode</code>; modifier layers (<code>animates != TARGET_COLOR</code>) transform
+  the accumulator (brightness = RGB multiply; saturation/hue = integer HSV). Finished non-loop
+  slots hold their last value.</li>
+<li><code>PACKET_SET_BACKGROUND</code> sets the compositor base (default black; idle panels display it).</li>
+<li>Progress interpolation: <code>progress_q8 = (elapsed * 256) / durationMs</code> (q8 fixed-point). The pure
+  compose/HSV/fold math lives in <code>Core/Panel/ColorCompose.hpp</code> (natively tested, shared with mobile
+  via <code>Core/CApi</code>).</li>
+<li><code>resolveColorRef()</code> called every tick — palette/colour changes take effect next frame with no re-prepare.</li>
+</ul>
+<h3 id="animationscheduler-controller-side">AnimationScheduler (controller side)<a class="headerlink" href="#animationscheduler-controller-side" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>playOnPanels()</code>: unicast PREPARE to each target panel, then General Call START 3× (all share
+  one seq_id, so the panel's duplicate guard absorbs the redundant copies — <code>ANIMATION_START</code> is
+  not hop-acked, see <em>Link-ARQ</em> above)</li>
+<li>Appearance broadcasts (palette, base colors, global brightness, background) and per-panel
+  CONTROL fan-out (<code>sendControlToPanels</code>) — a stateless packet-builder over <code>IPacketSink</code></li>
+</ul>
+<h3 id="controller-runners-compiled-to-per-panel-local-pulses-v6">Controller runners — compiled to per-panel local pulses (v6)<a class="headerlink" href="#controller-runners-compiled-to-per-panel-local-pulses-v6" title="Permanent link">&para;</a></h3>
+<p>As of v6, <code>ScenePlayer::fireStep</code> no longer streams a runner: it <strong>compiles</strong> the sweep into one
+local PULSE per panel via <code>Animations/RunnerCompile.hpp</code> (a closed-form inversion of the
+<code>RunnerMath</code> envelope), each with its own <code>startDelayMs</code> (onset) and pulse shape, then fires one
+general-call START. The panels then run the sweep autonomously — <strong>zero per-frame <code>SET_COLOR</code></strong> — and
+a runner composites like any other layer (default <code>max</code> blend). This removes the per-frame mirror
+traffic that previously grew with panel count.</p>
+<table>
+<thead>
+<tr>
+<th>Runner</th>
+<th>Compiled pulse</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>WAVE</code></td>
+<td>triangular PULSE, onset <code>dur·c/(maxCoord+w)</code>, window <code>dur·w/(maxCoord+w)</code></td>
+</tr>
+<tr>
+<td><code>RIPPLE</code></td>
+<td>band PULSE from the panel's <code>[near,far]</code> radial extent</td>
+</tr>
+<tr>
+<td><code>CHASE</code></td>
+<td>near-square PULSE, onset <code>dur·c/(maxCoord+1)</code>, window <code>dur/(maxCoord+1)</code></td>
+</tr>
+<tr>
+<td><code>WHEEL</code></td>
+<td>rotating-blade PULSE from the panel's geometric bearing; always <code>FLAG_LOOP</code>, <code>period = duration/lines</code></td>
+</tr>
+<tr>
+<td><code>BOUNCE</code></td>
+<td>a <code>WAVE</code> band whose <strong>peak</strong> reflects at the field edges (centre sweeps <code>[0,maxCoord]</code>); <code>reverse</code> is XOR'd with a per-layer toggle that flips on every re-fire — forward, then back, forever</td>
+</tr>
+</tbody>
+</table>
+<p><code>"repeat": true</code> plays WAVE/RIPPLE/CHASE as a continuous train instead of a single pass: the same
+<code>compile*</code> geometry feeds <code>compileRepeating()</code>, which <strong>swaps <code>colorFrom</code>/<code>colorTo</code></strong> (lit↔dark) so
+the rise→hold→fall envelope reads departing→dark-hold→approaching with <code>FLAG_LOOP</code> — true dark gaps
+using only the existing PULSE/loop mechanism. WHEEL always uses this engine (<code>compileWheel</code> via
+<code>compileRepeatingAsym</code>). <code>SCENE_SCHEMA_VERSION</code> is 8. Boot self-test and verification demos use the same compile path via
+<code>CompiledSweep</code> (list-order coordinates).</p>
+<h3 id="controller-runners-rain-sparkle-particle-spawners-v7">Controller runners — RAIN / SPARKLE particle spawners (v7)<a class="headerlink" href="#controller-runners-rain-sparkle-particle-spawners-v7" title="Permanent link">&para;</a></h3>
+<p>RAIN and SPARKLE are <strong>not</strong> compiled — they are stochastic particle spawners. The compiled-pulse
+model gives "seamless" only by <em>repeating forever</em>; a genuinely random, non-repeating effect
+requires drops that <strong>finish on their own</strong> rather than being overwritten. So <code>ScenePlayer</code> services
+these over the step window (<code>serviceSpawner()</code> in <code>tick()</code>): every <code>1000/waves</code> ms it launches one
+<strong>drop</strong> — a self-finishing one-shot PULSE — on a pooled <code>group_id</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pattern</strong></td>
+<td>SPARKLE = one random panel (instant-on + <code>width</code> fade); RAIN = a random source→leaf path (<code>spawnBuildPath</code>), head cascading via staggered <code>startDelayMs</code>, tail fading over <code>width</code> rings, <code>speed</code> = fall-time</td>
+</tr>
+<tr>
+<td><strong>Knobs</strong></td>
+<td><code>duration</code> = play <strong>window</strong> (soft — in-flight drops finish); <code>waves</code> = spawn <strong>rate</strong> (per second); <code>width</code>/<code>speed</code> per above; full <code>animates</code> set + <code>colorFrom</code>→<code>colorTo</code></td>
+</tr>
+<tr>
+<td><strong>Group pool</strong></td>
+<td>each drop takes one <code>group_id</code> (one slot per touched panel) from a per-layer pool reserved <strong>above</strong> all normal layer groups (<code>allocSpawnPools</code>); the round-robin cursor <strong>persists</strong> across the window re-fire so new drops use fresh ids while old ones drain</td>
+</tr>
+<tr>
+<td><strong>Slot reaping</strong></td>
+<td>drop pulses set <strong><code>FLAG_REAP_ON_DONE</code></strong> (a new, backward-compatible AnimationFlags bit — no protocol version bump); the panel frees the slot the instant the one-shot finishes (<code>AnimationPlayer</code>), so panels never clog and a recycled broadcast START can't re-fire a drained drop. <strong>All panels must be re-flashed</strong> with this firmware — older panels ignore the flag and would clog.</td>
+</tr>
+</tbody>
+</table>
+<p>Pure helpers (<code>Animations/RunnerSpawn.hpp</code>: PRNG, rate accumulator, pool, path, drop timing) are
+natively tested in <code>test_runner_spawn</code>; the stateful real-time behaviour is verified on sim/device
+(<code>tools/api-shell/mirror-dump.js</code>).</p>
+<h3 id="bandwidth-budget">Bandwidth budget<a class="headerlink" href="#bandwidth-budget" title="Permanent link">&para;</a></h3>
+<p>The pattern below (which scenarios cost bandwidth vs. which are free between updates) holds
+regardless of transport. These estimates are unvalidated on real hardware and should be treated as
+working estimates, not settled figures (see <a href="../hardware/#latency--topology-constraints"><code>docs/hardware.md</code></a>).</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Estimated cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>N panels, all panel-local (BREATHE etc.)</td>
+<td><strong>0 µs/frame</strong> during animation</td>
+</tr>
+<tr>
+<td>30 panels, REACTIVE, 120 BPM</td>
+<td><strong>~140 µs per beat</strong> (0 µs between beats)</td>
+</tr>
+<tr>
+<td>N panels, WAVE/RIPPLE/CHASE (compiled PULSE)</td>
+<td><strong>0 µs/frame</strong> during sweep (one PREPARE burst per pass)</td>
+</tr>
+<tr>
+<td>Setup: PREPARE × 30 panels + 3 General Calls</td>
+<td><strong>~6.2 ms</strong> one-time</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-discovery-sequence">6. Discovery Sequence<a class="headerlink" href="#6-discovery-sequence" title="Permanent link">&para;</a></h2>
+<p>Implemented by <code>Core/Relay/DiscoveryCoordinator</code> (controller) and <code>Core/Relay/PanelDiscoveryDriver</code>
+(panel) — both pure/portable and natively tested (<code>test_discovery_coordinator</code>,
+<code>test_panel_discovery_driver</code>, and <code>test_discovery_end_to_end</code>, which proves the whole protocol
+against a real multi-node fabric with a deliberate wiring loop, not just each piece in isolation).
+Runs on each controller boot before WiFi.</p>
+<p>Discovery is a <strong>controller-driven depth-first walk</strong> over the relay trunk: the controller keeps
+exactly one panel "active" at a time and steps it through its own edges one at a time, descending
+into any new child immediately (depth-first) and backtracking once a subtree is exhausted.</p>
+<h3 id="depth-first-walk">Depth-first walk<a class="headerlink" href="#depth-first-walk" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>sequenceDiagram
+  participant C as Controller
+  participant P as Parent panel
+  participant N as New panel
+
+  Note over C: DiscoveryCoordinator.begin()
+  C-&gt;&gt;P: INITIALIZATION_PULL (assign index 1, direct on trunk edge)
+  P-&gt;&gt;C: REGISTER_EDGE (panelIndex=1)
+  Note over C: push sentinel, frontier=1, nextIndex=2
+  C-&gt;&gt;P: DISCOVERY_ADVANCE (target=1, assign=2) — flooded, address-filtered
+  Note over P: tries its own next Unexplored edge
+  P-&gt;&gt;N: INITIALIZATION_PULL (assign index 2, direct, one hop)
+  N-&gt;&gt;P: REGISTER_EDGE (panelIndex=2)
+  Note over P: relayed upstream via PanelRouter's ordinary rule
+  P-&gt;&gt;C: REGISTER_EDGE (panelIndex=2)
+  Note over C: push 1, frontier=2, nextIndex=3
+  C-&gt;&gt;N: DISCOVERY_ADVANCE (target=2, assign=3)
+  Note over N: no more Unexplored edges
+  N-&gt;&gt;C: DISCOVERY_DONE (panelIndex=2) — routed upstream through P
+  Note over C: pop -&gt; frontier=1, re-advance with the same assign=3
+  Note over C: ... continues until the resume stack unwinds to the sentinel</code></pre>
+<p>Every hop except the very first <code>INITIALIZATION_PULL</code>/<code>REGISTER_EDGE</code> exchange (a direct,
+single-hop probe onto an edge that isn't in the topology yet, so no router rule could know how to
+forward it) travels through completely unmodified <code>PanelRouter</code> flood/route rules —
+<code>DISCOVERY_ADVANCE</code> floods downstream like any other packet and is address-filtered by the target's
+own index; <code>DISCOVERY_DONE</code> and an accepted <code>REGISTER_EDGE</code> reply route upstream to the parent like
+any other reply.</p>
+<h3 id="loop-rejection">Loop rejection<a class="headerlink" href="#loop-rejection" title="Permanent link">&para;</a></h3>
+<p>A panel that already has a parent + index refuses a second one: if <code>INITIALIZATION_PULL</code> arrives on
+any edge other than its established parent edge (<code>Core/Relay/PanelDiscovery::onParentOffer()</code>), it
+replies with <code>panelIndex=0</code> (never a real assignment — indices start at 1) instead of accepting. The
+prober marks that edge <code>NotConnected</code> and moves on to its next edge, no controller round-trip needed.
+Since packets carry no hop-count/TTL/visited list, this discovery-time rejection is the <strong>only</strong>
+thing that guarantees the discovered topology is a genuine, cycle-free spanning tree — which is in
+turn what guarantees an ordinary flood (<code>ANIMATION_START</code> etc.) terminates instead of circulating
+forever through a physically-wired loop.</p>
+<h3 id="full-discovery-flow">Full discovery flow<a class="headerlink" href="#full-discovery-flow" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Controller: <code>DiscoveryCoordinator::begin()</code> sends <code>INITIALIZATION_PULL{panelIndex=1}</code> directly on
+   its single trunk edge.</li>
+<li>The directly-wired panel accepts, becomes panel 1, replies <code>REGISTER_EDGE</code>. The controller pushes
+   the sentinel frontier (<code>0</code>) onto its resume stack, sets frontier <code>= 1</code>, and sends
+   <code>DISCOVERY_ADVANCE{target=1, assign=2}</code>.</li>
+<li>Whichever panel matches <code>target</code> (found via the ordinary flood — every panel relays it regardless
+   of the target field; only the addressed one acts) tries its next <code>Unexplored</code> edge, skipping its
+   own parent edge: probes it directly, and either gets an accept (marks the edge <code>Connected</code>, then
+   <strong>stops</strong> — no further edge is tried until the controller comes back), a reject/timeout (marks
+   <code>NotConnected</code>, immediately tries the next edge, no controller round-trip), or runs out of edges
+   (sends <code>DISCOVERY_DONE</code> upstream).</li>
+<li>On an accepted registration, the controller pushes the current frontier, descends into the new
+   panel, and repeats step 3 — this is what makes the walk depth-first rather than breadth-first.</li>
+<li>On <code>DISCOVERY_DONE</code>, the controller pops its resume stack and re-<code>ADVANCE</code>s the popped panel with
+   the same pending index (it was never consumed) so it tries its own remaining edges. Popping back
+   to the sentinel means the whole tree is resolved.</li>
+</ol>
+<h4 id="worked-example-two-panels-in-series">Worked example: two panels in series<a class="headerlink" href="#worked-example-two-panels-in-series" title="Permanent link">&para;</a></h4>
+<p>Chain: controller trunk → P1 edge 0; P1 edge 2 → P2 edge 2; every other edge unwired.</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant C as Controller&lt;br/&gt;(DiscoveryCoordinator)
+    participant P1 as Panel 1&lt;br/&gt;(driver + router)
+    participant P2 as Panel 2&lt;br/&gt;(driver + router)
+
+    Note over C: begin(): frontier=0, nextIdx=1
+    C-&gt;&gt;P1: PULL{assignIdx=1, parentEdge=trunk} (direct on trunk)
+    Note right of C: the trunk is a single shared wire, so the&lt;br/&gt;controller reads back an echo of every tx —&lt;br/&gt;parsed as an ordinary frame and ignored
+    Note over P1: onParentOffer(edge 0) → accept&lt;br/&gt;parent=0, myIdx=1
+    P1--&gt;&gt;C: REGISTER{panelIdx=1, edge=0, parentEdge=0} (direct, edge 0)
+    Note over C: addRoot(1), push(0), frontier=1, nextIdx=2
+
+    C-&gt;&gt;P1: ADVANCE{target=1, assign=2}
+    Note over P1: addressed to me → tryNextEdge&lt;br/&gt;(router flood: no connected children yet)
+    P1--xP1: probe edge 1: PULL{assignIdx=2, parentEdge=1}
+    Note over P1: edge 1 empty → PROBE_ATTEMPTS × PROBE_TIMEOUT (3 × 20 ms)&lt;br/&gt;→ NotConnected, next edge immediately
+    P1-&gt;&gt;P2: probe edge 2: PULL{assignIdx=2, parentEdge=2}
+    Note over P2: onParentOffer(edge 2) → accept&lt;br/&gt;parent=2, myIdx=2
+    P2--&gt;&gt;P1: REGISTER{panelIdx=2, edge=2, parentEdge=2} (direct, edge 2)
+    Note over P1: driver: edge 2 → Connected, stop&lt;br/&gt;router: non-parent arrival → relay to parent
+    P1--&gt;&gt;C: REGISTER{panelIdx=2, ...} (relayed)
+    Note over C: addLink(1↔2), push(1), frontier=2, nextIdx=3
+
+    C-&gt;&gt;P1: ADVANCE{target=2, assign=3}
+    Note over P1: not addressed → router floods to connected edge 2
+    P1-&gt;&gt;P2: ADVANCE{target=2, assign=3} (relayed)
+    P2--xP2: probe edge 0: PULL{assignIdx=3} → 3 × 20 ms timeout
+    P2--xP2: probe edge 1: PULL{assignIdx=3} → 3 × 20 ms timeout
+    Note over P2: no Unexplored edges left
+    P2--&gt;&gt;P1: DONE{panelIdx=2} (on parent edge 2)
+    P1--&gt;&gt;C: DONE{panelIdx=2} (relayed upstream)
+    Note over C: pop() → resume frontier=1
+
+    C-&gt;&gt;P1: ADVANCE{target=1, assign=3}
+    Note over P1: addressed: edges = parent / NotConnected / Connected&lt;br/&gt;→ nothing left to probe → DONE first, then the&lt;br/&gt;router relays the ADVANCE on to edge 2
+    P1--&gt;&gt;C: DONE{panelIdx=1}
+    P1-&gt;&gt;P2: ADVANCE{target=1} (relayed flood, P2 ignores — not addressed)
+    Note over C: pop() → sentinel 0 → complete, panels found 2</code></pre>
+<p>Reading notes:</p>
+<ul>
+<li>Every arrow is one <code>sendOnEdge()</code> burst: 2×<code>0xFF</code> preamble + frame, the sender blocking until
+  the last byte has shifted out. On the panel side each inbound frame needs wake → claim → mux
+  switch (<code>EdgeFrameReceiver</code>) before its first real byte.</li>
+<li>Every leg is retried: the root <code>PULL</code> every <code>ROOT_RETRY_INTERVAL_MS</code> (empty-tree give-up at
+  <code>ROOT_TIMEOUT_MS</code>), each probe <code>PULL</code> up to <code>PROBE_ATTEMPTS</code> times, and the frontier's <code>ADVANCE</code>
+  every <code>ADVANCE_RETRY_INTERVAL_MS</code> until a <code>REGISTER_EDGE</code>/<code>DONE</code> moves the walk. The duplicate
+  upstream frames retries can produce are filtered by the coordinator (a <code>REGISTER_EDGE</code> must
+  carry the newest assigned index, a <code>DONE</code> must name the current frontier). Only exhausting all
+  retries prunes a subtree (<code>NotConnected</code>) or ends the walk partially via
+  <code>WALK_STALL_TIMEOUT_MS</code>.</li>
+<li>The <code>assign</code> index in <code>ADVANCE</code>/<code>PULL</code> is the coordinator's global counter, incremented only on
+  an accepted registration — which is why P2's probes of its empty edges still carry <code>assignIdx=3</code>.</li>
+<li>On a resume-<code>ADVANCE</code> the dispatcher runs the driver before the router, so the addressed panel
+  transmits its own reply (here P1's <code>DONE</code>) before re-flooding the <code>ADVANCE</code> downstream — two
+  back-to-back tx bursts on different edges.</li>
+</ul>
+<h3 id="topology-capture-discoverytreebuilder">Topology capture — <code>DiscoveryTreeBuilder</code><a class="headerlink" href="#topology-capture-discoverytreebuilder" title="Permanent link">&para;</a></h3>
+<p><code>DiscoveryCoordinator</code> itself only tracks DFS <em>sequencing</em> (the frontier + resume stack) — it has no
+notion of the discovered tree's shape. <code>Core/Relay/DiscoveryTreeBuilder</code> (pure, natively tested) is
+fed one <code>(parentIndex, parentEdge, childIndex, childEdge)</code> tuple per accepted registration (the
+parent index comes from the coordinator's own frontier; both edge indices come from the <code>v11</code>
+<code>parentEdgeIndex</code>/<code>edgeIndex</code> fields on the <code>REGISTER_EDGE</code> reply) and accumulates the same
+<code>indices[]</code>/<code>edgeCounts[]</code>/<code>TopoLink[]</code> shape <code>PanelGraph::build()</code> consumes. <code>PanelsInitializer</code>
+(the real, non-<code>SIM_MODE</code> device glue) drives <code>ControllerDiscoveryService</code> — which owns both the
+coordinator and the tree builder — and, once discovery completes, converts the accumulated links
+into the <code>Panel</code>/<code>Edge</code> list <code>getPanels()</code> returns, the same conversion <code>Sim/PanelsInitializerSim.cpp</code>
+already does directly (fabricating a random tree with no wire protocol at all) — so every consumer
+of <code>getPanels()</code> (<code>PanelsTopologyProvider</code>, <code>PanelFlasher</code>, demos, <code>MqttService</code>) is unaffected by
+which side actually built the tree.</p>
+<hr />
+<h2 id="7-controller-boot-startup">7. Controller Boot &amp; Startup<a class="headerlink" href="#7-controller-boot-startup" title="Permanent link">&para;</a></h2>
+<p>Sequence after <code>LNPanelsInitializer.isFinished() == true</code>:</p>
+<pre class="mermaid"><code>flowchart TD
+  A[Mount LittleFS] --&gt; B[sendConfiguration — gamma/color temp to all panels]
+  B --&gt; C[selfTest — fade-in/out on every panel]
+  C --&gt; D[PaletteRepository::ensureSeeded]
+  D --&gt; E[AppearanceStore::loadAndApply\nbrightness + colors + palette broadcast]
+  E --&gt; F[AnimationScheduler init]
+  F --&gt; G[setupWiFi — AsyncWiFiManager\nauto-connect or open captive portal]
+  G --&gt; H[AsyncWebServer start port 80\nWebSocket + HTTP API + LittleFS]
+  H --&gt; I[ArduinoOTA.begin]
+  I --&gt; J[mDNS: lightnet-chipid.local\n_lightnet._tcp]
+  J --&gt; K[Main loop]</code></pre>
+<div class="admonition info">
+<p class="admonition-title"><abbr title="Little Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">LittleFS</abbr> mounted before WiFi</p>
+<p><code>Fs::begin()</code> is hoisted before WiFi so <code>PaletteRepository</code> and <code>AppearanceStore</code> can read <code>/data/palettes.db</code> and <code>/config/</code> before the captive-portal blocks (which can take up to 120 s on first boot).</p>
+</div>
+<p>Main loop (<code>case 1</code>), when no panel flash is in progress:
+<div class="language-cpp highlight"><span class="filename">C++</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">ArduinoOTA</span><span class="p">.</span><span class="n">handle</span><span class="p">();</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">serialFwReceiver</span><span class="o">-&gt;</span><span class="n">run</span><span class="p">();</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">panelFlasher</span><span class="o">-&gt;</span><span class="n">run</span><span class="p">();</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">websocketHandler</span><span class="o">-&gt;</span><span class="n">handleIncommingMessages</span><span class="p">();</span><span class="w">        </span><span class="c1">// drain WS commands   → main loop</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">mainLoopQueue</span><span class="o">-&gt;</span><span class="n">drain</span><span class="p">();</span><span class="w">                              </span><span class="c1">// drain HTTP-deferred work → main loop (§8)</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">appStateStore</span><span class="o">-&gt;</span><span class="n">isOn</span><span class="p">())</span><span class="w"> </span><span class="n">scenePlayer</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span><span class="w">    </span><span class="c1">// multi-layer scene playback</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">appearance</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span><span class="w"> </span><span class="n">configStore</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span><span class="w"> </span><span class="n">appStateStore</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="n">serviceMirror</span><span class="p">();</span><span class="w">                                    </span><span class="c1">// ≤30 fps flush of the mirror ring</span>
+</span></code></pre></div></p>
+<p>The ordering matters — see <a href="#main-loop-service-order">§8 Main-loop service order</a>.</p>
+<hr />
+<h2 id="8-concurrency-task-model-deferred-execution">8. Concurrency: Task Model &amp; Deferred Execution<a class="headerlink" href="#8-concurrency-task-model-deferred-execution" title="Permanent link">&para;</a></h2>
+<h3 id="81-two-execution-contexts">8.1 Two execution contexts<a class="headerlink" href="#81-two-execution-contexts" title="Permanent link">&para;</a></h3>
+<p>The controller firmware runs on <strong>two concurrent tasks</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>What runs on it</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Main loop</strong> (Arduino <code>loop()</code>)</td>
+<td>The <code>case 1</code> body: scene/animation ticks, mirror flush, queue draining</td>
+<td><code>scenePlayer-&gt;tick()</code>, <code>serviceMirror()</code></td>
+</tr>
+<tr>
+<td><strong>AsyncTCP task</strong></td>
+<td>All <code>AsyncWebServer</code> / <code>AsyncWebSocket</code> callbacks — HTTP route handlers and WS event/message callbacks</td>
+<td><code>SceneServer::handlePostPlayScene()</code>, <code>WebsocketServer::onMessage()</code></td>
+</tr>
+</tbody>
+</table>
+<p>These are separate FreeRTOS tasks, usually on different cores, preemptively scheduled — the two
+tasks run concurrently and share no implicit synchronization.</p>
+<h3 id="82-the-hazard-outbound-packets-must-be-single-task">8.2 The hazard: outbound packets must be single-task<a class="headerlink" href="#82-the-hazard-outbound-packets-must-be-single-task" title="Permanent link">&para;</a></h3>
+<p>Every outbound packet is captured by <code>PacketMirror::capture()</code> (registered on whichever sink is
+active — <code>activeSink.setOnPacketSent()</code> on real hardware, <code>LNBus.setOnPacketSent()</code> under
+<code>SIM_MODE</code>). <code>capture()</code> appends to a single shared ring buffer <strong>with no locks</strong> — it is written
+assuming exactly one caller. But packet emission is reached from <strong>both</strong> tasks:</p>
+<ul>
+<li><strong>Main loop</strong> — <code>scenePlayer-&gt;tick()</code> emits step PREPARE/START packets and services spawners;
+  step PREPARE/START packets.</li>
+<li><strong>AsyncTCP</strong> — a synchronous HTTP handler such as <code>/api/scenes/play/one-shot</code> calls <code>loadAndPlay()</code>, which
+  emits a burst of ~300 PREPARE/START packets <strong>inline on the AsyncTCP task</strong>.</li>
+</ul>
+<p>Left uncoordinated, <code>capture()</code> on the AsyncTCP task races <code>PacketMirror::flushTo()</code> on the main loop
+over the same buffer — a data race. The same AsyncTCP handlers also mutate <code>ScenePlayer</code> state that
+the main loop ticks. The invariant that removes the whole class of hazard:</p>
+<blockquote>
+<p><strong>All packet emission — and the <code>ScenePlayer</code> state it touches — happens on the main-loop task.</strong></p>
+</blockquote>
+<p>WebSocket commands already obeyed this (see <a href="#86-ws-command-queue-sibling-mechanism">§8.6</a>). HTTP
+handlers did not; <code>MainLoopQueue</code> brings them in line.</p>
+<h3 id="83-mainloopqueue-generic-deferred-execution">8.3 MainLoopQueue — generic deferred execution<a class="headerlink" href="#83-mainloopqueue-generic-deferred-execution" title="Permanent link">&para;</a></h3>
+<p><code>lib/Lightnet/Utils/MainLoopQueue.hpp</code> is a generic <em>"run this on the main loop"</em> queue. Any task
+<code>post()</code>s a unit of work; the main loop <code>drain()</code>s and runs it.</p>
+<div class="language-text highlight"><span class="filename">Text Only</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a> AsyncTCP task                         main-loop task
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a> ─────────────                         ──────────────
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a> post(fn, args, len)                   drain():
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>   under lock:                           loop:
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>     ring.push([fn][args]) ──▶ SpscByteQueue ──▶ under lock: ring.pop(blob)
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>                                                  fn(blob+ , len)   ◀── runs OUTSIDE the lock
+</span></code></pre></div>
+<ul>
+<li><strong>Record format</strong> — a function pointer (<code>TaskFn = void(*)(const uint8_t*, uint16_t)</code>) followed by
+  a small POD argument blob (≤ <code>MAX_ARGS</code> = 64 B). Each endpoint supplies a <strong>captureless lambda</strong>
+  (which decays to a <code>TaskFn</code>) plus a POD args struct, so there is <strong>no central dispatch switch</strong> —
+  work stays defined at the call site and each server owns its own execute function.</li>
+<li><strong>Storage</strong> is a <code>SpscByteQueue</code> (the codebase's lock-free byte-record ring). Both <code>push</code> and <code>pop</code>
+  are wrapped in the <strong>same critical section</strong> <code>WebsocketServer</code> uses (<code>portENTER_CRITICAL</code>). That
+  supplies the memory barrier a multi-core <abbr title="Wi-Fi + BLE microcontroller — the supported controller MCU.">ESP32</abbr> needs — <code>SpscByteQueue</code> alone is only
+  lock-free-safe on a single in-order core — and serializes producer vs consumer, so it is robust
+  even if work is posted from the main loop itself.</li>
+<li><strong>The task <code>fn()</code> runs outside the lock</strong> — its record is copied out of the ring under the lock
+  first — so a slow or packet-emitting task never blocks the producer.</li>
+<li><strong>Args are copied by value</strong> into the ring, so they must be self-contained POD with no pointers
+  into request-scoped memory. To defer something large (e.g. a ~2.5 KB parsed scene), the handler
+  heap-allocates it and passes only the pointer in the args; the task frees it.</li>
+<li><strong>Overflow is honest</strong> — a full queue makes <code>post()</code> return <code>false</code>, and the HTTP handler surfaces
+  that as <code>503 busy</code> rather than dropping the request silently.</li>
+</ul>
+<p>Covered by the native suite <code>test/test_main_loop_queue</code>.</p>
+<h3 id="84-http-handler-pattern-validate-sync-execute-deferred">8.4 HTTP handler pattern: validate sync, execute deferred<a class="headerlink" href="#84-http-handler-pattern-validate-sync-execute-deferred" title="Permanent link">&para;</a></h3>
+<p>Every mutating endpoint that emits packets follows one shape:</p>
+<div class="language-cpp highlight"><span class="filename">C++</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Server::handleX</span><span class="p">(</span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="n">body</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="c1">// 1. Validate synchronously (pure — no packets): parse, ranges, names, appState.isOn().</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="c1">//    Failures return immediately (4xx).</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="c1">// 2. Capture validated inputs into a POD args struct (or heap-own a large payload).</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">Args</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Server</span><span class="o">*</span><span class="w"> </span><span class="n">self</span><span class="p">;</span><span class="w"> </span><span class="cm">/* small scalars or a heap pointer */</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="n">args</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="c1">// 3. Queue the packet-emitting work; report the outcome.</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queue</span><span class="p">.</span><span class="k">post</span><span class="p">(</span><span class="o">+</span><span class="p">[](</span><span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">        </span><span class="n">Args</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="n">memcpy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">        </span><span class="n">x</span><span class="p">.</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">service</span><span class="p">.</span><span class="n">doIt</span><span class="p">(...);</span><span class="w">          </span><span class="c1">// runs on the main loop; frees any heap payload</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="p">},</span><span class="w"> </span><span class="o">&amp;</span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">args</span><span class="p">);</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">ok</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Http</span><span class="o">::</span><span class="n">sendError</span><span class="p">(</span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="mi">503</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;busy&quot;</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">    </span><span class="n">Http</span><span class="o">::</span><span class="n">sendAccepted</span><span class="p">(</span><span class="n">req</span><span class="p">);</span><span class="w">                </span><span class="c1">// 202</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>The HTTP success code therefore changes meaning: <strong><code>202 Accepted</code> = "validated and queued"</strong>; the
+effect lands on the next main-loop tick (sub-millisecond later). Validation failures stay synchronous
+(<code>4xx</code>); a full queue is <code>503</code>. Read-only endpoints and pure filesystem/config mutations stay fully
+synchronous and return <code>200</code>.</p>
+<pre class="mermaid"><code>sequenceDiagram
+  participant Cl as Client
+  participant TCP as AsyncTCP task
+  participant Q as MainLoopQueue
+  participant Loop as Main loop
+  participant Sink as activeSink → PacketMirror
+
+  Cl-&gt;&gt;TCP: POST /api/scenes/play/one-shot
+  TCP-&gt;&gt;TCP: parse + validate (pure, no packets)
+  TCP-&gt;&gt;Q: post(playParsed, parsed*)
+  TCP--&gt;&gt;Cl: 202 Accepted
+  Note over Loop: next tick
+  Loop-&gt;&gt;Q: drain()
+  Q-&gt;&gt;Loop: playParsed(parsed*) (frees parsed*)
+  Loop-&gt;&gt;Sink: PREPARE × N + START — capture() on main loop
+  Loop-&gt;&gt;Loop: serviceMirror() → flush ring to WS clients</code></pre>
+<p><code>ScenesService</code> is split to support this: <code>prepareInline()</code> / <code>prepareByName()</code> /
+<code>prepareOneShot()</code> parse + persist (pure, safe on AsyncTCP, return a heap-ownable result), while
+<code>playParsed()</code> / <code>playParsedOneShot()</code> emit packets and are called from the queued task on the main
+loop. The legacy <code>playScene*</code> / <code>playOneShot</code> methods remain for callers that already run on the main
+loop (the demos).</p>
+<p><strong>What defers vs what stays synchronous</strong> — the boundary is exactly "does this handler reach
+<code>capture()</code> or mutate <code>ScenePlayer</code>?":</p>
+<table>
+<thead>
+<tr>
+<th>Deferred → <code>202</code></th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST /api/scenes/play</code>, <code>…/play/one-shot</code>, <code>…/:name/play</code>, <code>…/stop</code>, <code>…/speed</code></td>
+<td>PREPARE/START packets, <code>ScenePlayer</code> state</td>
+</tr>
+<tr>
+<td><code>POST /api/animations/play</code>, <code>…/trigger</code></td>
+<td>PREPARE/START, reactive-trigger packets</td>
+</tr>
+<tr>
+<td><code>PATCH /api/appearance</code></td>
+<td>brightness / base-colors / palette broadcasts</td>
+</tr>
+<tr>
+<td><code>POST /api/state/power</code></td>
+<td>per-panel on/off, scene stop/resume</td>
+</tr>
+<tr>
+<td><code>PUT /api/panels/:addr/on</code>, <code>…/color</code></td>
+<td>per-panel packets</td>
+</tr>
+<tr>
+<td><code>PATCH /api/configuration</code> (<code>logicalRoot</code>)</td>
+<td><code>ScenePlayer::setLogicalRoot</code> re-aims a playing scene</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Synchronous → <code>200</code></th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>All other <code>GET</code>s</td>
+<td>read-only</td>
+</tr>
+<tr>
+<td><code>POST /api/scenes</code>, <code>PATCH /api/scenes/:id</code>, <code>DELETE /api/scenes/:id</code></td>
+<td>database only</td>
+</tr>
+<tr>
+<td><code>POST /api/palettes</code>, <code>PUT /api/palettes/:name</code>, <code>DELETE /api/palettes/:name</code></td>
+<td>filesystem only</td>
+</tr>
+<tr>
+<td><code>PATCH /api/configuration</code> (without <code>logicalRoot</code>)</td>
+<td>config store only — no packets, no <code>ScenePlayer</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>GET /api/panels</code> is the one <code>GET</code> that isn't synchronous — see §8.7.</p>
+<h3 id="85-packetmirror-flush-on-overflow">8.5 PacketMirror flush-on-overflow<a class="headerlink" href="#85-packetmirror-flush-on-overflow" title="Permanent link">&para;</a></h3>
+<p>With <code>capture()</code> now guaranteed single-task, the mirror's live ring no longer has to hold an entire
+scene-start burst. When an append would overflow, <code>capture()</code> <strong>flushes inline</strong> (<code>flushTo()</code>) and
+then appends, so <strong>no PREPARE/START packet is ever dropped</strong>, and the ring can stay small (6 KB on
+<abbr title="Wi-Fi + BLE microcontroller — the supported controller MCU.">ESP32</abbr>, freeing scarce DRAM). This inline flush is safe <strong>only because the [§8.2 invariant]
+(#82-the-hazard-outbound-packets-must-be-single-task) holds</strong>: <code>flushTo()</code> touches the WS client list
+and calls <code>socket-&gt;binary()</code>, which must not race the periodic <code>serviceMirror()</code> flush — and now
+cannot, since both run on the main loop. A <code>WebsocketServer*</code> is wired into <code>PacketMirror</code> via
+<code>setServer()</code> at boot to enable the self-flush; before it is set, <code>capture()</code> falls back to dropping.</p>
+<h3 id="86-ws-command-queue-sibling-mechanism">8.6 WS command queue (sibling mechanism)<a class="headerlink" href="#86-ws-command-queue-sibling-mechanism" title="Permanent link">&para;</a></h3>
+<p><code>WebsocketServer</code> has carried the same idea for <strong>inbound WebSocket commands</strong> since before
+<code>MainLoopQueue</code>: a double-buffered <code>CircularQueue</code> pair (<code>cmdQueue</code> / <code>executionQueue</code>). <code>onMessage()</code>
+(AsyncTCP) enqueues under the critical section; <code>WebsocketHandler::handleIncommingMessages()</code>
+(main loop) swaps the two buffers under the lock and drains, so the command handlers (<code>cmdSetColor</code>,
+<code>cmdAnimationTrigger</code>, …) execute on the main loop. <code>MainLoopQueue</code> generalizes the same
+producer/consumer discipline to arbitrary function-pointer work for the HTTP layer.</p>
+<h3 id="main-loop-service-order">Main-loop service order<a class="headerlink" href="#main-loop-service-order" title="Permanent link">&para;</a></h3>
+<div class="language-cpp highlight"><span class="filename">C++</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1">// case 1, when no panel flash is in progress:</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">websocketHandler</span><span class="o">-&gt;</span><span class="n">handleIncommingMessages</span><span class="p">();</span><span class="w">        </span><span class="c1">// 1. drain WS commands      → main loop</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">mainLoopQueue</span><span class="o">-&gt;</span><span class="n">drain</span><span class="p">();</span><span class="w">                              </span><span class="c1">// 2. drain HTTP-deferred work → main loop</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">appStateStore</span><span class="o">-&gt;</span><span class="n">isOn</span><span class="p">())</span><span class="w"> </span><span class="n">scenePlayer</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">appearance</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span><span class="w"> </span><span class="n">configStore</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span><span class="w"> </span><span class="n">appStateStore</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">serviceMirror</span><span class="p">();</span><span class="w">                                    </span><span class="c1">// 3. ≤30 fps flush of the mirror ring</span>
+</span></code></pre></div>
+<p>Draining HTTP work <strong>before</strong> the ticks means a scene queued this iteration is played and then ticked
+in the same pass. <code>serviceMirror()</code> runs <strong>last</strong> so any packets emitted by the drained work (or by an
+inline overflow flush during it) reach mirroring clients in the same iteration.</p>
+<h3 id="87-requestreply-over-the-relay-trunk-controllerrelaypacketsink">8.7 Request/reply over the relay trunk (<code>ControllerRelayPacketSink</code>)<a class="headerlink" href="#87-requestreply-over-the-relay-trunk-controllerrelaypacketsink" title="Permanent link">&para;</a></h3>
+<p>Real (non-SIM) hardware has no I²C wire to any panel — <code>fetchState()</code> and <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> go over the relay
+trunk, and both need a genuine request/reply round trip that plain <code>IPacketSink::send()</code> doesn't
+offer (fire-and-forget only). Turn-on/off and panel configuration are fire-and-forget: per-hop
+delivery is the link-ARQ layer's job (§4), and panels send no end-to-end <code>PACKET_ACK</code> for them —
+an unsolicited ACK would only reach a controller that is no longer listening for it and be
+hop-retransmitted by the adjacent panel into nothing.
+<code>ControllerRelayPacketSink</code> (already the <code>IPacketSink</code> implementation, already holding the trunk
+transport) grows two extra, non-virtual capabilities for this rather than a separate class:</p>
+<ul>
+<li><strong><code>send(wantAck=true)</code></strong> blocks (bounded by <code>ACK_TIMEOUT_MS</code>) for a <code>PACKET_ACK</code> reply after
+  sending. No current caller requests it (and no panel handler emits <code>PACKET_ACK</code>), but the
+  capability stays on the sink for operations that need a bare delivery confirmation.</li>
+<li><strong><code>requestReply(targetPanelIndex, request, expectedReplyType, replyBuffer, timeoutMs)</code></strong> is the
+  same machinery exposed for callers that need the reply's <em>payload</em>, not just a bare ack —
+  <code>PanelsController::fetchState()</code> (<code>PACKET_FETCH_STATE_REPLY</code>) and <code>RelayBootloaderClient</code>
+  (<code>PACKET_BOOTLOADER_PONG</code>/<code>WRITE_ACK</code>) both use it directly.</li>
+</ul>
+<p>Both flush any stray buffered bytes immediately before sending, then poll the trunk transport
+(with <code>yield()</code> each iteration, so blocking doesn't starve WiFi/TCP or trip the task watchdog)
+through a private <code>PacketFramer</code>, matching on the frame's type. There is no correlation id on any
+reply (<code>PACKET_ACK</code> is meta-only), so this relies on the relay's own single-active-flow invariant
+(§4) — the controller only ever waits for one reply at a time by construction — with
+flush-before-send as the guard against a stale, already-timed-out reply confusing the next call.
+<code>requestReply()</code>'s own send deliberately does not go through the <code>onPacketSentCallback</code> mirror
+hook — queries and <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> control traffic aren't scene state changes, so there's nothing to preview.</p>
+<p>The panel side answers with the ordinary upstream routing rule (§6) —
+<code>LightnetPanel::handleFetchState()</code> calls <code>sendOnEdge(discovery.parentEdge(), ...)</code> directly, one hop, and every
+ancestor's unmodified <code>PanelRouter</code> carries the reply the rest of the way, exactly like
+<code>PACKET_DISCOVERY_DONE</code>. No <code>PanelRouter</code>/<code>PanelFrameDispatcher</code> changes were needed.</p>
+<p><strong><code>GET /api/panels</code> is deferred, not synchronous</strong> (§8.4's table): <code>fetchState()</code> costs a real
+relay round trip per panel, so <code>PanelServer::
+handleGetPanels()</code> posts the whole per-panel loop (build the response, then <code>Http::sendOkStream()</code>)
+to <code>MainLoopQueue</code> instead of running it on the AsyncTCP task — the same deferral mechanism §8.3
+describes, just used to defer a <em>read</em> that still returns its real payload once computed, rather
+than to acknowledge a write immediately and let it land later. Worst case (every panel
+unreachable) still blocks the main loop for <code>panelCount × ACK_TIMEOUT_MS</code> — the relay's
+single-active-flow design means no two fetches can ever be in flight at once, so this can't be
+parallelized away; an accepted, flagged cost of the transport, not an implementation shortcut.</p>
+<p>Also unaffected by this: <code>Protocol::isVersionExemptType()</code> (checked inside <code>validatePacket()</code>
+itself) lets a version-mismatched panel still be reset, told to enter its bootloader, or
+discovered over the relay — <code>PACKET_RESET_DEVICE</code>/<code>PACKET_ENTER_BOOTLOADER</code> and the discovery
+control plane (<code>PACKET_INITIALIZATION_PULL</code>/<code>PACKET_REGISTER_EDGE</code>/<code>PACKET_DISCOVERY_ADVANCE</code>/
+<code>PACKET_DISCOVERY_DONE</code>) are the only types that complete despite <code>header.protocolVersion</code> not
+matching this build's <code>Protocol::VERSION</code>, without weakening that check for any other packet
+type. See <a href="../ota/#flashing-order-and-reboot-safety"><abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> — Flashing order and reboot safety</a> for
+why discovery specifically needs this: without it, a controller reboot that re-runs discovery at
+a newer version than a not-yet-flashed panel is still running would never find that panel at all.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+  <footer class="md-footer">
+    <div class="md-footer__inner md-grid">
+      <div class="md-footer-custom">
+        
+        <div class="md-footer-social">
+          
+          <a href="https://github.com/przemczan/lightnet" title="Documentation hub" class="md-footer-social__link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+            <span class="md-footer-social__name">Documentation hub</span>
+          </a>
+          
+          <a href="https://github.com/przemczan/lightnet-firmware" title="Firmware" class="md-footer-social__link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+            <span class="md-footer-social__name">Firmware</span>
+          </a>
+          
+          <a href="https://github.com/przemczan/lightnet-mobile" title="Mobile App" class="md-footer-social__link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+            <span class="md-footer-social__name">Mobile App</span>
+          </a>
+          
+        </div>
+        
+      </div>
+    </div>
+  </footer>
+  <div class="donate-widget">
+    <a class="donate-btn" id="donateCopy"
+       href="ethereum:0x6eb7Ac0FBc7bD95595Eb221681CC2Ba7aeDfd54D"
+       aria-label="Support Lightnet via ETH">
+      <span class="donate-icon">⟠</span>
+      <span class="donate-label">Donate</span>
+      <span class="donate-address">0x6eb7Ac0FBc7bD95595Eb221681CC2Ba7aeDfd54D</span>
+      <span class="donate-copied" id="donateCopied">Copied!</span>
+    </a>
+  </div>
+  <script>
+    (function () {
+      var btn = document.getElementById('donateCopy');
+      var copied = document.getElementById('donateCopied');
+      var addr = '0x6eb7Ac0FBc7bD95595Eb221681CC2Ba7aeDfd54D';
+      btn.addEventListener('click', function () {
+        navigator.clipboard.writeText(addr).then(function () {
+          copied.classList.add('donate-copied--visible');
+          setTimeout(function () { copied.classList.remove('donate-copied--visible'); }, 1800);
+        });
+      });
+    })();
+  </script>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.path", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tooltips", "navigation.instant.preview"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
