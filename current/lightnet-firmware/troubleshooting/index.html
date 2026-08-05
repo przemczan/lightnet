@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -558,6 +558,8 @@
       
         
       
+        
+      
     
     
     
@@ -706,6 +708,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../hardware/panel-relay-signal-path/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Panel Relay Signal Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../architecture/" class="md-nav__link">
         
   
@@ -788,7 +818,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_8" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -812,14 +842,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3_8" id="__nav_3_8_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1087,6 +1117,34 @@
     <span class="md-ellipsis">
       
         Inspecting panel state from a client
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#panel-isp-programming-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Panel ISP programming issues
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Panel ISP programming issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#target-doesnt-answer-avrdude" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "Target doesn't answer" (avrdude)
       
     </span>
   </a>
@@ -1619,6 +1677,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#panel-isp-programming-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Panel ISP programming issues
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Panel ISP programming issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#target-doesnt-answer-avrdude" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "Target doesn't answer" (avrdude)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#common-user-facing-issues" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1754,6 +1840,38 @@
 </span></code></pre></div>
 <p>The matching HTTP endpoint is <code>GET /api/panels</code>.</p>
 <hr />
+<h2 id="panel-isp-programming-issues">Panel ISP programming issues<a class="headerlink" href="#panel-isp-programming-issues" title="Permanent link">&para;</a></h2>
+<h3 id="target-doesnt-answer-avrdude">"Target doesn't answer" (avrdude)<a class="headerlink" href="#target-doesnt-answer-avrdude" title="Permanent link">&para;</a></h3>
+<p><code>avrdude</code> reports something like <code>Target doesn't answer. 1</code> (or <code>initialization failed</code>) when
+flashing a panel over <abbr title="A cheap USB AVR programmer used to flash the bootloader and fuses onto a panel ATmega.">USBasp</abbr> (<code>pio run -e panel_atmega328p -t upload</code> /
+<code>panel_atmega328pb</code>). This might mean the target AVR's core clock isn't running at all, so it can never
+service the ISP (SPI) handshake — ISP inherently needs the target's own clock to respond, unlike a
+bootloader-based <abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> upload.</p>
+<p>The near-universal cause on these boards is a fuse/crystal mismatch: <code>panel_fuses_328</code> in
+<code>platformio.ini</code> sets the low fuse to select an external crystal oscillator (<code>0xF7</code> for the 328P's
+Full Swing Crystal Oscillator, <code>0xFF</code>/Low Power Crystal for the 328PB variant — see that section's
+own comment). If <code>X2</code> (the 16MHz crystal) isn't actually oscillating — missing, dead, a cold
+solder joint, or wrong load caps — the chip is fused to wait on a clock source that never arrives,
+and it's effectively bricked from ISP's point of view even though the silicon itself is fine.</p>
+<p><strong>Fix — inject an external clock</strong>: a second, known-good AVR can generate a clock signal for the
+bricked target to run on, just long enough to rewrite its fuses back to something that works.</p>
+<ol>
+<li>Flash <code>tools/recovery/ckout_divider.cpp</code> (via <code>pio run -e donor_ckout_slowclock -t upload</code>) onto
+   a spare ATmega328P. It divides the donor's own 16MHz system clock by 16 (<code>CLKPR</code>) before it
+   reaches the <code>CKOUT</code>/PB0 pin — a clean ~1MHz square wave is easier to couple in and less likely
+   to fight the bricked panel's own dead oscillator amplifier bias than the raw 16MHz would be.</li>
+<li>Enable the donor's own <code>CKOUT</code> fuse so PB0 actually outputs the system clock — it's low-fuse bit
+   6 (active-low), so cleared relative to <code>panel_fuses_328</code>'s normal <code>0xF7</code>: write lfuse <code>0xB7</code> on
+   the donor specifically (<code>avrdude ... -U lfuse:w:0xB7:m</code>), not on the bricked target.</li>
+<li>Feed the donor's <code>CKOUT</code>/PB0 output into the bricked target's <code>XTAL1</code> pin through a coupling
+   capacitor (a small ceramic, a few nF–10s of nF works well) — this is <code>X2</code>'s pin 1/PB6 on
+   <code>Panel.png</code>.</li>
+<li>With the injected clock running, <code>avrdude</code> should be able to talk to the target again. Rewrite
+   its fuses back to the correct crystal-based values (<code>panel_fuses_328</code>, or the matching 328PB
+   override) and reflash normally, then remove the donor clock and confirm the panel boots on its
+   own crystal.</li>
+</ol>
+<hr />
 <h2 id="common-user-facing-issues">Common user-facing issues<a class="headerlink" href="#common-user-facing-issues" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -1785,7 +1903,7 @@
 </tr>
 <tr>
 <td>Animations look glitchy with many panels</td>
-<td><abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> bus quality — shorten cable runs or reduce panel count</td>
+<td>Relay edge quality — check inter-panel cable connections, especially on deep branches</td>
 </tr>
 <tr>
 <td>Panel stuck in bootloop after <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr></td>
@@ -1893,7 +2011,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.path", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tooltips", "navigation.instant.preview"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

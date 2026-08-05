@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -558,6 +558,8 @@
       
         
       
+        
+      
     
     
     
@@ -706,6 +708,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../hardware/panel-relay-signal-path/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Panel Relay Signal Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../architecture/" class="md-nav__link">
         
   
@@ -790,7 +820,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_8" checked>
         
           
           <div class="md-nav__link md-nav__container">
@@ -814,14 +844,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3_8" id="__nav_3_8_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2340,7 +2370,7 @@
 
 
 <h1 id="concepts">Concepts<a class="headerlink" href="#concepts" title="Permanent link">&para;</a></h1>
-<p>The Lightnet animation system lets you define multi-layer, palette-driven light shows in <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> and send them to panels over HTTP. Panel-local animations run entirely on the <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr> after a single setup packet — zero per-frame <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> traffic. Most controller runners compile to per-panel local pulses at step start; RAIN, SPARKLE, and MATRIX spawn stochastic drops over the step window.</p>
+<p>The Lightnet animation system lets you define multi-layer, palette-driven light shows in <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> and send them to panels over HTTP. Panel-local animations run entirely on the <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr> after a single setup packet — zero per-frame relay traffic. Most controller runners compile to per-panel local pulses at step start; RAIN, SPARKLE, and MATRIX spawn stochastic drops over the step window.</p>
 <p>The palette and scene model draws inspiration from the <a href="https://github.com/Aircoookie/WLED">WLED</a> project.</p>
 <p>Core building blocks of the Lightnet animation system — scenes, layers, steps, groups, palettes, color references, and how steps advance over time.</p>
 <hr />
@@ -2394,7 +2424,7 @@ step (the named step, or the sequence's last step if none is named) is infinite
 <h2 id="step">Step<a class="headerlink" href="#step" title="Permanent link">&para;</a></h2>
 <p>A <strong>step</strong> is a single animation segment within a layer's sequence. Steps are executed in order, advancing automatically when <code>durationMs</code> elapses. A step can be:</p>
 <ul>
-<li>A <strong>panel-local animation</strong> (<code>"type": "BREATHE"</code>, etc.) — runs entirely on the <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr> with zero per-frame <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> traffic</li>
+<li>A <strong>panel-local animation</strong> (<code>"type": "BREATHE"</code>, etc.) — runs entirely on the <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr> with zero per-frame relay traffic</li>
 <li>A <strong>controller runner</strong> (<code>"runner": "WAVE"</code>, etc.) — compiled to per-panel local pulses (WAVE/RIPPLE/CHASE/WHEEL/BOUNCE) or driven as a particle spawner over the step window (RAIN/SPARKLE/MATRIX)</li>
 <li>A <strong>gap</strong> (no <code>type</code> and no <code>runner</code>, only <code>duration</code>) — a timed no-op used to offset a layer's start or pause between animations</li>
 </ul>
@@ -2412,7 +2442,7 @@ animation or to insert a pause:</p>
 <p>To force an explicit black instead of holding, use <code>{"type":"SOLID","color":"#000000","duration":N}</code>.</p>
 <hr />
 <h2 id="group">Group<a class="headerlink" href="#group" title="Permanent link">&para;</a></h2>
-<p>Groups are the synchronisation unit. When the controller fires a <code>GENERAL CALL START</code> on a group, every panel that has an animation queued for that group starts simultaneously (±2.5 µs jitter).</p>
+<p>Groups are the synchronisation unit. When the controller fires a <code>GENERAL CALL START</code> on a group, every panel that has an animation queued for that group starts as soon as the flood reaches it. <code>ANIMATION_START</code> is not per-hop acknowledged (see <a href="../../architecture/#link-arq-per-hop-acknowledgment-v13">Architecture §4, <em>Link-ARQ</em></a>) — the controller sends it redundantly instead — so propagation is dominated by wire transit time (roughly hop-count × the per-hop <abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> transit time) rather than by acknowledgment/retry turnarounds. Actual cross-panel skew scales with tree depth and fan-out and is unvalidated on real hardware (see <a href="../../hardware/#latency--topology-constraints">Hardware, <em>Latency &amp; Topology Constraints</em></a>).</p>
 <p>A <code>group</code> may be written as a <strong>name</strong> (<code>"group": "intro"</code>) or a <strong>number</strong> (<code>"group": 3</code>). Names are the preferred, readable form; the controller maps each distinct name to an auto-assigned numeric ID (1, 2, 3…) in order of first appearance at parse time, so the on-the-wire protocol is unchanged. Numbers (1–254) still work for back-compat; 0 is reserved.</p>
 <p><code>startAfter</code> references a layer by its group <strong>name</strong>, optionally followed by
 <code>:stepId</code> to target one of that layer's steps (see <a href="#layer-ordering-startafter">Layer ordering</a>).</p>
@@ -2798,7 +2828,7 @@ displays it. This is the clean way to put a static ambient colour under animated
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">]</span><span class="w">          </span><span class="c1">// specific panel addresses (numbered from 1)</span>
 </span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nt">&quot;panels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;exclude&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">]}</span><span class="w">   </span><span class="c1">// all panels except listed addresses</span>
 </span></code></pre></div>
-<p>Panel addresses are assigned during discovery in tree-traversal order, starting at <strong>1</strong> (address 0 is the <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> general-call broadcast and is rejected). Up to 32 panels per explicit targeting list.</p>
+<p>Panel addresses are assigned during discovery in tree-traversal order, starting at <strong>1</strong> (address 0 is the relay's general-call/broadcast target and is rejected). Up to 32 panels per explicit targeting list.</p>
 <p>Beyond these explicit forms, <code>panels</code> also accepts <strong>graph selectors</strong> (<code>"root"</code>, <code>"leaves"</code>,
 <code>"depth:1-2"</code>, <code>"subtree:N"</code>, <code>"fraction:0-0.5"</code>, …) and <strong>composition</strong> (<code>{"any":[…]}</code> /
 <code>{"all":[…]}</code> / <code>{"not":…}</code>) — these resolve against the panel tree so a scene adapts to
@@ -3007,7 +3037,7 @@ the barrier) with a to-scale timeline is in
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.path", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tooltips", "navigation.instant.preview"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

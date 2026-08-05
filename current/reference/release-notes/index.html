@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -29,7 +29,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -554,6 +554,8 @@
       
         
       
+        
+      
     
     
     
@@ -702,6 +704,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../lightnet-firmware/hardware/panel-relay-signal-path/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Panel Relay Signal Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../lightnet-firmware/architecture/" class="md-nav__link">
         
   
@@ -784,7 +814,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_8" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -808,14 +838,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3_8" id="__nav_3_8_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1486,6 +1516,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#v100-2026-08-05" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v1.0.0 — 2026-08-05
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#versioning" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1559,6 +1600,17 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#v100-2026-08-05" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v1.0.0 — 2026-08-05
+      
+    </span>
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#versioning" class="md-nav__link">
@@ -1662,23 +1714,27 @@
 
 
 <h1 id="release-notes">Release notes<a class="headerlink" href="#release-notes" title="Permanent link">&para;</a></h1>
-<div class="admonition info">
-<p class="admonition-title">Placeholder</p>
-<p>Versioned releases haven't started yet. This page reflects the current state of the codebase. When tagged releases ship, per-repo changelogs will live here (likely pulled in via <code>!include</code> from the firmware and mobile repos).</p>
-</div>
+<p>Dated entries below track major/minor releases across the three Lightnet repos. Splitting into per-repo changelogs (pulled in via <code>!include</code>) remains a future consideration if this page grows unwieldy.</p>
+<h2 id="v100-2026-08-05">v1.0.0 — 2026-08-05<a class="headerlink" href="#v100-2026-08-05" title="Permanent link">&para;</a></h2>
+<p>First major release.</p>
+<ul>
+<li><strong>Firmware</strong> — replaced the controller↔panel I²C bus with a new <abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> relay transport: multi-hop discovery, per-hop link-ARQ acknowledgments, and a relay <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> bootloader for flashing panels over the relay chain (panel flasher tooling reworked to match). Internal wire protocol (<code>Protocol::VERSION</code>) bumped <strong>v6 → v14</strong>.</li>
+<li><strong>Breaking</strong>: this is a protocol-incompatible change — flash the controller and <strong>every</strong> panel in the same session (see the warning below).</li>
+<li><strong>Mobile app</strong> — synced the app's I²C/binary packet protocol handling (packet builder, packet types, scene editor round-trip) to match the firmware's new transport.</li>
+</ul>
 <h2 id="versioning">Versioning<a class="headerlink" href="#versioning" title="Permanent link">&para;</a></h2>
 <p>Lightnet will follow <a href="https://semver.org/">Semantic Versioning</a>:</p>
 <ul>
-<li><strong>Major</strong> — breaking changes (e.g. <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> protocol bump, <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> schema bump)</li>
+<li><strong>Major</strong> — breaking changes (e.g. wire protocol bump, <abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> schema bump)</li>
 <li><strong>Minor</strong> — additive features, backwards-compatible</li>
 <li><strong>Patch</strong> — bug fixes only</li>
 </ul>
 <h2 id="firmware-protocol-versions">Firmware protocol versions<a class="headerlink" href="#firmware-protocol-versions" title="Permanent link">&para;</a></h2>
-<p>The internal <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> protocol between controller and panels is versioned independently of the firmware version itself. The current version is <strong>v6</strong> (<code>Core/Common/ProtocolMeta.hpp</code> → <code>Protocol::VERSION</code>).</p>
+<p>The internal wire protocol carried over the <abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> relay trunk between controller and panels is versioned independently of the firmware version itself. The current version is <strong>v14</strong> (<code>Core/Common/ProtocolMeta.hpp</code> → <code>Protocol::VERSION</code>).</p>
 <div class="admonition warning">
 <p class="admonition-title">Flash controller and panels together</p>
-<p>The controller and every panel must agree on the <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> protocol version. When you cross a protocol bump (e.g. v5 → v6), flash the controller and <strong>all</strong> panels in the same session. Mismatched versions cause unpredictable behaviour after discovery completes.</p>
-<p>The full protocol-version table lives in <a href="../../lightnet-firmware/architecture/#4-i2c-protocol-internal">Firmware → Architecture</a>.</p>
+<p>The controller and every panel must agree on the wire protocol version. When you cross a protocol bump, flash the controller and <strong>all</strong> panels in the same session. Mismatched versions cause unpredictable behaviour after discovery completes — with the exception of a small set of version-exempt packet types (reset, enter-bootloader, discovery) that let a mismatched panel still be discovered, reset, and reflashed over the relay.</p>
+<p>The full protocol-version table lives in <a href="../../lightnet-firmware/architecture/#4-wire-protocol-internal">Firmware → Architecture</a>.</p>
 </div>
 <h2 id="mobile-app-protocol">Mobile app protocol<a class="headerlink" href="#mobile-app-protocol" title="Permanent link">&para;</a></h2>
 <p>The mobile app's WebSocket binary protocol is at <code>protocolVersion = 0x0001</code>. Bumps here will be called out in this file when they happen.</p>
@@ -1775,7 +1831,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.path", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tooltips", "navigation.instant.preview"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

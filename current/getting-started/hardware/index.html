@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -423,10 +423,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#controller-pick-one" class="md-nav__link">
+  <a href="#controller" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Controller — pick one
+        Controller
       
     </span>
   </a>
@@ -668,6 +668,8 @@
       
         
       
+        
+      
     
     
     
@@ -816,6 +818,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../lightnet-firmware/hardware/panel-relay-signal-path/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Panel Relay Signal Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../lightnet-firmware/architecture/" class="md-nav__link">
         
   
@@ -898,7 +928,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_8" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -922,14 +952,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3_8" id="__nav_3_8_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1603,10 +1633,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#controller-pick-one" class="md-nav__link">
+  <a href="#controller" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Controller — pick one
+        Controller
       
     </span>
   </a>
@@ -1722,24 +1752,23 @@
 <h1 id="1-build-the-hardware">1. Build the hardware<a class="headerlink" href="#1-build-the-hardware" title="Permanent link">&para;</a></h1>
 <p>A Lightnet installation has two kinds of boards: <strong>one controller</strong> and <strong>one or more panels</strong>. They are designed and flashed independently, then connected with a small cable that carries power and a single discovery wire.</p>
 <pre class="mermaid"><code>graph LR
-  C["🎛️ Controller&lt;br/&gt;ESP8266 / ESP32"] --&gt;|edge cable| P1["💡 Panel&lt;br/&gt;ATmega328P/PB"]
+  C["🎛️ Controller&lt;br/&gt;ESP32"] --&gt;|edge cable| P1["💡 Panel&lt;br/&gt;ATmega328P/PB"]
   P1 --&gt;|edge cable| P2["💡 Panel"]
   P1 --&gt;|edge cable| P3["💡 Panel"]
   P3 --&gt;|edge cable| P4["💡 Panel"]</code></pre>
 <p>Each edge cable carries:</p>
 <ul>
 <li><strong>Power</strong> (V+ / GND) to the next panel</li>
-<li><strong><abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr></strong> (SDA / SCL) — the shared bus used for all commands after discovery</li>
-<li><strong>A single-wire ping line</strong> — used once at boot so the controller can map the topology</li>
+<li><strong><abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr></strong> (TX / RX) — a point-to-point serial link to that one neighbour, used for both discovery and all runtime traffic. There's no shared bus and no separate ping/handshake phase: every panel is a store-and-forward repeater that only ever talks to its own physical neighbours.</li>
 </ul>
-<p>Panels expose <strong>up to 5 edges</strong> (configurable via <code>NUMBER_OF_EDGES</code> in <code>panel.config.hpp</code>). One edge is the "parent" connection (back toward the controller); the others fan out to children. Topology is a tree — no cycles.</p>
+<p>Panels expose <strong>up to 5 edges</strong> (configurable via <code>NUMBER_OF_EDGES</code> in <code>panel.config.hpp</code>; current hardware wires 3). One edge is the "parent" connection (back toward the controller); the others fan out to children. Topology is a tree — no cycles.</p>
 <hr />
 <h2 id="what-you-need">What you need<a class="headerlink" href="#what-you-need" title="Permanent link">&para;</a></h2>
-<div class="admonition warning">
+<div class="admonition info">
 <p class="admonition-title">DIY status</p>
-<p>Schematics, <abbr title="Printed Circuit Board — the physical board you solder components onto.">PCB</abbr> layouts, and a full bill of materials are not yet published. This section will fill in once boards are released. For now, <a href="https://github.com/przemczan/lightnet-firmware">the firmware repository</a> is the authoritative reference for pin assignments and target MCUs.</p>
+<p>Example schematics and <abbr title="Printed Circuit Board — the physical board you solder components onto.">PCB</abbr> layouts are published on EasyEDA: <a href="https://oshwlab.com/przemczan/project_loftjneo">Controller</a> and <a href="https://oshwlab.com/przemczan/project_dqjlfkzg">Panel</a>. <a href="https://github.com/przemczan/lightnet-firmware">The firmware repository</a> remains the authoritative reference for pin assignments and target MCUs.</p>
 </div>
-<h3 id="controller-pick-one">Controller — pick one<a class="headerlink" href="#controller-pick-one" title="Permanent link">&para;</a></h3>
+<h3 id="controller">Controller<a class="headerlink" href="#controller" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -1750,19 +1779,14 @@
 </thead>
 <tbody>
 <tr>
-<td><strong><abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr></strong> (e.g. ESP-12E)</td>
-<td><code>controller_esp8266</code></td>
-<td>Lowest cost; single-core; works for typical installs</td>
-</tr>
-<tr>
-<td><strong><abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr></strong> (Wemos D1 Mini Pro)</td>
-<td><code>controller_wemos</code></td>
-<td>Same chip, larger antenna option</td>
-</tr>
-<tr>
-<td><strong><abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr> DevKit</strong></td>
+<td><strong><abbr title="Wi-Fi + BLE microcontroller — the supported controller MCU.">ESP32</abbr> DevKit</strong></td>
 <td><code>controller_esp32</code></td>
-<td>More headroom for large installs; preferred if you can pick</td>
+<td>Standard controller board</td>
+</tr>
+<tr>
+<td><strong><abbr title="Wi-Fi + BLE microcontroller — the supported controller MCU.">ESP32</abbr>-S2</strong> (Lolin S2 Mini)</td>
+<td><code>controller_s2_mini</code></td>
+<td>Smaller footprint alternative</td>
 </tr>
 </tbody>
 </table>
@@ -1807,9 +1831,9 @@
 <li>Panels form a <strong>tree</strong> rooted at the controller — no rings or cross-links</li>
 <li>A panel always has exactly <strong>one parent edge</strong>; the remaining 0–4 edges can fan out</li>
 <li>Panels are identified by an index assigned during discovery (tree-traversal order)</li>
-<li>The firmware caps panel count at <strong>32 on <abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr></strong> and <strong>100 on <abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr></strong> (<code>LIGHTNET_MAX_PANELS</code> in <code>Core/Common/LightnetConfig.hpp</code>)</li>
+<li>The firmware caps panel count at <strong>100</strong> (<code>LIGHTNET_MAX_PANELS</code> in <code>Core/Common/LightnetConfig.hpp</code>)</li>
 </ul>
-<p>Keep cable runs short enough that the <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> bus stays clean — long runs and high panel counts will eventually start dropping frames. The architecture details in <a href="../../lightnet-firmware/architecture/">Firmware → Architecture</a> cover the bus characteristics.</p>
+<p>Every inter-panel link is a point-to-point <abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> hop, so what scales with tree size is <strong>hop count (depth)</strong>, not bus contention — each hop's transit time accumulates across the depth. The architecture details in <a href="../../lightnet-firmware/architecture/">Firmware → Architecture</a> cover the relay protocol.</p>
 <hr />
 <p><a class="md-button md-button--primary" href="../toolchain/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg></span> Next: Prepare your tools</a></p>
 
@@ -1905,7 +1929,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.path", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tooltips", "navigation.instant.preview"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

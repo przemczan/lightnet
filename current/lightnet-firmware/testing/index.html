@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -558,6 +558,8 @@
       
         
       
+        
+      
     
     
     
@@ -706,6 +708,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../hardware/panel-relay-signal-path/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Panel Relay Signal Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../architecture/" class="md-nav__link">
         
   
@@ -788,7 +818,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_8" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -812,14 +842,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3_8" id="__nav_3_8_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1710,7 +1740,7 @@
 <h1 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h1>
 <p>How the firmware is tested, what runs where, and how to add new coverage.</p>
 <p>Today the only automated layer is <strong>native host-side unit tests</strong> — pure C++ logic compiled and run on your PC. Fast (under 2 s), no device, no flashing. This is what <code>pio test -e native</code> runs.</p>
-<p>There is no in-device Unity runner today; hardware-only code paths (filesystem I/O, <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr>, animation timing) are exercised by running the firmware on a real board and observing serial / WebSocket output.</p>
+<p>There is no in-device Unity runner today; hardware-only code paths (filesystem I/O, the relay transport, animation timing) are exercised by running the firmware on a real board and observing serial / WebSocket output.</p>
 <hr />
 <h2 id="running-native-tests">Running native tests<a class="headerlink" href="#running-native-tests" title="Permanent link">&para;</a></h2>
 <div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pio<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-e<span class="w"> </span>native<span class="w">                       </span><span class="c1"># all suites</span>
@@ -1867,9 +1897,69 @@
 <td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_scene_capi/test_main.cpp"><code>test/test_scene_capi/test_main.cpp</code></a></td>
 <td>Scene C ABI (<code>Core/CApi/controller_core_c.h</code>) — load+play emits packets, bad-<abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> rejection, stop emits control, mirror-batch drain</td>
 </tr>
+<tr>
+<td><code>test_panel_discovery</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_panel_discovery/test_main.cpp"><code>test/test_panel_discovery/test_main.cpp</code></a></td>
+<td><code>Core/Relay/PanelDiscovery</code> — parent-offer acceptance, idempotent re-offer, loop rejection on a second edge, child-probe accept/fail</td>
+</tr>
+<tr>
+<td><code>test_panel_router</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_panel_router/test_main.cpp"><code>test/test_panel_router/test_main.cpp</code></a></td>
+<td><code>Core/Relay/PanelRouter</code> — flood-from-parent / route-to-parent decision table, plus a 3-node in-memory fabric with a deliberate wiring loop proving discovery rejects it and a flood terminates rather than circulating</td>
+</tr>
+<tr>
+<td><code>test_packet_framer</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_packet_framer/test_main.cpp"><code>test/test_packet_framer/test_main.cpp</code></a></td>
+<td><code>Protocol::packetSizeForType</code> + <code>Core/Relay/PacketFramer</code> — recovering packet boundaries from a raw byte stream (no out-of-band length like I2C provided): byte-at-a-time and bulk feeds, corrupted-header-<abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> resync, unrecognized-type-byte skipping, back-to-back frames with no explicit reset, sizing the relay <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> bootloader control plane, and the <code>validateProtocolVersion</code> bypass that plane depends on (rejected by default, accepted when constructed for the bootloader)</td>
+</tr>
+<tr>
+<td><code>test_link_arq</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_link_arq/test_main.cpp"><code>test/test_link_arq/test_main.cpp</code></a></td>
+<td>Link-ARQ pure pieces (<code>Core/Relay/LinkArq.hpp</code>) — the <code>PACKET_LINK_ACK</code> wire entry, the <code>Protocol::isLinkAckedType()</code> policy table, the <code>LinkAckMatcher</code> micro-framer a sender's ack window drains bytes through, and the <code>LinkDedup</code> duplicate window a receiver consults before dispatching</td>
+</tr>
+<tr>
+<td><code>test_discovery_coordinator</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_discovery_coordinator/test_main.cpp"><code>test/test_discovery_coordinator/test_main.cpp</code></a></td>
+<td><code>Core/Relay/DiscoveryCoordinator</code> — the controller's depth-first resume-stack sequencing against a mock <code>IEdgeLink</code>: push/advance on a new registration, pop/backtrack on <code>DISCOVERY_DONE</code>, completion only once the stack unwinds to the controller sentinel, rejected replies and unrelated packet types ignored, and (when an optional <code>DiscoveryTreeBuilder</code> is supplied) that accepted registrations feed it a root/link while rejections never do</td>
+</tr>
+<tr>
+<td><code>test_discovery_tree_builder</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_discovery_tree_builder/test_main.cpp"><code>test/test_discovery_tree_builder/test_main.cpp</code></a></td>
+<td><code>Core/Relay/DiscoveryTreeBuilder</code> — accumulates <code>(parent, parentEdge, child, childEdge)</code> tuples into the <code>indices[]</code>/<code>edgeCounts[]</code>/<code>TopoLink[]</code> shape <code>PanelGraph::build()</code> consumes: a root alone has no links, both edge indices are recorded per link, chained/branching trees build links in order, <code>reset()</code> clears accumulated state</td>
+</tr>
+<tr>
+<td><code>test_panel_discovery_driver</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_panel_discovery_driver/test_main.cpp"><code>test/test_panel_discovery_driver/test_main.cpp</code></a></td>
+<td><code>Core/Relay/PanelDiscoveryDriver</code> — the panel's local probe/offer/reject/timeout sequence against a real <code>PanelDiscovery</code> + mock <code>IEdgeLink</code>: fresh acceptance, idempotent re-offer, loop rejection, <code>DISCOVERY_ADVANCE</code> address filtering, the full probe→accept→advance→reject→done sequence, and probe-timeout expiry via <code>tick()</code></td>
+</tr>
+<tr>
+<td><code>test_discovery_end_to_end</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_discovery_end_to_end/test_main.cpp"><code>test/test_discovery_end_to_end/test_main.cpp</code></a></td>
+<td>The whole relay discovery protocol (<code>DiscoveryCoordinator</code> + <code>PanelDiscoveryDriver</code> + unmodified <code>PanelRouter</code>) over real exchanged packets on a 3-node fabric with a deliberate wiring loop and two genuinely empty ports — proves correct index assignment, tree connectivity, loop rejection on both sides, probe-timeout handling, and (via a <code>DiscoveryTreeBuilder</code> wired into the coordinator) that the accumulated <code>indices[]</code>/<code>TopoLink[]</code> matches the real spanning tree with the loop-closing edge never recorded — not just the decision table in isolation</td>
+</tr>
+<tr>
+<td><code>test_byte_ring</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_byte_ring/test_main.cpp"><code>test/test_byte_ring/test_main.cpp</code></a></td>
+<td><code>Core/Common/ByteRing</code> — lock-free single-producer/single-consumer byte ring for a <abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> RX path (one push/pop per byte, unlike <code>SpscByteQueue</code>'s length-prefixed records): FIFO order, full/empty edges, wrap-boundary integrity, reset</td>
+</tr>
+<tr>
+<td><code>test_edge_frame_receiver</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_edge_frame_receiver/test_main.cpp"><code>test/test_edge_frame_receiver/test_main.cpp</code></a></td>
+<td><code>Core/Relay/EdgeFrameReceiver</code> — tags a completed frame with the edge it arrived on given one shared USART + mux: wake claims/ignores an edge, bytes dropped without a claim, a full frame tagged with the claiming edge, claim released on completion, a corrupted header <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> does not release the claim (still the same in-flight transmission), stalled-claim recovery via <code>tick()</code>, byte activity resetting the timeout clock</td>
+</tr>
+<tr>
+<td><code>test_panel_frame_dispatcher</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_panel_frame_dispatcher/test_main.cpp"><code>test/test_panel_frame_dispatcher/test_main.cpp</code></a></td>
+<td><code>Core/Relay/PanelFrameDispatcher</code> — the one decision the panel's dispatch loop needs per arrived frame, against a real <code>PanelDiscovery</code>/<code>PanelDiscoveryDriver</code>/<code>PanelRouter</code> behind a mock <code>IEdgeLink</code>: no local dispatch before this panel is assigned an index, <code>PACKET_INITIALIZATION_PULL</code> never reaching <code>PanelRouter</code> (asserted via a detectable extra send if it did), broadcast/own-index targets dispatched locally once assigned, another panel's unicast still relayed but not dispatched locally</td>
+</tr>
+<tr>
+<td><code>test_trunk_frame_receiver</code></td>
+<td><a href="https://github.com/przemczan/lightnet-firmware/blob/master/test/test_trunk_frame_receiver/test_main.cpp"><code>test/test_trunk_frame_receiver/test_main.cpp</code></a></td>
+<td><code>Core/Relay/TrunkFrameReceiver</code> — <code>PacketFramer</code> plus an inter-byte idle-gap reset for the controller's un-muxed trunk RX paths: a stray leading byte (e.g. panel power-up line noise) must not make the framer latch onto a phony type/size and swallow the real frames that follow</td>
+</tr>
 </tbody>
 </table>
-<p>287 tests total, ~41 s wall time.</p>
+<p>424 tests total.</p>
 <hr />
 <h2 id="what-is-testable-natively-what-isnt">What is testable natively, what isn't<a class="headerlink" href="#what-is-testable-natively-what-isnt" title="Permanent link">&para;</a></h2>
 <table>
@@ -2061,7 +2151,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.path", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tooltips", "navigation.instant.preview"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

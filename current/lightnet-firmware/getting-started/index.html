@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -558,6 +558,8 @@
       
         
       
+        
+      
     
     
     
@@ -810,6 +812,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../hardware/panel-relay-signal-path/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Panel Relay Signal Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../architecture/" class="md-nav__link">
         
   
@@ -892,7 +922,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_8" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -916,14 +946,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3_8" id="__nav_3_8_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1708,12 +1738,11 @@
 
 
 <h1 id="build-flash-reference">Build &amp; Flash Reference<a class="headerlink" href="#build-flash-reference" title="Permanent link">&para;</a></h1>
-<p>This page is the PlatformIO reference: every environment, the fuses, and the day-to-day commands. For a guided first-time walkthrough, see the hub's <strong><a href="../../getting-started/">Get Started</a></strong> instead.</p>
+<p>This page is the PlatformIO reference: every environment, the fuses, and the day-to-day commands. For a guided first-time walkthrough, see the hub's <strong><a href="../../getting-started/">Get Started</a></strong> instead. For schematics and <abbr title="Printed Circuit Board — the physical board you solder components onto.">PCB</abbr> layouts, see <a href="../hardware/#schematics-pcb">Hardware → Schematics &amp; <abbr title="Printed Circuit Board — the physical board you solder components onto.">PCB</abbr></a>.</p>
 <h2 id="repository">Repository<a class="headerlink" href="#repository" title="Permanent link">&para;</a></h2>
-<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>--recurse-submodules<span class="w"> </span>https://github.com/przemczan/lightnet-firmware.git
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/przemczan/lightnet-firmware.git
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>lightnet-firmware
 </span></code></pre></div>
-<p>The twiboot bootloader lives in a submodule. If you already cloned without <code>--recurse-submodules</code>, run <code>git submodule update --init --recursive</code>.</p>
 <p>The same source tree builds both controller and panel binaries — the active PlatformIO environment selects which one.</p>
 <hr />
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
@@ -1740,6 +1769,11 @@
 <td><code>DEMO_MODE</code></td>
 <td><code>0</code></td>
 <td>Set to <code>1</code> to run the built-in light demo on startup</td>
+</tr>
+<tr>
+<td><code>LIGHTNET_TRUNK_BAUD</code></td>
+<td><code>250000UL</code></td>
+<td>Relay trunk <abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> baud — must match the panels' setting; flash both sides together after changing. 250k is the fastest rate bench-validated clean end to end; 500k shows framing/overrun faults on the panel-to-panel hop</td>
 </tr>
 <tr>
 <td><code>CONFIG_PORTAL_TIMEOUT</code></td>
@@ -1772,7 +1806,7 @@
 </tr>
 <tr>
 <td><code>DEBUG_LIGHTNET_BUS</code></td>
-<td><abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> bus logs</td>
+<td>Bus packet logs — one line per packet sent/received (type + panel index, valid/invalid); also gates the sim panel dispatch logs (<code>LightnetBus</code>, <code>SIM_MODE</code>)</td>
 </tr>
 <tr>
 <td><code>DEBUG_FLASHER</code></td>
@@ -1780,7 +1814,7 @@
 </tr>
 <tr>
 <td><code>DEBUG_DISCOVERY</code></td>
-<td>Panel discovery / ping logs</td>
+<td>Panel discovery logs</td>
 </tr>
 <tr>
 <td><code>DEBUG_INIT</code></td>
@@ -1792,10 +1826,17 @@
 </tr>
 </tbody>
 </table>
-<p>Pin assignments (<code>INITIALIZER_EDGE_PIN_NO</code>, <code>IIC_SDA_PIN</code>, etc.) have platform-specific defaults in <code>src/controller/config.hpp</code> and only need overriding for custom hardware.</p>
+<p><code>DEBUG_LIGHTNET_BUS_PACKET_CONTENT</code> additionally dumps every packet's raw bytes. It is the one sub-switch that defaults to <code>0</code> — set it to <code>1</code> explicitly when you need packet content.</p>
+<p>Pin assignments (<code>CONTROLLER_TRUNK_RX_PIN</code>/<code>CONTROLLER_TRUNK_TX_PIN</code> for the relay trunk's <code>Serial1</code>, etc.) have platform-specific defaults in <code>src/controller/config.hpp</code> and only need overriding for custom hardware.</p>
 </div>
 <div class="tabbed-block">
-<p>Located at <code>src/panel.config.hpp</code>, included by <code>src/panel/config.hpp</code>.</p>
+<p>Located at <code>src/panel.config.hpp</code>, included by <code>src/panel/config.hpp</code>. The panel build is
+bare-metal (no <code>framework = arduino</code> — see <a href="../architecture/">Architecture</a>); with <code>DEBUG=1</code>
+its debug output goes out a bit-banged, TX-only <abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> on PD7 (<code>Panel/DebugSerial.hpp</code>,
+57600 8N1, overridable via <code>DEBUG_SERIAL_BAUD</code>), since USART0 is owned by the relay trunk.
+Edge pins/count are fixed by
+<code>Panel/EdgeUartTransport.hpp</code> (3 edges, matching the schematic's mux/USART wiring), not
+configurable per-build the way the old <abbr title="General-Purpose Input/Output — a pin on the microcontroller that can be driven high or low or read as a signal.">GPIO</abbr> ping-pulse edges were.</p>
 <table>
 <thead>
 <tr>
@@ -1806,22 +1847,17 @@
 </thead>
 <tbody>
 <tr>
-<td><code>NUMBER_OF_EDGES</code></td>
-<td><code>3</code></td>
-<td>Physical edges on the panel (3–5)</td>
+<td><code>LIGHTNET_TRUNK_BAUD</code></td>
+<td><code>250000UL</code></td>
+<td>Edge-link <abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> baud — must match the controller's setting and the relay bootloader (re-burn the bootloader after changing); use exact 16 MHz UBRR divisors (2000000, 1000000, 500000, 250000, …) for 0% baud error. 250k is the fastest rate bench-validated clean end to end</td>
 </tr>
 <tr>
-<td><code>EDGE_1_PIN</code> … <code>EDGE_5_PIN</code></td>
-<td>9–13</td>
-<td>Arduino pin for each edge output</td>
+<td><code>DEBUG_SERIAL_BAUD</code></td>
+<td><code>57600UL</code></td>
+<td>Baud of the bit-banged debug <abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> on PD7 — match your monitor's baud if overridden</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition note">
-<p class="admonition-title">6-edge panels</p>
-<p>Six edges require a separate pin-change <abbr title="Interrupt Service Routine — a small function the CPU jumps into when a hardware event fires.">ISR</abbr> — not yet supported.</p>
-</div>
-<p>Panel builds have <code>DEBUG=0</code> by default. To enable, set <code>DEBUG=1</code> for your panel environment in <code>platformio.ini</code>, then uncomment <code>DEBUG_RGB_CTRL</code> in this file.</p>
 </div>
 </div>
 </div>
@@ -1841,44 +1877,44 @@
 </thead>
 <tbody>
 <tr>
-<td><code>controller_esp8266</code></td>
-<td>ESP-12E (<abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr>)</td>
-<td>USB upload at 230400 baud</td>
-</tr>
-<tr>
-<td><code>controller_wemos_d1_mini_pro</code></td>
-<td>Wemos D1 Mini Pro (<abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr>)</td>
-<td>USB upload at 460800 baud</td>
-</tr>
-<tr>
 <td><code>controller_esp32</code></td>
-<td><abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr> DevKit</td>
+<td><abbr title="Wi-Fi + BLE microcontroller — the supported controller MCU.">ESP32</abbr> DevKit</td>
 <td>USB upload at 460800 baud</td>
 </tr>
 <tr>
 <td><code>controller_s2_mini</code></td>
-<td>Lolin S2 Mini (<abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr>-S2)</td>
+<td>Lolin S2 Mini (<abbr title="Wi-Fi + BLE microcontroller — the supported controller MCU.">ESP32</abbr>-S2)</td>
 <td>USB upload at 460800 baud</td>
 </tr>
 <tr>
-<td><code>controller_wemos_d1_mini_pro_sim</code></td>
-<td>Wemos D1 Mini (sim)</td>
-<td>Host-side sim — no hardware; mirrors <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> over serial</td>
+<td><code>controller_esp32_c3</code></td>
+<td>Unbranded <abbr title="Wi-Fi + BLE microcontroller — the supported controller MCU.">ESP32</abbr>-C3-MINI-1 clone (<abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> bridge)</td>
+<td>USB upload at 460800 baud</td>
 </tr>
 <tr>
 <td><code>controller_esp32_sim</code></td>
-<td><abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr> DevKit (sim)</td>
-<td>Same as <code>_sim</code> above</td>
+<td><abbr title="Wi-Fi + BLE microcontroller — the supported controller MCU.">ESP32</abbr> DevKit (sim)</td>
+<td>Host-side sim — no hardware; fabricates a virtual panel tree directly (<code>Sim/PanelsInitializerSim.cpp</code>), no wire protocol involved</td>
 </tr>
 <tr>
 <td><code>controller_s2_mini_sim</code></td>
 <td>Lolin S2 Mini (sim)</td>
 <td>Same as <code>_sim</code> above</td>
 </tr>
+<tr>
+<td><code>controller_esp32_c3_sim</code></td>
+<td><abbr title="Wi-Fi + BLE microcontroller — the supported controller MCU.">ESP32</abbr>-C3-MINI-1 clone (sim)</td>
+<td>Same as <code>_sim</code> above</td>
+</tr>
 </tbody>
 </table>
-<p>All controller environments use <code>lib_ldf_mode = chain+</code>, FastLED, ESPAsyncWebServer, and ESPAsyncWiFiManager. <code>*_sim</code> targets define <code>SIM_MODE</code> and drive a virtual panel bus for development and live-preview testing without panels attached.</p>
-<p><strong>MQTT / Home Assistant</strong> is available on <abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr> controller targets only (<code>controller_esp32</code>, <code>controller_s2_mini</code>, and their <code>_sim</code> variants). <abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr> builds do not include MQTT. Enable it via the WiFi captive portal (MQTT section) or <code>PATCH /api/mqtt</code> after the controller is on the network. By default the controller <strong>auto-discovers</strong> the broker (<code>_mqtt._tcp</code> <abbr title="Multicast DNS — local-network discovery protocol that lets devices announce a hostname like `lightnet-xxxx.local` without DNS or static IP.">mDNS</abbr>, then <code>homeassistant.local</code> / <code>hassio.local</code>); set a manual broker host to skip discovery. Home Assistant discovers Lightnet entities automatically when its MQTT integration uses the same broker. See <a href="../api/"><code>docs/api.md</code></a> §2.9 for topic layout and discovery modes.</p>
+<div class="admonition note">
+<p class="admonition-title">ESP8266 controller targets are retired</p>
+<p>Dropped: it doesn't meet the relay design's requirements (no spare hardware <abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> for the
+trunk, and RAM was already tight). See <code>platformio.ini</code>.</p>
+</div>
+<p>All controller environments use <code>lib_ldf_mode = chain+</code>, ESPAsyncWebServer, and ESPAsyncWiFiManager. <code>*_sim</code> targets define <code>SIM_MODE</code>: the scene engine and <code>PanelsController</code> stay on <code>ControllerPacketSink</code>/<code>LNBus</code> (routed to <code>SimPanelManager</code>) since sim panels don't speak the relay's <abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> protocol, while real hardware uses <code>ControllerRelayPacketSink</code> over <code>Serial1</code> instead — see <a href="../architecture/">Architecture</a> §3.</p>
+<p><strong>MQTT / Home Assistant</strong> is available on all controller targets (<code>LIGHTNET_MQTT=1</code>, <abbr title="Wi-Fi + BLE microcontroller — the supported controller MCU.">ESP32</abbr>-class only now). Enable it via <code>PATCH /api/mqtt</code> after the controller is on the network. By default the controller <strong>auto-discovers</strong> the broker (<code>_mqtt._tcp</code> <abbr title="Multicast DNS — local-network discovery protocol that lets devices announce a hostname like `lightnet-xxxx.local` without DNS or static IP.">mDNS</abbr>, then <code>homeassistant.local</code> / <code>hassio.local</code>); set a manual broker host to skip discovery. Home Assistant discovers Lightnet entities automatically when its MQTT integration uses the same broker. See <a href="../api/"><code>docs/api.md</code></a> §2.9 for topic layout and discovery modes.</p>
 </div>
 <div class="tabbed-block">
 <table>
@@ -1919,14 +1955,14 @@
 <td><code>panel_atmega328pb</code></td>
 <td>ATmega328PB</td>
 <td><abbr title="A cheap USB AVR programmer used to flash the bootloader and fuses onto a panel ATmega.">USBasp</abbr></td>
-<td>twiboot at <code>0x7000</code></td>
-<td><code>-D</code> flag preserves bootloader on erase</td>
+<td>relay bootloader at <code>0x7000</code></td>
+<td>Every upload chip-erases (wiping any resident bootloader — re-burn via the bootloader envs when <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> testing needs it): skipping the erase with avrdude's <code>-D</code> corrupts every re-flash, since ISP writes can only clear bits and chip erase is the only erase ISP has. <strong>Bare-metal</strong> — no <code>framework = arduino</code>.</td>
 </tr>
 <tr>
 <td><code>panel_atmega328p</code></td>
 <td>ATmega328P</td>
 <td><abbr title="A cheap USB AVR programmer used to flash the bootloader and fuses onto a panel ATmega.">USBasp</abbr></td>
-<td>twiboot at <code>0x7000</code></td>
+<td>relay bootloader at <code>0x7000</code></td>
 <td>Same binary as 328PB</td>
 </tr>
 </tbody>
@@ -1943,7 +1979,7 @@
 <tbody>
 <tr>
 <td><code>atmega328p_bootloader</code></td>
-<td>Flash fuses + burn twiboot bootloader onto a 328P panel</td>
+<td>Flash fuses + burn the relay's own <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> bootloader (<code>lib/Lightnet/Panel/bootloader/</code>) onto a 328P panel — see <a href="../ota/"><code>docs/ota.md</code></a></td>
 </tr>
 <tr>
 <td><code>atmega328pb_bootloader</code></td>
@@ -1958,31 +1994,46 @@
 <h2 id="panel-fuses-atmega328pb-328p">Panel fuses (ATmega328PB / 328P)<a class="headerlink" href="#panel-fuses-atmega328pb-328p" title="Permanent link">&para;</a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Flash fuses through the bootloader environment</p>
-<p>Wrong fuse values can lock the microcontroller. Use <code>pio run -e atmega328p_bootloader -t fuses</code> — don't set them by hand unless you know exactly what you're doing.</p>
+<p>Wrong fuse values can lock the microcontroller. Use <code>pio run -e atmega328p_bootloader -t fuses</code> (or the <code>pb</code> variant) — don't set them by hand unless you know exactly what you're doing. If ISP stops responding to a chip right after a fuse write (works fine before, dead after — on old <em>and</em> brand-new chips), suspect an invalid <code>CKSEL</code>/clock-source fuse before anything else: with no working system clock, the target can't run the SPI programming state machine at all, so even reading the device signature times out. Standard ISP cannot recover from this — either inject an external clock signal into XTAL1 (often enough to revive ISP long enough to rewrite fuses) or use high-voltage/parallel programming, which doesn't depend on the target's own clock. The <code>donor_ckout_slowclock</code> environment turns a spare ATmega328P into such a clock donor — it emits a clean ~1 MHz square wave on CKOUT/PB0 (see <code>tools/recovery/ckout_divider.cpp</code> and the env comment in <code>platformio.ini</code>).</p>
 </div>
-<div class="language-text highlight"><span class="filename">Text Only</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>lfuse = 0xF7  — 16 MHz external full-swing crystal
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>hfuse = 0xD8  — SPIEN, EESAVE, BOOTRST (4 KB boot section at 0x7000)
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>efuse = 0xFC  — BOD 4.3 V
+<div class="language-text highlight"><span class="filename">Text Only</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>lfuse = 0xF7  — 328P: Full Swing Crystal Oscillator (0.4-20 MHz, rail-to-rail XTAL2 swing, robust
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>                to board noise), slowest/safest start-up ramp
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>lfuse = 0xF7  — 328PB: Full Swing isn&#39;t defined on this variant&#39;s datasheet — same byte value
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>                selects the Low Power Crystal Oscillator (8-16 MHz band) instead, same start-up ramp
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>hfuse = 0xD8  — SPIEN, EESAVE, BOOTRST (4 KB boot section at 0x7000)
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>efuse = 0xFD  — 328P: BOD 2.7 V
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>efuse = 0xF5  — 328PB: same BOD 2.7 V, but bit 3 is unused-and-must-read-0 on this variant instead
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>                of the usual AVR unused-bits-read-1 convention; avrdude accepts 0xFD with a
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>                deprecation warning today but will eventually hard-error on it
 </span></code></pre></div>
+<p>328P and 328PB share the same <code>lfuse</code>/<code>hfuse</code> bytes but take different <code>efuse</code> values (<code>panel_fuses_328</code> for 328P; <code>env:panel_atmega328pb</code> / <code>env:atmega328pb_bootloader</code> override <code>efuse</code> for 328PB in <code>platformio.ini</code>) — don't copy one variant's fuse bytes onto the other.</p>
 <p>One-time sequence per panel:</p>
 <div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>atmega328p_bootloader<span class="w"> </span>-t<span class="w"> </span>fuses<span class="w">    </span><span class="c1"># set fuses</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>atmega328p_bootloader<span class="w"> </span>-t<span class="w"> </span>upload<span class="w">   </span><span class="c1"># burn twiboot</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>atmega328p_bootloader<span class="w"> </span>-t<span class="w"> </span>upload<span class="w">   </span><span class="c1"># burn the relay bootloader</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>panel_atmega328pb<span class="w">  </span>-t<span class="w"> </span>upload<span class="w">      </span><span class="c1"># burn panel application</span>
 </span></code></pre></div>
-<p>After this, future panel updates are wireless via the controller. See <a href="../ota/"><abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> &amp; Updates</a>.</p>
+<p>After this, future panel updates are wireless via the controller — see <a href="../ota/"><abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> &amp; Updates</a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Every ISP app upload wipes the bootloader — re-burn it</p>
+<p><code>panel_atmega328p</code>/<code>panel_atmega328pb</code> chip-erase before writing (ISP has no partial erase, and
+a flash write can only clear bits, never set them, so skipping erase corrupts the app the
+moment a different image is written over the old one). A full chip erase also wipes whatever
+was at <code>0x7000</code>. If you ever flash the app again over ISP (bench testing, recovery), re-run the
+<code>atmega328p_bootloader -t upload</code> step afterward, or the panel won't boot into the app at all.</p>
+</div>
 <hr />
 <h2 id="common-commands">Common commands<a class="headerlink" href="#common-commands" title="Permanent link">&para;</a></h2>
 <div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Build only</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_esp32
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
 </span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Build + upload over USB</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_wemos_d1_mini_pro<span class="w"> </span>-t<span class="w"> </span>upload
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_s2_mini<span class="w"> </span>-t<span class="w"> </span>upload
 </span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
 </span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># Upload over Wi-Fi (controller OTA via ArduinoOTA + mDNS)</span>
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_wemos_d1_mini_pro<span class="w"> </span>-t<span class="w"> </span>upload<span class="w"> </span>--upload-port<span class="w"> </span>lightnet-XXXX.local
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_s2_mini<span class="w"> </span>-t<span class="w"> </span>upload<span class="w"> </span>--upload-port<span class="w"> </span>lightnet-XXXX.local
 </span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
 </span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="c1"># Serial monitor — 57600 baud everywhere</span>
-</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>pio<span class="w"> </span>device<span class="w"> </span>monitor<span class="w"> </span>-e<span class="w"> </span>controller_wemos_d1_mini_pro
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>pio<span class="w"> </span>device<span class="w"> </span>monitor<span class="w"> </span>-e<span class="w"> </span>controller_s2_mini
 </span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>
 </span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="c1"># Build everything</span>
 </span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>pio<span class="w"> </span>run
@@ -1998,7 +2049,7 @@
 <ul>
 <li><a href="../hardware/">Hardware</a> — pin assignments and panel connectivity</li>
 <li><a href="../architecture/">Architecture</a> — source tree and internal design</li>
-<li><a href="../ota/"><abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> &amp; Updates</a> — panel updates over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> and controller self-update</li>
+<li><a href="../ota/"><abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> &amp; Updates</a> — panel updates over the relay and controller self-update</li>
 <li><a href="../testing/">Testing</a> — native unit tests and how to add new ones</li>
 </ul>
 
@@ -2094,7 +2145,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.path", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tooltips", "navigation.instant.preview"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

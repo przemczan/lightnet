@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -556,6 +556,8 @@
       
         
       
+        
+      
     
     
     
@@ -704,6 +706,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../lightnet-firmware/hardware/panel-relay-signal-path/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Panel Relay Signal Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../lightnet-firmware/architecture/" class="md-nav__link">
         
   
@@ -786,7 +816,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_8" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -810,14 +840,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3_8" id="__nav_3_8_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1690,11 +1720,11 @@
 <h2 id="hardware">Hardware<a class="headerlink" href="#hardware" title="Permanent link">&para;</a></h2>
 <dl>
 <dt>Controller</dt>
-<dd>The central device in a Lightnet network — an <abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr> or <abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr>. It discovers panels, exposes the HTTP and WebSocket APIs over Wi-Fi, runs the scene player, and brokers all <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> traffic. Defined in <a href="../../lightnet-firmware/architecture/">Firmware → Architecture</a>.</dd>
+<dd>The central device in a Lightnet network — an <abbr title="Wi-Fi + BLE microcontroller — the supported controller MCU.">ESP32</abbr>. It discovers panels, exposes the HTTP and WebSocket APIs over Wi-Fi, runs the scene player, and drives the <abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> relay trunk that carries all panel traffic. Defined in <a href="../../lightnet-firmware/architecture/">Firmware → Architecture</a>.</dd>
 <dt>Panel</dt>
-<dd>A leaf device — an ATmega328P or 328PB driving one <a href="#term-ws2812"><abbr title="Single-wire addressable RGB LED used on each panel.">WS2812</abbr></a> LED. Panels have up to 5 edge connectors and run animations locally between updates from the controller.</dd>
+<dd>A leaf device — an ATmega328P or 328PB driving one <a href="#term-ws2812"><abbr title="Single-wire addressable RGB LED used on each panel.">WS2812</abbr></a> LED. Panels have up to 5 edge connectors and run animations locally between updates from the controller. Each panel is a <strong>store-and-forward repeater</strong>, not a node on a shared bus — it only ever talks to its own physical neighbours.</dd>
 <dt>Edge</dt>
-<dd>A physical connector on a panel (or controller). Each edge carries power and a single-wire ping line used during discovery. After discovery, <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> handles all communication; the ping line goes idle until reset.</dd>
+<dd>A physical connector on a panel (or controller). Each edge carries power and a point-to-point <abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> link to that one neighbour — the same link handles discovery and all runtime traffic, with no separate ping phase.</dd>
 <dt>Topology</dt>
 <dd>The connectivity graph. Lightnet uses a <strong>tree</strong> rooted at the controller — one panel attaches directly, others fan out. No cycles, no rings.</dd>
 </dl>
@@ -1705,9 +1735,9 @@
 <dt>Layer</dt>
 <dd>An independent animation track inside a scene. Targets a set of panels, belongs to a <a href="#term-group">group</a>, and runs a sequence of <a href="#term-step">steps</a>. Up to 8 layers per scene.</dd>
 <dt id="term-step">Step</dt>
-<dd>One animation segment in a layer's sequence. Either <strong>panel-local</strong> (BREATHE, PULSE, etc. — runs on the <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr> with no per-frame <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr>) or a <strong>controller runner</strong> (WAVE, RIPPLE, CHASE — computed on the ESP and pushed each frame). Up to 12 steps per layer.</dd>
+<dd>One animation segment in a layer's sequence. Either <strong>panel-local</strong> (BREATHE, PULSE, etc. — runs on the <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr> with no per-frame relay traffic) or a <strong>controller runner</strong> (WAVE, RIPPLE, CHASE — computed on the ESP and pushed each frame). Up to 12 steps per layer.</dd>
 <dt id="term-group">Group</dt>
-<dd>A synchronisation unit. Panels in the same group fire animations simultaneously (±2.5 µs jitter via <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> General Call). Group IDs 1–254 are valid; 0 is reserved.</dd>
+<dd>A synchronisation unit. Panels in the same group fire animations simultaneously via a general-call flood (broadcast address) over the relay trunk. Group IDs 1–254 are valid; 0 is reserved.</dd>
 <dt>Palette</dt>
 <dd>A 1–16 stop gradient of (position, RGB) entries. The controller linearly interpolates between stops to produce a continuous 256-entry colour ramp. Built-in palettes (<code>Rainbow</code>, <code>Lava</code>, <code>Ocean</code>, …) ship with the firmware; user palettes are saved to <code>/data/palettes.db</code>.</dd>
 <dt>ColorRef</dt>
@@ -1720,7 +1750,7 @@
 </ul>
 </dd>
 <dt>Animation runner</dt>
-<dd>Controller-computed animation. Calculates per-panel brightness or colour each frame and pushes it over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr>. <strong>WAVE</strong> sweeps a brightness envelope across the panel list, <strong>RIPPLE</strong> expands from an origin panel, <strong>CHASE</strong> moves a single lit panel through the list.</dd>
+<dd>Controller-computed animation. Calculates per-panel brightness or colour each frame and pushes it over the relay trunk. <strong>WAVE</strong> sweeps a brightness envelope across the panel list, <strong>RIPPLE</strong> expands from an origin panel, <strong>CHASE</strong> moves a single lit panel through the list.</dd>
 </dl>
 <h2 id="networking-protocol">Networking &amp; protocol<a class="headerlink" href="#networking-protocol" title="Permanent link">&para;</a></h2>
 <dl>
@@ -1730,21 +1760,23 @@
 <dd><abbr title="JavaScript Object Notation — text-based data format used by the HTTP API.">JSON</abbr> <abbr title="Representational State Transfer — HTTP-style API where each URL represents a resource.">REST</abbr> API on port 80. Used for configuration, scenes, palettes, appearance, and firmware uploads. Full surface: <a href="../../lightnet-firmware/api/">Firmware → API Reference</a>.</dd>
 <dt>WebSocket</dt>
 <dd>Binary protocol at <code>ws://lightnet-&lt;chipid&gt;.local/ws</code>. Sub-millisecond panel control and reactive triggers. 14-byte header with <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16/IBM over header and payload. Full schema: <a href="../../lightnet-firmware/api/">Firmware → API Reference</a>.</dd>
-<dt><abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> protocol</dt>
-<dd>The internal bus between controller and panels. Custom packet format defined in <code>Core/Common/ProtocolMeta.hpp</code> (included via <code>Common/Protocol.hpp</code>) with packed structs and <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> validation. Documented in <a href="../../lightnet-firmware/architecture/">Firmware → Architecture</a>.</dd>
+<dt>Wire protocol</dt>
+<dd>The internal packet protocol carried over the <abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> relay trunk between the controller and every panel. Custom packed-struct format with <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16 framing, defined in <code>Core/Common/ProtocolMeta.hpp</code> (included via <code>Common/Protocol.hpp</code>). Documented in <a href="../../lightnet-firmware/architecture/#4-wire-protocol-internal">Firmware → Architecture</a>.</dd>
 <dt>General Call</dt>
-<dd><abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> broadcast (address <code>0x00</code>) — every panel receives it simultaneously. Lightnet uses it for animation start, palette and brightness updates, and reactive triggers.</dd>
+<dd>A broadcast packet (target address <code>0</code>) flooded to every panel in the tree — used for animation start, palette and brightness updates, and reactive triggers.</dd>
 <dt>Discovery</dt>
-<dd>The boot-time process that walks the panel tree. The controller pings each edge in turn; receiving panels register over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> and receive a sequential index. After all panels report, the controller transitions to its main loop.</dd>
+<dd>The boot-time depth-first walk that maps the panel tree. The controller descends edge by edge over the relay; each newly-reached panel registers and receives a sequential index before the controller backtracks to the next sibling edge. After all panels report, the controller transitions to its main loop.</dd>
+<dt>Relay trunk</dt>
+<dd>The <abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> link between the controller and the first panel, and by extension the whole chain of point-to-point panel-to-panel <abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> hops it feeds. Every panel is a store-and-forward repeater — there is no shared bus.</dd>
 </dl>
 <h2 id="persistence-updates">Persistence &amp; updates<a class="headerlink" href="#persistence-updates" title="Permanent link">&para;</a></h2>
 <dl>
 <dt id="term-littlefs"><abbr title="Little Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">LittleFS</abbr></dt>
 <dd>Little Flash File System — the ESP's small on-chip filesystem. Lightnet stores scenes, palettes, appearance settings, and the staged panel firmware blob here.</dd>
 <dt><abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr></dt>
-<dd>Wireless firmware update. <strong>Panel <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr></strong> uses the <a href="#term-twiboot">twiboot</a> bootloader and pushes pages over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr>. <strong>Controller <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr></strong> uses ArduinoOTA over Wi-Fi.</dd>
-<dt id="term-twiboot">twiboot</dt>
-<dd>A bootloader for <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr> panels that accepts firmware pages over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr>. Lives in the upper 4 KB of flash. Entered when the controller sends an <code>ENTER_BOOTLOADER</code> command and the panel writes a magic value to EEPROM before resetting.</dd>
+<dd>Wireless firmware update. <strong>Panel <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr></strong> streams pages over the relay trunk to a from-scratch bootloader (<code>RelayBootloader</code>) that speaks the same framed wire protocol. <strong>Controller <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr></strong> uses ArduinoOTA over Wi-Fi.</dd>
+<dt id="term-relaybootloader">RelayBootloader</dt>
+<dd>The bootloader resident on each <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr> panel. Accepts firmware pages over the relay's own packet framing (<code>PACKET_BOOTLOADER_*</code> types). Entered when the controller sends <code>PACKET_ENTER_BOOTLOADER</code> with a magic token and the panel resets into it; deliberately skips protocol-version checks so it can still reflash a version-mismatched panel.</dd>
 <dt id="term-ws2812"><abbr title="Single-wire addressable RGB LED used on each panel.">WS2812</abbr></dt>
 <dd>The addressable RGB LED on each panel — single-wire timing-coded protocol, one bit-banged on <code>PD5</code>.</dd>
 </dl>
@@ -1843,7 +1875,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.path", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tooltips", "navigation.instant.preview"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

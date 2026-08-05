@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -558,6 +558,8 @@
       
         
       
+        
+      
     
     
     
@@ -686,6 +688,34 @@
     
   
     Hardware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hardware/panel-relay-signal-path/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Panel Relay Signal Path
   
 
     
@@ -1292,7 +1322,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_8" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1316,14 +1346,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3_8" id="__nav_3_8_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2698,7 +2728,7 @@
 <p>No payload.</p>
 <hr />
 <h4 id="animation_trigger-type-8">ANIMATION_TRIGGER (type 8)<a class="headerlink" href="#animation_trigger-type-8" title="Permanent link">&para;</a></h4>
-<p>Fire a low-latency reactive beat trigger. The controller broadcasts <code>PACKET_ANIMATION_UPDATE_PARAMS</code> via <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> General Call to all panels running a REACTIVE animation in the specified group. Round-trip from WebSocket frame to panels lighting up is typically under 5 ms.</p>
+<p>Fire a low-latency reactive beat trigger. The controller broadcasts <code>PACKET_ANIMATION_UPDATE_PARAMS</code> (general call) to all panels running a REACTIVE animation in the specified group. Round-trip from WebSocket frame to panels lighting up is typically under 5 ms.</p>
 <table>
 <thead>
 <tr>
@@ -2901,7 +2931,7 @@
 </table>
 <hr />
 <h4 id="mirror_batch-type-9">MIRROR_BATCH (type 9)<a class="headerlink" href="#mirror_batch-type-9" title="Permanent link">&para;</a></h4>
-<p>Streamed <strong>controller → client</strong> at up to ~30 fps once the client has sent <code>SET_MIRROR(1)</code>. Each frame is a coalesced batch of all outbound <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> packets captured since the previous flush. The mobile app uses these to drive its per-panel <code>AnimationPlayer</code> for real-time preview.</p>
+<p>Streamed <strong>controller → client</strong> at up to ~30 fps once the client has sent <code>SET_MIRROR(1)</code>. Each frame is a coalesced batch of all outbound packets captured since the previous flush. The mobile app uses these to drive its per-panel <code>AnimationPlayer</code> for real-time preview.</p>
 <p><strong>Payload header (6 bytes):</strong></p>
 <table>
 <thead>
@@ -2947,7 +2977,7 @@
 <td>1 B</td>
 <td><code>address</code></td>
 <td>uint8</td>
-<td><abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> target panel index; <code>0</code> = General Call (all panels)</td>
+<td>Target panel index; <code>0</code> = General Call (all panels)</td>
 </tr>
 <tr>
 <td>1</td>
@@ -3057,7 +3087,7 @@
 <hr />
 <h2 id="2-http-api">2. HTTP API<a class="headerlink" href="#2-http-api" title="Permanent link">&para;</a></h2>
 <p>All endpoints return <code>application/json</code>. All ports are 80.</p>
-<p>Mutating endpoints whose side effects emit <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> packets to panels — scene play/stop/speed, one-shot
+<p>Mutating endpoints whose side effects emit packets to panels — scene play/stop/speed, one-shot
 play, animation trigger, appearance PATCH, per-panel on/color, power, and configuration <code>logicalRoot</code> — <strong>validate
 synchronously then queue the work onto the main loop</strong>, returning <code>202 Accepted</code>. The change is
 applied on the next main-loop tick (sub-millisecond later); validation failures (<code>4xx</code>) are still
@@ -3277,7 +3307,7 @@ filesystem/config mutations (scene/palette save &amp; delete, configuration PATC
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="err">Content-Type: application/octet-stream</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="err">[raw binary body — panel firmware .bin file]</span>
 </span></code></pre></div>
-<p>The body is streamed directly to <code>/panel_fw.bin</code> to avoid buffering in RAM. Once the upload completes, the controller starts flashing panels over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> one by one in discovery order.</p>
+<p>The body is streamed directly to <code>/panel_fw.bin</code> to avoid buffering in RAM. Once the upload completes, the controller starts flashing panels over the relay trunk one by one, leaves first and the root last (see <a href="../ota/#flashing-order-and-reboot-safety"><abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> — Flashing order and reboot safety</a>).</p>
 <p><strong>Responses:</strong></p>
 <table>
 <thead>
@@ -3398,8 +3428,8 @@ filesystem/config mutations (scene/palette save &amp; delete, configuration PATC
 </tr>
 </tbody>
 </table>
-<p><code>:address</code> is the panel's <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> index as returned by <code>GET /api/panels</code>.</p>
-<p><code>GET /api/panels</code> fetches the live state of each discovered panel over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr>. Panels that do not respond are omitted from the array. <code>connectedPanel</code> and <code>connectedEdge</code> in the edges response are <code>0</code> when an edge slot is unoccupied.</p>
+<p><code>:address</code> is the panel's index as returned by <code>GET /api/panels</code>.</p>
+<p><code>GET /api/panels</code> fetches the live state of each discovered panel over the relay trunk. Panels that do not respond are omitted from the array. <code>connectedPanel</code> and <code>connectedEdge</code> in the edges response are <code>0</code> when an edge slot is unoccupied.</p>
 <p>These are the HTTP equivalents of the WebSocket <code>TOGGLE</code>, <code>SET_COLOR</code>, <code>GET_PANELS_STATES</code>, and <code>GET_EDGES_LIST</code> commands.</p>
 <hr />
 <h3 id="27-configuration">2.7 Configuration<a class="headerlink" href="#27-configuration" title="Permanent link">&para;</a></h3>
@@ -3497,13 +3527,9 @@ the replay target is the internal one-shot scene id rather than a catalogued sce
 </ul>
 <hr />
 <h3 id="29-mqtt-home-assistant">2.9 MQTT (Home Assistant)<a class="headerlink" href="#29-mqtt-home-assistant" title="Permanent link">&para;</a></h3>
-<p><strong><abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr> controllers only</strong> (<code>controller_esp32</code>, <code>controller_s2_mini</code>). MQTT is not compiled for <abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr> targets.</p>
+<p>Available on all controller targets (<code>controller_esp32</code>, <code>controller_s2_mini</code>).</p>
 <p>Optional integration with a local MQTT broker (no TLS in v1). When enabled, the controller publishes Home Assistant MQTT discovery configs and state topics, and subscribes to command topics. Configuration is stored in <code>/config/mqtt.db</code>.</p>
-<p><strong>Configure via:</strong></p>
-<ol>
-<li><strong>Captive portal</strong> — WiFi setup form includes an <em>MQTT (Home Assistant)</em> section (<code>Enable MQTT</code>, broker discovery mode, broker host, port, username, password).</li>
-<li><strong>HTTP</strong> — <code>GET/PATCH /api/mqtt</code>.</li>
-</ol>
+<p><strong>Configure via HTTP</strong> — <code>GET/PATCH /api/mqtt</code> (not exposed in the WiFi captive portal — the AsyncWiFiManagerParameter path for it crashes the async_tcp task with the vendored ESPAsyncWiFiManager/ESPAsyncWebServer combination, so it's HTTP-only).</p>
 <table>
 <thead>
 <tr>
@@ -3827,7 +3853,7 @@ the replay target is the internal one-shot scene id rather than a catalogued sce
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.path", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tooltips", "navigation.instant.preview"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

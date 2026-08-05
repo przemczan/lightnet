@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://przemczan.github.io/lightnet/current/lightnet-firmware/architecture/">
       
       
-        <link rel="prev" href="../hardware/">
+        <link rel="prev" href="../hardware/panel-relay-signal-path/">
       
       
         <link rel="next" href="../api/">
@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -558,6 +558,8 @@
       
         
       
+        
+      
     
     
     
@@ -703,6 +705,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../hardware/panel-relay-signal-path/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Panel Relay Signal Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -826,10 +856,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#controller-esp8266esp32-only" class="md-nav__link">
+  <a href="#controller-esp32-only-esp8266-retired-didnt-meet-the-relay-designs-requirements" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Controller/ — ESP8266/ESP32 only
+        Controller/ — ESP32 only (ESP8266 retired — didn't meet the relay design's requirements)
       
     </span>
   </a>
@@ -886,15 +916,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-i2c-protocol-internal" class="md-nav__link">
+  <a href="#4-wire-protocol-internal" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. I²C Protocol (Internal)
+        4. Wire Protocol (Internal)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="4. I²C Protocol (Internal)">
+    <nav class="md-nav" aria-label="4. Wire Protocol (Internal)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -920,10 +950,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#general-call" class="md-nav__link">
+  <a href="#broadcast-flood" class="md-nav__link">
     <span class="md-ellipsis">
       
-        General Call
+        Broadcast (Flood)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#link-arq-per-hop-acknowledgment-v13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Link-ARQ (per-hop acknowledgment, v13)
       
     </span>
   </a>
@@ -1031,10 +1072,21 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#ping-handshake-per-edge" class="md-nav__link">
+  <a href="#depth-first-walk" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Ping handshake (per edge)
+        Depth-first walk
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loop-rejection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loop rejection
       
     </span>
   </a>
@@ -1046,6 +1098,34 @@
     <span class="md-ellipsis">
       
         Full discovery flow
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Full discovery flow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#worked-example-two-panels-in-series" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Worked example: two panels in series
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#topology-capture-discoverytreebuilder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Topology capture — DiscoveryTreeBuilder
       
     </span>
   </a>
@@ -1157,6 +1237,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#87-requestreply-over-the-relay-trunk-controllerrelaypacketsink" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.7 Request/reply over the relay trunk (ControllerRelayPacketSink)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1230,7 +1321,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_8" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1254,14 +1345,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3_8" id="__nav_3_8_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1979,10 +2070,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#controller-esp8266esp32-only" class="md-nav__link">
+  <a href="#controller-esp32-only-esp8266-retired-didnt-meet-the-relay-designs-requirements" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Controller/ — ESP8266/ESP32 only
+        Controller/ — ESP32 only (ESP8266 retired — didn't meet the relay design's requirements)
       
     </span>
   </a>
@@ -2039,15 +2130,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-i2c-protocol-internal" class="md-nav__link">
+  <a href="#4-wire-protocol-internal" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. I²C Protocol (Internal)
+        4. Wire Protocol (Internal)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="4. I²C Protocol (Internal)">
+    <nav class="md-nav" aria-label="4. Wire Protocol (Internal)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2073,10 +2164,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#general-call" class="md-nav__link">
+  <a href="#broadcast-flood" class="md-nav__link">
     <span class="md-ellipsis">
       
-        General Call
+        Broadcast (Flood)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#link-arq-per-hop-acknowledgment-v13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Link-ARQ (per-hop acknowledgment, v13)
       
     </span>
   </a>
@@ -2184,10 +2286,21 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#ping-handshake-per-edge" class="md-nav__link">
+  <a href="#depth-first-walk" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Ping handshake (per edge)
+        Depth-first walk
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loop-rejection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loop rejection
       
     </span>
   </a>
@@ -2199,6 +2312,34 @@
     <span class="md-ellipsis">
       
         Full discovery flow
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Full discovery flow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#worked-example-two-panels-in-series" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Worked example: two panels in series
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#topology-capture-discoverytreebuilder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Topology capture — DiscoveryTreeBuilder
       
     </span>
   </a>
@@ -2310,6 +2451,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#87-requestreply-over-the-relay-trunk-controllerrelaypacketsink" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.7 Request/reply over the relay trunk (ControllerRelayPacketSink)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2384,14 +2536,14 @@
 
 
 <h1 id="system-architecture">System Architecture<a class="headerlink" href="#system-architecture" title="Permanent link">&para;</a></h1>
-<p>Internal design reference for the Lightnet controller and panel firmware. Covers topology, library structure, <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> protocol, animation framework internals, discovery, and boot sequence.</p>
+<p>Internal design reference for the Lightnet controller and panel firmware. Covers topology, library structure, relay protocol, animation framework internals, discovery, and boot sequence.</p>
 <hr />
 <h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
 <ol>
 <li><a href="#1-physical-topology">Physical Topology</a></li>
 <li><a href="#2-two-build-source-tree">Two-Build Source Tree</a></li>
 <li><a href="#3-library-structure">Library Structure</a></li>
-<li><a href="#4-i2c-protocol-internal"><abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> Protocol (Internal)</a></li>
+<li><a href="#4-wire-protocol-internal">Wire Protocol (Internal)</a></li>
 <li><a href="#5-animation-framework-internals">Animation Framework Internals</a></li>
 <li><a href="#6-discovery-sequence">Discovery Sequence</a></li>
 <li><a href="#7-controller-boot-startup">Controller Boot &amp; Startup</a></li>
@@ -2399,21 +2551,29 @@
 </ol>
 <hr />
 <h2 id="1-physical-topology">1. Physical Topology<a class="headerlink" href="#1-physical-topology" title="Permanent link">&para;</a></h2>
-<p>Panels form a <strong>tree structure</strong> rooted at the controller. Each panel has up to 5 edges (physical connectors); edges carry both power and a single-wire ping line. The controller discovers the network by sequentially pinging each edge via <abbr title="General-Purpose Input/Output — a pin on the microcontroller that can be driven high or low or read as a signal.">GPIO</abbr>, triggering <abbr title="Pin Change Interrupt — AVR feature that triggers an ISR whenever a watched pin changes state.">PCINT</abbr> interrupts on the receiving <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr>.</p>
+<p>Panels form a <strong>tree structure</strong> rooted at the controller, but each panel is a <strong>store-and-forward
+repeater</strong> rather than a node on a shared bus: it only ever talks to its own physical neighbours (up
+to 3 edges today), never directly to the controller or to a panel it isn't wired to. Every panel has
+a single hardware USART shared across all its edges through a <code>CD74HC4052</code> analog mux, carrying
+framed <code>Protocol</code> packets — there is no separate ping/handshake phase and no shared electrical bus
+anywhere in the tree (see <a href="../hardware/#topology"><code>docs/hardware.md</code></a> for the electrical rationale).</p>
 <pre class="mermaid"><code>graph TD
   C[🎛️ Controller]
   C --&gt; A[Panel A — edge 0]
   A --&gt; B[Panel B — edge 1]
   A --&gt; Pc[Panel C — edge 2]
-  C --&gt; D[Panel D — edge 1]
+  B --&gt; D[Panel D — edge 1]
   D --&gt; E[Panel E — edge 0]</code></pre>
-<p>After the ping handshake completes, all communication uses <strong><abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr></strong> (<code>LightnetBus</code>) carrying structured <code>Protocol</code> packets. Panels are assigned sequential indices during discovery and use those indices as <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> addresses for all subsequent unicast traffic.</p>
+<p>Panels are assigned sequential indices during discovery (§6). Reaching panel N means flooding a
+packet downstream with N as an address filter (<code>Core/Relay/PanelRouter</code>), and every intermediate
+panel between the controller and N relays it one hop closer. Only the panel whose own index matches
+acts on it; everyone else just relays it further and ignores it locally.</p>
 <hr />
 <h2 id="2-two-build-source-tree">2. Two-Build Source Tree<a class="headerlink" href="#2-two-build-source-tree" title="Permanent link">&para;</a></h2>
 <p>The firmware compiles to two completely different binaries from a single source tree. The flag <code>LIGHTNET_TARGET_CONTROLLER</code> (set in <code>platformio.ini</code> build flags) selects the target:</p>
 <pre class="mermaid"><code>graph LR
   M["src/main.cpp"] --&gt; CC{"LIGHTNET_TARGET_CONTROLLER?"}
-  CC -- defined --&gt; ESP["src/controller/main.hpp\n(ESP8266 / ESP32)"]
+  CC -- defined --&gt; ESP["src/controller/main.hpp\n(ESP32 only — see §3)"]
   CC -- not defined --&gt; ATM["src/panel/main.hpp\n(ATmega)"]</code></pre>
 <p>There is no runtime branching — the preprocessor eliminates the unused side entirely. Code that belongs to both targets lives in <code>lib/Lightnet/Common/</code>.</p>
 <hr />
@@ -2430,23 +2590,15 @@
 <tbody>
 <tr>
 <td><code>LightnetBus</code></td>
-<td><abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> wrapper: <code>sendPacketAck()</code> / <code>sendPacketNack()</code> / <code>sendResponsePacket()</code>, <abbr title="Interrupt Service Routine — a small function the CPU jumps into when a hardware event fires.">ISR</abbr> callbacks</td>
-</tr>
-<tr>
-<td><code>LightnetPanelEdge</code></td>
-<td>Per-edge state machine: <code>IDLE → WELCOME_SENT → BOOTING → READY</code>. <code>updateEdgeState()</code> is <abbr title="Interrupt Service Routine — a small function the CPU jumps into when a hardware event fires.">ISR</abbr>-safe (enqueues to ring buffer); <code>processEdgeState()</code> drains in main loop</td>
-</tr>
-<tr>
-<td><code>LightnetPinger</code></td>
-<td><abbr title="General-Purpose Input/Output — a pin on the microcontroller that can be driven high or low or read as a signal.">GPIO</abbr> ping pulses. <code>HANDSHAKE</code> = 500 µs, <code>DONE</code> = 2000 µs. Owns an 8-entry ring buffer.</td>
+<td>In-memory dispatch to <code>SimPanelManager</code>: <code>sendPacketAck()</code> / <code>sendPacketNack()</code> / <code>sendPacketWithResponse()</code>. <code>SIM_MODE</code>-only now (<code>#ifdef SIM_MODE</code>) — the relay trunk replaced I²C for discovery, application traffic, <code>fetchState()</code>, and <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> on real hardware; this survives only because sim panels only respond to <code>LightnetBus</code>-routed commands (see §6, §7, §8.7).</td>
 </tr>
 <tr>
 <td><code>Protocol</code></td>
-<td>All <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> packet structs (<code>__packed__</code>), <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> validation, <code>setPacketMeta()</code></td>
+<td>All packet structs (<code>__packed__</code>), <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> validation, <code>setPacketMeta()</code></td>
 </tr>
 <tr>
 <td><code>LightnetConfig</code></td>
-<td>Cross-cutting constants in <code>Core/Common/LightnetConfig.hpp</code>: <code>LIGHTNET_MAX_PANELS</code> (100 on <abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr>, 32 on <abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr>), <code>PALETTE_STOPS=16</code>, <code>BASE_COLORS_COUNT=3</code></td>
+<td>Cross-cutting constants in <code>Core/Common/LightnetConfig.hpp</code>: <code>LIGHTNET_MAX_PANELS</code> (100)</td>
 </tr>
 <tr>
 <td><code>ColorRef</code></td>
@@ -2458,11 +2610,7 @@
 </tr>
 </tbody>
 </table>
-<div class="admonition note">
-<p class="admonition-title"><code>busIsDisabled</code> is a static shared flag</p>
-<p><code>LightnetPinger::busIsDisabled</code> is <strong>static</strong> — shared across all pinger instances. It is set during any ping so all pingers ignore <abbr title="Interrupt Service Routine — a small function the CPU jumps into when a hardware event fires.">ISR</abbr> samples while a pulse is being driven. Do not instantiate multiple pingers that need independent bus control.</p>
-</div>
-<h3 id="controller-esp8266esp32-only">Controller/ — <abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr>/<abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr> only<a class="headerlink" href="#controller-esp8266esp32-only" title="Permanent link">&para;</a></h3>
+<h3 id="controller-esp32-only-esp8266-retired-didnt-meet-the-relay-designs-requirements">Controller/ — <abbr title="Wi-Fi + BLE microcontroller — the supported controller MCU.">ESP32</abbr> only (ESP8266 retired — didn't meet the relay design's requirements)<a class="headerlink" href="#controller-esp32-only-esp8266-retired-didnt-meet-the-relay-designs-requirements" title="Permanent link">&para;</a></h3>
 <p><strong>Panels/</strong></p>
 <table>
 <thead>
@@ -2474,15 +2622,15 @@
 <tbody>
 <tr>
 <td><code>PanelsInitializer</code></td>
-<td>Discovery orchestrator; assigns panel indices, builds edge graph</td>
+<td>Drives <code>ControllerDiscoveryService</code> over the relay trunk (<code>ControllerEdgeTransport</code>/<code>Serial1</code>) and converts the resulting <code>DiscoveryTreeBuilder</code> link list into the <code>Panel</code>/<code>Edge</code> graph below once discovery completes — the SIM_MODE build (<code>Sim/PanelsInitializerSim.cpp</code>) fabricates the same graph shape directly instead, with no wire protocol involved at all</td>
 </tr>
 <tr>
 <td><code>PanelsController</code></td>
-<td>Unicast commands to panels: color, on/off, configuration, enter-bootloader</td>
+<td>Per-panel commands (color, on/off, configuration, enter-bootloader) via the shared <code>IPacketSink</code> (<code>ControllerRelayPacketSink</code> on real hardware, <code>ControllerPacketSink</code>/<code>LNBus</code> under <code>SIM_MODE</code> — main.cpp picks one at compile time). <code>fetchState()</code> needs a synchronous request/reply: on real hardware it uses <code>ControllerRelayPacketSink::requestReply()</code>, under <code>SIM_MODE</code> it stays directly on <code>LNBus</code></td>
 </tr>
 <tr>
 <td><code>Panel</code> / <code>Edge</code></td>
-<td>In-memory data model of discovered topology</td>
+<td>In-memory data model of discovered topology — same shape regardless of which side built it</td>
 </tr>
 </tbody>
 </table>
@@ -2636,7 +2784,7 @@
 <tr>
 <td><code>MqttServer</code></td>
 <td><code>GET /api/mqtt</code>, <code>PATCH /api/mqtt</code></td>
-<td>MQTT broker config + runtime discovery status (<abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr> only; see <a href="../api/"><code>docs/api.md</code></a> §2.9)</td>
+<td>MQTT broker config + runtime discovery status (<abbr title="Wi-Fi + BLE microcontroller — the supported controller MCU.">ESP32</abbr> only; see <a href="../api/"><code>docs/api.md</code></a> §2.9)</td>
 </tr>
 <tr>
 <td><code>ConfigurationServer</code></td>
@@ -2647,7 +2795,7 @@
 </table>
 <div class="admonition note">
 <p class="admonition-title">Mutating endpoints defer to the main loop (§8)</p>
-<p>Every handler that emits <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> packets (scene play/stop/speed, one-shot/trigger, appearance,
+<p>Every handler that emits packets (scene play/stop/speed, one-shot/trigger, appearance,
 per-panel on/color, power, configuration <code>logicalRoot</code>) <strong>validates synchronously, then queues the
 packet-emitting work onto the main loop via <code>MainLoopQueue</code> and returns <code>202 Accepted</code></strong>.
 They are injected with a <code>MainLoopQueue&amp;</code>. Read-only and pure filesystem/config endpoints stay
@@ -2663,12 +2811,12 @@ synchronous (<code>200</code>). See <a href="#8-concurrency-task-model-deferred-
 </thead>
 <tbody>
 <tr>
-<td><code>TwibootClient</code></td>
-<td>twiboot host protocol over raw Wire (bypasses LNBus). <code>connect()</code> / <code>writePage()</code> / <code>startApp()</code></td>
+<td><code>RelayBootloaderClient</code></td>
+<td>Drives <code>RelayBootloader.cpp</code> over the relay trunk via <code>ControllerRelayPacketSink::requestReply()</code>. <code>connect()</code> / <code>writePage()</code> / <code>startApp()</code>. Real hardware only — no wire to any panel exists, and <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> doesn't exist under <code>SIM_MODE</code></td>
 </tr>
 <tr>
 <td><code>PanelFlasher</code></td>
-<td>Non-blocking <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> state machine: <code>ENTER_BL → WAIT_BL → FLASHING → VERIFY → NEXT_PANEL</code></td>
+<td>Non-blocking <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> state machine: <code>ENTER_BL → WAIT_BL → FLASHING → NEXT_PANEL</code></td>
 </tr>
 <tr>
 <td><code>FirmwareUpdateServer</code></td>
@@ -2691,11 +2839,11 @@ synchronous (<code>200</code>). See <a href="#8-concurrency-task-model-deferred-
 <tbody>
 <tr>
 <td><code>LightnetPanel</code></td>
-<td>Main panel state machine; handles <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> packets, drives edge registration</td>
+<td>Main panel state machine; handles relay packets, drives edge registration</td>
 </tr>
 <tr>
 <td><code>RGBController</code></td>
-<td>FastLED wrapper for the single <abbr title="Single-wire addressable RGB LED used on each panel.">WS2812</abbr> LED on PD5. <code>globalBrightness</code> multiplier on all output</td>
+<td><code>ClockedLed</code> (bit-banged APA102/SK9822-style) wrapper for the panel's LED on <code>LED_SCK</code>/<code>LED_MOSI</code>. Applies gamma/tint/<code>globalBrightness</code> in explicit <code>scale8</code>-style passes</td>
 </tr>
 <tr>
 <td><code>AnimationPlayer</code></td>
@@ -2703,7 +2851,7 @@ synchronous (<code>200</code>). See <a href="#8-concurrency-task-model-deferred-
 </tr>
 <tr>
 <td><code>BootloaderBridge</code></td>
-<td>Writes EEPROM boot-magic <code>0xB007</code> then software-jumps to twiboot</td>
+<td>Writes assigned index + parent edge + EEPROM boot-magic <code>0xB007</code> then software-jumps to <code>RelayBootloader.cpp</code></td>
 </tr>
 </tbody>
 </table>
@@ -2718,7 +2866,7 @@ synchronous (<code>200</code>). See <a href="#8-concurrency-task-model-deferred-
 <tbody>
 <tr>
 <td><code>WebsocketServer</code></td>
-<td><code>AsyncWebSocket</code> on <code>/ws</code>; lock-free queue swap between <abbr title="Interrupt Service Routine — a small function the CPU jumps into when a hardware event fires.">ISR</abbr> and main loop; per-client <code>ClientSettings</code> (mirroring flag) with <abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr>-safe locking</td>
+<td><code>AsyncWebSocket</code> on <code>/ws</code>; lock-free queue swap between <abbr title="Interrupt Service Routine — a small function the CPU jumps into when a hardware event fires.">ISR</abbr> and main loop; per-client <code>ClientSettings</code> (mirroring flag) with <abbr title="Wi-Fi + BLE microcontroller — the supported controller MCU.">ESP32</abbr>-safe locking</td>
 </tr>
 <tr>
 <td><code>WebsocketHandler</code></td>
@@ -2734,7 +2882,7 @@ synchronous (<code>200</code>). See <a href="#8-concurrency-task-model-deferred-
 </tr>
 <tr>
 <td><code>PacketMirror</code></td>
-<td>Captures outbound <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> packets; maintains a live-stream ring (flushed at ~30 fps to mirroring clients) and a persistent snapshot (unicast to a client when it enables mirroring). <code>capture()</code> <strong>flushes inline on overflow instead of dropping</strong> — safe only because all callers now run on the main loop (§8); <code>setServer()</code> wires the WS server for that self-flush</td>
+<td>Captures outbound packets; maintains a live-stream ring (flushed at ~30 fps to mirroring clients) and a persistent snapshot (unicast to a client when it enables mirroring). <code>capture()</code> <strong>flushes inline on overflow instead of dropping</strong> — safe only because all callers now run on the main loop (§8); <code>setServer()</code> wires the WS server for that self-flush</td>
 </tr>
 </tbody>
 </table>
@@ -2743,8 +2891,13 @@ synchronous (<code>200</code>). See <a href="#8-concurrency-task-model-deferred-
 <code>List</code>, <code>Crc</code> (<abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16/IBM), <code>Mem</code>, <code>Macros</code>, <code>Debug</code> (<code>PRINTLN</code>/<code>PRINTKV</code>/<code>PRINTF</code> — no-ops at
 <code>DEBUG=0</code>), <code>Gamma</code> (correction table in PROGMEM).</p>
 <hr />
-<h2 id="4-i2c-protocol-internal">4. <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> Protocol (Internal)<a class="headerlink" href="#4-i2c-protocol-internal" title="Permanent link">&para;</a></h2>
-<p>Defined in <code>Common/Protocol.hpp</code>. All packets use <code>__attribute__((__packed__))</code> structs.</p>
+<h2 id="4-wire-protocol-internal">4. Wire Protocol (Internal)<a class="headerlink" href="#4-wire-protocol-internal" title="Permanent link">&para;</a></h2>
+<p>Defined in <code>Common/Protocol.hpp</code> (structs) and <code>Core/Common/ProtocolMeta.hpp</code> (version,
+<code>packetSizeForType()</code>, <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> validation). All packets use <code>__attribute__((__packed__))</code> structs and
+carry <code>PacketMeta</code>/<abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16 framing over the relay's shared <abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> (see <a href="../hardware/"><code>docs/hardware.md</code></a>).
+Since a <abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> byte stream has no out-of-band length field, <code>Protocol::packetSizeForType()</code> gives a
+receiver each type's fixed wire size so <code>Core/Relay/PacketFramer</code> can recover frame boundaries from
+a raw byte stream.</p>
 <h3 id="versions">Versions<a class="headerlink" href="#versions" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -2775,6 +2928,46 @@ synchronous (<code>200</code>). See <a href="#8-concurrency-task-model-deferred-
 <td>compositing</td>
 <td>Layer compositor. <code>PacketAnimationPrepare</code> gains <code>composeMode</code> + <code>composeOrder</code> + <code>startDelayMs</code> (25 B); <code>PacketAnimationControl</code> gains <code>group_id</code> (per-slot, 7 B); new <code>SET_BACKGROUND</code> packet. Runners are compiled to per-panel local PULSEs.</td>
 </tr>
+<tr>
+<td><strong>v7</strong></td>
+<td>relay</td>
+<td><code>FETCH_STATE</code>/<code>FETCH_ANIM_STATE</code> replies get their own wire types (<code>FETCH_STATE_REPLY</code>/<code>FETCH_ANIM_STATE_REPLY</code>) instead of reusing the request's — a byte-stream receiver can't otherwise size a frame from its type byte alone without knowing whether it's a request or reply.</td>
+</tr>
+<tr>
+<td><strong>v8</strong></td>
+<td>relay</td>
+<td>Discovery control plane: <code>PACKET_DISCOVERY_ADVANCE</code>/<code>PACKET_DISCOVERY_DONE</code> (see §6).</td>
+</tr>
+<tr>
+<td><strong>v9</strong></td>
+<td>relay</td>
+<td><code>PacketPanelConfiguration</code>'s <code>colorTemperature</code>/<code>colorCorrection</code> changed from FastLED's <code>ColorTemperature</code>/<code>LEDColorCorrection</code> enums to raw <code>ColorRGB</code> — moves the struct into the portable core (no FastLED dependency) and lets <code>packetSizeForType()</code> size it like every other packet.</td>
+</tr>
+<tr>
+<td><strong>v10</strong></td>
+<td>relay</td>
+<td><code>PacketHeader</code> gains <code>targetPanelIndex</code> (0 = broadcast, else one panel) — the relay's addressing field, since flooding has no physical-bus-address equivalent; without it a flooded <code>FETCH_STATE</code> query would make every panel reply at once. <code>PacketDiscoveryAdvance</code>'s own bespoke <code>targetPanelIndex</code> payload field folds into this. Every packet grows 2 B.</td>
+</tr>
+<tr>
+<td><strong>v11</strong></td>
+<td>relay</td>
+<td><code>PacketInitializationPull</code>/<code>PacketRegisterEdge</code> gain <code>parentEdgeIndex</code> — the probing panel's (or controller trunk's) own edge index for the link being offered, echoed back unchanged in the reply. Lets the controller learn <em>both</em> sides of every discovered link (needed to build <code>PanelGraph</code>'s <code>TopoLink[]</code>, see §6) without a second, independently-timed upstream frame that would race the single-active-flow invariant (§4). Both structs grow 2 B.</td>
+</tr>
+<tr>
+<td><strong>v12</strong></td>
+<td>relay</td>
+<td>Relay <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> bootloader control plane: <code>PACKET_BOOTLOADER_PING/PONG/WRITE_CHUNK/WRITE_ACK/START_APP</code> (see <a href="../ota/"><code>docs/ota.md</code></a>). An intermediate panel built before v12 can't frame/relay these new types at all (<code>packetSizeForType()</code> doesn't recognize them), so this still needs every panel between the controller and the flash target updated — even though the bootloader itself, once resident, deliberately skips <code>protocolVersion</code> validation (flashing is how a version mismatch gets resolved).</td>
+</tr>
+<tr>
+<td><strong>v13</strong></td>
+<td>relay</td>
+<td>Link-ARQ hop acknowledgments: <code>PACKET_LINK_ACK</code> + the <code>Protocol::isLinkAckedType()</code> policy table (see the <em>Link-ARQ</em> section below). Per-hop frame loss no longer compounds geometrically with tree depth for control/reply traffic. The resident bootloader's frozen wire contract is untouched — BL-bound types are deliberately not hop-acked.</td>
+</tr>
+<tr>
+<td><strong>v14</strong></td>
+<td>relay</td>
+<td><code>ANIMATION_START</code> moves out of <code>Protocol::isLinkAckedType()</code>. It floods to every panel and each relay panel forwards to all its children before dispatching locally, so hop-acking it compounded the ack/retransmit window with both tree depth and fan-out — working against every panel firing an animation at the same time. <code>AnimationScheduler::sendGroupStart()</code>'s existing redundant send (now 3 copies, up from 2) is the sole reliability mechanism for it, the same tradeoff already made for <code>SET_COLOR</code>.</td>
+</tr>
 </tbody>
 </table>
 <div class="admonition warning">
@@ -2782,6 +2975,9 @@ synchronous (<code>200</code>). See <a href="#8-concurrency-task-model-deferred-
 <p>Panel and controller must be flashed together when upgrading across protocol versions — versions are not interchangeable.</p>
 </div>
 <h3 id="packet-catalogue">Packet catalogue<a class="headerlink" href="#packet-catalogue" title="Permanent link">&para;</a></h3>
+<p>Not exhaustive — see <code>Core/Common/ProtocolTypes.hpp</code>'s <code>packetType_t</code> enum for the full list. <code>Dir</code>
+is who <em>authors</em> a packet. Over the relay, reaching a specific panel means flooding downstream with
+that panel's index as an address filter (<code>PanelRouter</code>).</p>
 <table>
 <thead>
 <tr>
@@ -2796,128 +2992,245 @@ synchronous (<code>200</code>). See <a href="#8-concurrency-task-model-deferred-
 <tr>
 <td>2</td>
 <td><code>INITIALIZATION_PULL</code></td>
-<td>C→P</td>
-<td>7 B</td>
-<td>Pull address <code>0x78</code>; panel replies with <code>PacketRegisterEdge</code></td>
+<td>C→P or P→P</td>
+<td>11 B</td>
+<td>Direct, single-hop probe — never routed. Sent by whoever is currently exploring one of its own edges (the controller down its trunk, or a registered panel down its next <code>Unexplored</code> edge), carrying <code>parentEdgeIndex</code> = the sender's own edge for this link (v11); panel replies with <code>PacketRegisterEdge</code> on the same edge</td>
 </tr>
 <tr>
 <td>3</td>
 <td><code>REGISTER_EDGE</code></td>
-<td>P→C</td>
-<td>9 B</td>
-<td>Panel index + edge index</td>
+<td>P→P or P→C</td>
+<td>13 B</td>
+<td>Reply to a probe: <code>panelIndex</code> = the assigned index (or <code>0</code> if this edge closes a wiring loop — see §6), <code>edgeIndex</code> = the replying panel's own edge for this link, <code>parentEdgeIndex</code> = echoed unchanged from the probe (v11) — together these give the controller both sides of the link for <code>DiscoveryTreeBuilder</code></td>
 </tr>
 <tr>
 <td>4</td>
 <td><code>TURN_ON_OFF</code></td>
 <td>C→P</td>
-<td>6 B</td>
+<td>8 B</td>
 <td></td>
 </tr>
 <tr>
 <td>5</td>
 <td><code>SET_COLOR</code></td>
 <td>C→P</td>
-<td>8 B</td>
+<td>10 B</td>
 <td></td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>FETCH_STATE</code></td>
+<td>C→P</td>
+<td>7 B</td>
+<td>Meta-only request</td>
 </tr>
 <tr>
 <td>11</td>
 <td><code>PANEL_CONFIGURATION</code></td>
 <td>C→P</td>
-<td>—</td>
-<td>Gamma correction, color temp/correction</td>
+<td>14 B</td>
+<td>Gamma correction + color temp/correction tint (raw RGB, v9)</td>
 </tr>
 <tr>
 <td>12</td>
 <td><code>ANIMATION_PREPARE</code></td>
 <td>C→P</td>
-<td>25 B</td>
+<td>28 B</td>
 <td>Unicast; buffers a layer (incl. <code>composeMode</code>/<code>composeOrder</code>/<code>startDelayMs</code>), arms for group start</td>
 </tr>
 <tr>
 <td>13</td>
 <td><code>ANIMATION_START</code></td>
-<td>General Call</td>
-<td>7 B</td>
-<td>Fires all panels with matching group_id</td>
+<td>Flood</td>
+<td>9 B</td>
+<td>Fires all panels with matching group_id. Not hop-acked (v14) — sent 3× (shared seq_id) instead, see <em>Link-ARQ</em> below</td>
 </tr>
 <tr>
 <td>14</td>
 <td><code>ANIMATION_CONTROL</code></td>
 <td>C→P</td>
-<td>7 B</td>
+<td>9 B</td>
 <td>STOP / PAUSE / RESUME / CLEAR_QUEUE; <code>group_id</code>=0 → all slots</td>
 </tr>
 <tr>
 <td>15</td>
 <td><code>FETCH_ANIM_STATE</code></td>
 <td>C→P</td>
-<td>5 B</td>
-<td>Panel replies with 11 B status</td>
+<td>7 B</td>
+<td>Meta-only request</td>
 </tr>
 <tr>
 <td>16</td>
 <td><code>ANIMATION_UPDATE_PARAMS</code></td>
-<td>General Call</td>
-<td>10 B</td>
+<td>Flood</td>
+<td>12 B</td>
 <td>Trigger / brightness-mult / speed-scale</td>
 </tr>
 <tr>
 <td>17</td>
 <td><code>SET_PALETTE</code></td>
-<td>C→P or GC</td>
-<td>70 B</td>
-<td>16-stop gradient; GC = broadcast to all</td>
+<td>C→P or Flood</td>
+<td>72 B</td>
+<td>16-stop gradient; flood = all panels</td>
 </tr>
 <tr>
 <td>18</td>
 <td><code>SET_BASE_COLORS</code></td>
-<td>C→P or GC</td>
-<td>14 B</td>
+<td>C→P or Flood</td>
+<td>16 B</td>
 <td>3 × RGB base colors</td>
 </tr>
 <tr>
 <td>19</td>
 <td><code>SET_GLOBAL_BRIGHTNESS</code></td>
-<td>General Call</td>
-<td>6 B</td>
+<td>Flood</td>
+<td>8 B</td>
 <td>0–255 multiplier</td>
 </tr>
 <tr>
 <td>20</td>
 <td><code>SET_BACKGROUND</code></td>
-<td>C→P or GC</td>
-<td>8 B</td>
+<td>C→P or Flood</td>
+<td>10 B</td>
 <td>Scene compositor base colour (sent once at scene start)</td>
+</tr>
+<tr>
+<td>21</td>
+<td><code>FETCH_STATE_REPLY</code></td>
+<td>P→C</td>
+<td>13 B</td>
+<td>Panel state, in reply to <code>FETCH_STATE</code></td>
+</tr>
+<tr>
+<td>22</td>
+<td><code>FETCH_ANIM_STATE_REPLY</code></td>
+<td>P→C</td>
+<td>14 B</td>
+<td>Animation status, in reply to <code>FETCH_ANIM_STATE</code></td>
+</tr>
+<tr>
+<td>23</td>
+<td><code>DISCOVERY_ADVANCE</code></td>
+<td>C→P</td>
+<td>9 B</td>
+<td>Flooded; target now carried in <code>PacketHeader.targetPanelIndex</code> (v10) — see §6</td>
+</tr>
+<tr>
+<td>24</td>
+<td><code>DISCOVERY_DONE</code></td>
+<td>P→C</td>
+<td>9 B</td>
+<td>Routed upstream — see §6</td>
+</tr>
+<tr>
+<td>25</td>
+<td><code>LINK_ACK</code></td>
+<td>hop-local</td>
+<td>9 B</td>
+<td>Link-ARQ hop acknowledgment (v13): echoes a <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16 over the acked frame's full bytes. Never relayed, never itself acked, version-exempt — see <em>Link-ARQ</em> below</td>
 </tr>
 <tr>
 <td>200</td>
 <td><code>RESET_DEVICE</code></td>
 <td>C→P</td>
-<td>5 B</td>
+<td>7 B</td>
 <td><abbr title="Watchdog Timer — a hardware safety timer that resets the MCU if firmware stops feeding it.">WDT</abbr> reset</td>
 </tr>
 <tr>
 <td>201</td>
 <td><code>ENTER_BOOTLOADER</code></td>
 <td>C→P</td>
-<td>6 B</td>
+<td>8 B</td>
 <td>Token must be <code>0xB0</code></td>
+</tr>
+<tr>
+<td>202</td>
+<td><code>BOOTLOADER_PING</code></td>
+<td>C→bootloader</td>
+<td>7 B</td>
+<td>Meta-only; presence check once a panel is resident in <code>RelayBootloader.cpp</code> (v12)</td>
+</tr>
+<tr>
+<td>203</td>
+<td><code>BOOTLOADER_PONG</code></td>
+<td>bootloader→C</td>
+<td>12 B</td>
+<td>Bootloader version + flash page size + <code>BOOTLOADER_START</code></td>
+</tr>
+<tr>
+<td>204</td>
+<td><code>BOOTLOADER_WRITE_CHUNK</code></td>
+<td>C→bootloader</td>
+<td>76 B</td>
+<td>64 B of flash data + its own <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16 (<code>headerCrc</code> covers only <code>PacketHeader</code>, not payload) — two chunks per 128 B page</td>
+</tr>
+<tr>
+<td>205</td>
+<td><code>BOOTLOADER_WRITE_ACK</code></td>
+<td>bootloader→C</td>
+<td>12 B</td>
+<td>Per-chunk result: ok / bad <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> / bad address, plus a <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16 over its address+status payload (<code>headerCrc</code> covers only <code>PacketHeader</code>) so a corrupted status is retried, never misread</td>
+</tr>
+<tr>
+<td>206</td>
+<td><code>BOOTLOADER_START_APP</code></td>
+<td>C→bootloader</td>
+<td>7 B</td>
+<td>Meta-only; commits any pending page then jumps to the application</td>
 </tr>
 </tbody>
 </table>
-<h3 id="general-call">General Call<a class="headerlink" href="#general-call" title="Permanent link">&para;</a></h3>
-<p><abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> address <code>0x00</code> broadcasts to all panels simultaneously (±2.5 µs jitter). Used for:</p>
+<p>Every packet above carries <code>PacketHeader.targetPanelIndex</code> (v10): <code>0</code> = broadcast/flood, any other
+value = one specific panel. <code>PanelRouter</code> routes an addressed downstream packet to the <strong>single
+branch</strong> containing the target: discovery assigns indices in pre-order DFS, so every subtree is a
+contiguous index range and each parent only stores each child's own index
+(<code>PanelDiscovery::childIndex()</code>, recorded from the child's <code>REGISTER_EDGE</code> reply) — the target lives
+behind the child with the largest index ≤ target. Any connected child without a recorded index
+(incomplete discovery) reverts that panel to the legacy full flood, so nothing reachable is ever cut
+off. Branch routing is what keeps a parent listening when the addressed panel replies — a parent
+mid-flood to a sibling edge is deaf (<code>EdgeUartTransport</code> masks RX + wakes per send) and would
+deterministically swallow a fast reply. The receiving panel's own dispatch still uses the target as
+a single type-independent "is this for me" gate before the type switch below.</p>
+<h3 id="broadcast-flood">Broadcast (Flood)<a class="headerlink" href="#broadcast-flood" title="Permanent link">&para;</a></h3>
+<p>Broadcast packets are delivered via <code>PanelRouter</code>'s ordinary flood rule (downstream to every
+connected edge except the one a packet arrived on). Used for:</p>
 <ul>
 <li><code>ANIMATION_START</code> — fires queued animations in lockstep</li>
 <li><code>ANIMATION_UPDATE_PARAMS</code> — reactive triggers, speed changes</li>
 <li><code>SET_PALETTE</code> / <code>SET_BASE_COLORS</code> / <code>SET_GLOBAL_BRIGHTNESS</code></li>
 </ul>
-<div class="admonition note">
-<p class="admonition-title">Duplicate guard</p>
-<p>START and UPDATE_PARAMS packets are sent <strong>twice</strong> (300 µs apart) with a <code>seq_id</code> duplicate guard so the panel processes exactly one copy.</p>
-</div>
+<h3 id="link-arq-per-hop-acknowledgment-v13">Link-ARQ (per-hop acknowledgment, v13)<a class="headerlink" href="#link-arq-per-hop-acknowledgment-v13" title="Permanent link">&para;</a></h3>
+<p>Measured per-hop frame loss (per mux receive channel: X0/PORT1 ≈ 2 %, X1/PORT2 ≈ 8 %,
+X2/PORT3 ≈ 25 % at 250 k on the rev-1 panel board) compounds <strong>geometrically</strong> with tree depth —
+end-to-end retries alone can't make a 30-panel chain deliver control traffic. The link-ARQ layer
+converts that into a small per-link residual: with two hop retransmissions, an 8 %-lossy hop's
+residual is 0.05 %.</p>
+<p>Mechanics (<code>Core/Relay/LinkArq.hpp</code> for the pure pieces + rationale):</p>
+<ul>
+<li>After transmitting a frame whose type <code>Protocol::isLinkAckedType()</code> covers, the sender parks
+  its receiver on the egress edge and waits <code>LINK_ACK_TIMEOUT_MS</code> for a <code>PACKET_LINK_ACK</code> echoing
+  a <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16 over the frame's <strong>full bytes</strong>; on timeout it retransmits, up to <code>LINK_RETRANSMITS</code>
+  times, then gives up (end-to-end retries recover the residual). Panel side:
+  <code>Panel/ArqEdgeLink</code> (an <code>IEdgeLink</code> decorator between <code>PanelRouter</code> and the transport);
+  controller side: integrated into <code>ControllerRelayPacketSink</code>'s one receive loop, so a fast
+  end-to-end reply arriving before the hop ack is never lost to the ack window.</li>
+<li>A receiver completing a valid acked-type frame <strong>always acks first, then dispatches</strong> — and
+  consults a <code>LINK_DEDUP_WINDOW_MS</code> duplicate window (<code>LinkDedup</code>, keyed on the same full-frame
+  <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>): a hop retransmission whose previous ack was lost is re-acked but never re-relayed or
+  re-acted on. End-to-end retries arrive far outside the window and dispatch normally.</li>
+<li><strong>Not</strong> hop-acked: <code>SET_COLOR</code> (60 fps self-healing stream — ack turnarounds would eat the
+  trunk at depth), <code>ANIMATION_START</code> (v14 — a flood, and every relay panel forwards to all its
+  children before dispatching locally, so the ack/retransmit window compounded with both tree
+  depth and fan-out, working against every panel firing together; <code>AnimationScheduler::
+  sendGroupStart()</code> sends it 3× with a shared <code>seq_id</code> instead — the panel-side duplicate guard
+  absorbs the extra copies, and whichever copy arrives first is the one that fires it), the
+  discovery control plane (own per-hop retries), and the BL-bound bootloader types
+  (<code>PING</code>/<code>WRITE_CHUNK</code>/<code>START_APP</code> — the resident bootloader doesn't speak link-ARQ; its
+  <strong>replies</strong> <code>PONG</code>/<code>WRITE_ACK</code> <em>are</em> protected at every panel-to-panel hop, the BL simply
+  ignores the ack its own parent sends it).</li>
+</ul>
+<p>Per-panel <code>[DIAG]</code> counters (<code>lack</code>/<code>lrtx</code>/<code>lto</code>/<code>ldup</code>, see <code>LightnetPanel::flushRelayDiag</code>)
+expose the layer's live behavior for link-quality regression checks.</p>
 <hr />
 <h2 id="5-animation-framework-internals">5. Animation Framework Internals<a class="headerlink" href="#5-animation-framework-internals" title="Permanent link">&para;</a></h2>
 <h3 id="animationplayer-panel-side-layer-compositor-shared-with-mobile">AnimationPlayer (panel side) — layer compositor, shared with mobile<a class="headerlink" href="#animationplayer-panel-side-layer-compositor-shared-with-mobile" title="Permanent link">&para;</a></h3>
@@ -2957,9 +3270,11 @@ It is the <strong>single implementation</strong> of panel-local animation math, 
 </ul>
 <h3 id="animationscheduler-controller-side">AnimationScheduler (controller side)<a class="headerlink" href="#animationscheduler-controller-side" title="Permanent link">&para;</a></h3>
 <ul>
-<li><code>playOnPanels()</code>: unicast PREPARE to each target panel (3 retries each), then General Call START twice</li>
-<li><code>tick()</code>: 60 fps frame gate; ticks all active runners, deletes finished ones</li>
-<li>Per-panel <code>AnimationRecord</code> in-memory state — avoids polling panels for status queries</li>
+<li><code>playOnPanels()</code>: unicast PREPARE to each target panel, then General Call START 3× (all share
+  one seq_id, so the panel's duplicate guard absorbs the redundant copies — <code>ANIMATION_START</code> is
+  not hop-acked, see <em>Link-ARQ</em> above)</li>
+<li>Appearance broadcasts (palette, base colors, global brightness, background) and per-panel
+  CONTROL fan-out (<code>sendControlToPanels</code>) — a stateless packet-builder over <code>IPacketSink</code></li>
 </ul>
 <h3 id="controller-runners-compiled-to-per-panel-local-pulses-v6">Controller runners — compiled to per-panel local pulses (v6)<a class="headerlink" href="#controller-runners-compiled-to-per-panel-local-pulses-v6" title="Permanent link">&para;</a></h3>
 <p>As of v6, <code>ScenePlayer::fireStep</code> no longer streams a runner: it <strong>compiles</strong> the sweep into one
@@ -3032,7 +3347,7 @@ these over the step window (<code>serviceSpawner()</code> in <code>tick()</code>
 </tr>
 <tr>
 <td><strong>Slot reaping</strong></td>
-<td>drop pulses set <strong><code>FLAG_REAP_ON_DONE</code></strong> (a new, backward-compatible AnimationFlags bit — no <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> protocol bump); the panel frees the slot the instant the one-shot finishes (<code>AnimationPlayer</code>), so panels never clog and a recycled broadcast START can't re-fire a drained drop. <strong>All panels must be re-flashed</strong> with this firmware — older panels ignore the flag and would clog.</td>
+<td>drop pulses set <strong><code>FLAG_REAP_ON_DONE</code></strong> (a new, backward-compatible AnimationFlags bit — no protocol version bump); the panel frees the slot the instant the one-shot finishes (<code>AnimationPlayer</code>), so panels never clog and a recycled broadcast START can't re-fire a drained drop. <strong>All panels must be re-flashed</strong> with this firmware — older panels ignore the flag and would clog.</td>
 </tr>
 </tbody>
 </table>
@@ -3040,11 +3355,14 @@ these over the step window (<code>serviceSpawner()</code> in <code>tick()</code>
 natively tested in <code>test_runner_spawn</code>; the stateful real-time behaviour is verified on sim/device
 (<code>tools/api-shell/mirror-dump.js</code>).</p>
 <h3 id="bandwidth-budget">Bandwidth budget<a class="headerlink" href="#bandwidth-budget" title="Permanent link">&para;</a></h3>
+<p>The pattern below (which scenarios cost bandwidth vs. which are free between updates) holds
+regardless of transport. These estimates are unvalidated on real hardware and should be treated as
+working estimates, not settled figures (see <a href="../hardware/#latency--topology-constraints"><code>docs/hardware.md</code></a>).</p>
 <table>
 <thead>
 <tr>
 <th>Scenario</th>
-<th><abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> cost</th>
+<th>Estimated cost</th>
 </tr>
 </thead>
 <tbody>
@@ -3061,41 +3379,151 @@ natively tested in <code>test_runner_spawn</code>; the stateful real-time behavi
 <td><strong>0 µs/frame</strong> during sweep (one PREPARE burst per pass)</td>
 </tr>
 <tr>
-<td>Setup: PREPARE × 30 panels + 2 General Calls</td>
+<td>Setup: PREPARE × 30 panels + 3 General Calls</td>
 <td><strong>~6.2 ms</strong> one-time</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="6-discovery-sequence">6. Discovery Sequence<a class="headerlink" href="#6-discovery-sequence" title="Permanent link">&para;</a></h2>
-<p>Triggered by <code>PanelsInitializer::start()</code>. Runs on each controller boot before WiFi.</p>
-<h3 id="ping-handshake-per-edge">Ping handshake (per edge)<a class="headerlink" href="#ping-handshake-per-edge" title="Permanent link">&para;</a></h3>
+<p>Implemented by <code>Core/Relay/DiscoveryCoordinator</code> (controller) and <code>Core/Relay/PanelDiscoveryDriver</code>
+(panel) — both pure/portable and natively tested (<code>test_discovery_coordinator</code>,
+<code>test_panel_discovery_driver</code>, and <code>test_discovery_end_to_end</code>, which proves the whole protocol
+against a real multi-node fabric with a deliberate wiring loop, not just each piece in isolation).
+Runs on each controller boot before WiFi.</p>
+<p>Discovery is a <strong>controller-driven depth-first walk</strong> over the relay trunk: the controller keeps
+exactly one panel "active" at a time and steps it through its own edges one at a time, descending
+into any new child immediately (depth-first) and backtracking once a subtree is exhausted.</p>
+<h3 id="depth-first-walk">Depth-first walk<a class="headerlink" href="#depth-first-walk" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>sequenceDiagram
   participant C as Controller
-  participant P as Panel
+  participant P as Parent panel
+  participant N as New panel
 
-  C-&gt;&gt;P: HANDSHAKE pulse (500 µs)
-  P-&gt;&gt;C: HANDSHAKE ACK (500 µs)
-  Note over P: enters STATE_REGISTER_EDGES&lt;br/&gt;calls LNBus.begin(0x78)
-  C-&gt;&gt;P: INITIALIZATION_PULL (I²C 0x78)
-  P-&gt;&gt;C: PacketRegisterEdge (panel + edge index)
-  Note over P: repeats for each non-parent edge
-  P-&gt;&gt;C: DONE pulse (2000 µs)</code></pre>
-<p>The Panel <abbr title="Interrupt Service Routine — a small function the CPU jumps into when a hardware event fires.">ISR</abbr> calls <code>LNPanel.updateEdgesStates((PINB &gt;&gt; 1) &amp; 0x07, TCNT1)</code> directly. Timer1 runs free at prescaler 8 (0.5 µs/tick) for pulse-duration measurement.</p>
+  Note over C: DiscoveryCoordinator.begin()
+  C-&gt;&gt;P: INITIALIZATION_PULL (assign index 1, direct on trunk edge)
+  P-&gt;&gt;C: REGISTER_EDGE (panelIndex=1)
+  Note over C: push sentinel, frontier=1, nextIndex=2
+  C-&gt;&gt;P: DISCOVERY_ADVANCE (target=1, assign=2) — flooded, address-filtered
+  Note over P: tries its own next Unexplored edge
+  P-&gt;&gt;N: INITIALIZATION_PULL (assign index 2, direct, one hop)
+  N-&gt;&gt;P: REGISTER_EDGE (panelIndex=2)
+  Note over P: relayed upstream via PanelRouter's ordinary rule
+  P-&gt;&gt;C: REGISTER_EDGE (panelIndex=2)
+  Note over C: push 1, frontier=2, nextIndex=3
+  C-&gt;&gt;N: DISCOVERY_ADVANCE (target=2, assign=3)
+  Note over N: no more Unexplored edges
+  N-&gt;&gt;C: DISCOVERY_DONE (panelIndex=2) — routed upstream through P
+  Note over C: pop -&gt; frontier=1, re-advance with the same assign=3
+  Note over C: ... continues until the resume stack unwinds to the sentinel</code></pre>
+<p>Every hop except the very first <code>INITIALIZATION_PULL</code>/<code>REGISTER_EDGE</code> exchange (a direct,
+single-hop probe onto an edge that isn't in the topology yet, so no router rule could know how to
+forward it) travels through completely unmodified <code>PanelRouter</code> flood/route rules —
+<code>DISCOVERY_ADVANCE</code> floods downstream like any other packet and is address-filtered by the target's
+own index; <code>DISCOVERY_DONE</code> and an accepted <code>REGISTER_EDGE</code> reply route upstream to the parent like
+any other reply.</p>
+<h3 id="loop-rejection">Loop rejection<a class="headerlink" href="#loop-rejection" title="Permanent link">&para;</a></h3>
+<p>A panel that already has a parent + index refuses a second one: if <code>INITIALIZATION_PULL</code> arrives on
+any edge other than its established parent edge (<code>Core/Relay/PanelDiscovery::onParentOffer()</code>), it
+replies with <code>panelIndex=0</code> (never a real assignment — indices start at 1) instead of accepting. The
+prober marks that edge <code>NotConnected</code> and moves on to its next edge, no controller round-trip needed.
+Since packets carry no hop-count/TTL/visited list, this discovery-time rejection is the <strong>only</strong>
+thing that guarantees the discovered topology is a genuine, cycle-free spanning tree — which is in
+turn what guarantees an ordinary flood (<code>ANIMATION_START</code> etc.) terminates instead of circulating
+forever through a physically-wired loop.</p>
 <h3 id="full-discovery-flow">Full discovery flow<a class="headerlink" href="#full-discovery-flow" title="Permanent link">&para;</a></h3>
 <ol>
-<li><code>PanelsInitializer::start()</code> — initialises <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> as master, attaches CHANGE interrupt on the edge <abbr title="General-Purpose Input/Output — a pin on the microcontroller that can be driven high or low or read as a signal.">GPIO</abbr></li>
-<li><code>PanelsInitializer::boot()</code> runs every main-loop iteration:</li>
-<li>Drives <code>LightnetPanelEdge</code> state machines</li>
-<li>While a panel is in <code>STATE_BOOTING</code>, pulls address <code>0x78</code> every 20 ms</li>
-<li>Panel: detects HANDSHAKE → replies HANDSHAKE → enters <code>STATE_REGISTER_EDGES</code> → calls <code>LNBus.begin(0x78)</code></li>
-<li>Controller pull delivers <code>PACKET_INITIALIZATION_PULL</code>; panel responds with <code>PacketRegisterEdge</code> (panel index + edge index)</li>
-<li>Panel repeats steps 3–4 for each non-parent edge, then sends DONE to its parent</li>
-<li>Controller detects DONE → <code>isReady()</code> returns true (5 s boot timeout)</li>
+<li>Controller: <code>DiscoveryCoordinator::begin()</code> sends <code>INITIALIZATION_PULL{panelIndex=1}</code> directly on
+   its single trunk edge.</li>
+<li>The directly-wired panel accepts, becomes panel 1, replies <code>REGISTER_EDGE</code>. The controller pushes
+   the sentinel frontier (<code>0</code>) onto its resume stack, sets frontier <code>= 1</code>, and sends
+   <code>DISCOVERY_ADVANCE{target=1, assign=2}</code>.</li>
+<li>Whichever panel matches <code>target</code> (found via the ordinary flood — every panel relays it regardless
+   of the target field; only the addressed one acts) tries its next <code>Unexplored</code> edge, skipping its
+   own parent edge: probes it directly, and either gets an accept (marks the edge <code>Connected</code>, then
+   <strong>stops</strong> — no further edge is tried until the controller comes back), a reject/timeout (marks
+   <code>NotConnected</code>, immediately tries the next edge, no controller round-trip), or runs out of edges
+   (sends <code>DISCOVERY_DONE</code> upstream).</li>
+<li>On an accepted registration, the controller pushes the current frontier, descends into the new
+   panel, and repeats step 3 — this is what makes the walk depth-first rather than breadth-first.</li>
+<li>On <code>DISCOVERY_DONE</code>, the controller pops its resume stack and re-<code>ADVANCE</code>s the popped panel with
+   the same pending index (it was never consumed) so it tries its own remaining edges. Popping back
+   to the sentinel means the whole tree is resolved.</li>
 </ol>
+<h4 id="worked-example-two-panels-in-series">Worked example: two panels in series<a class="headerlink" href="#worked-example-two-panels-in-series" title="Permanent link">&para;</a></h4>
+<p>Chain: controller trunk → P1 edge 0; P1 edge 2 → P2 edge 2; every other edge unwired.</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant C as Controller&lt;br/&gt;(DiscoveryCoordinator)
+    participant P1 as Panel 1&lt;br/&gt;(driver + router)
+    participant P2 as Panel 2&lt;br/&gt;(driver + router)
+
+    Note over C: begin(): frontier=0, nextIdx=1
+    C-&gt;&gt;P1: PULL{assignIdx=1, parentEdge=trunk} (direct on trunk)
+    Note right of C: the trunk is a single shared wire, so the&lt;br/&gt;controller reads back an echo of every tx —&lt;br/&gt;parsed as an ordinary frame and ignored
+    Note over P1: onParentOffer(edge 0) → accept&lt;br/&gt;parent=0, myIdx=1
+    P1--&gt;&gt;C: REGISTER{panelIdx=1, edge=0, parentEdge=0} (direct, edge 0)
+    Note over C: addRoot(1), push(0), frontier=1, nextIdx=2
+
+    C-&gt;&gt;P1: ADVANCE{target=1, assign=2}
+    Note over P1: addressed to me → tryNextEdge&lt;br/&gt;(router flood: no connected children yet)
+    P1--xP1: probe edge 1: PULL{assignIdx=2, parentEdge=1}
+    Note over P1: edge 1 empty → PROBE_ATTEMPTS × PROBE_TIMEOUT (3 × 20 ms)&lt;br/&gt;→ NotConnected, next edge immediately
+    P1-&gt;&gt;P2: probe edge 2: PULL{assignIdx=2, parentEdge=2}
+    Note over P2: onParentOffer(edge 2) → accept&lt;br/&gt;parent=2, myIdx=2
+    P2--&gt;&gt;P1: REGISTER{panelIdx=2, edge=2, parentEdge=2} (direct, edge 2)
+    Note over P1: driver: edge 2 → Connected, stop&lt;br/&gt;router: non-parent arrival → relay to parent
+    P1--&gt;&gt;C: REGISTER{panelIdx=2, ...} (relayed)
+    Note over C: addLink(1↔2), push(1), frontier=2, nextIdx=3
+
+    C-&gt;&gt;P1: ADVANCE{target=2, assign=3}
+    Note over P1: not addressed → router floods to connected edge 2
+    P1-&gt;&gt;P2: ADVANCE{target=2, assign=3} (relayed)
+    P2--xP2: probe edge 0: PULL{assignIdx=3} → 3 × 20 ms timeout
+    P2--xP2: probe edge 1: PULL{assignIdx=3} → 3 × 20 ms timeout
+    Note over P2: no Unexplored edges left
+    P2--&gt;&gt;P1: DONE{panelIdx=2} (on parent edge 2)
+    P1--&gt;&gt;C: DONE{panelIdx=2} (relayed upstream)
+    Note over C: pop() → resume frontier=1
+
+    C-&gt;&gt;P1: ADVANCE{target=1, assign=3}
+    Note over P1: addressed: edges = parent / NotConnected / Connected&lt;br/&gt;→ nothing left to probe → DONE first, then the&lt;br/&gt;router relays the ADVANCE on to edge 2
+    P1--&gt;&gt;C: DONE{panelIdx=1}
+    P1-&gt;&gt;P2: ADVANCE{target=1} (relayed flood, P2 ignores — not addressed)
+    Note over C: pop() → sentinel 0 → complete, panels found 2</code></pre>
+<p>Reading notes:</p>
+<ul>
+<li>Every arrow is one <code>sendOnEdge()</code> burst: 2×<code>0xFF</code> preamble + frame, the sender blocking until
+  the last byte has shifted out. On the panel side each inbound frame needs wake → claim → mux
+  switch (<code>EdgeFrameReceiver</code>) before its first real byte.</li>
+<li>Every leg is retried: the root <code>PULL</code> every <code>ROOT_RETRY_INTERVAL_MS</code> (empty-tree give-up at
+  <code>ROOT_TIMEOUT_MS</code>), each probe <code>PULL</code> up to <code>PROBE_ATTEMPTS</code> times, and the frontier's <code>ADVANCE</code>
+  every <code>ADVANCE_RETRY_INTERVAL_MS</code> until a <code>REGISTER_EDGE</code>/<code>DONE</code> moves the walk. The duplicate
+  upstream frames retries can produce are filtered by the coordinator (a <code>REGISTER_EDGE</code> must
+  carry the newest assigned index, a <code>DONE</code> must name the current frontier). Only exhausting all
+  retries prunes a subtree (<code>NotConnected</code>) or ends the walk partially via
+  <code>WALK_STALL_TIMEOUT_MS</code>.</li>
+<li>The <code>assign</code> index in <code>ADVANCE</code>/<code>PULL</code> is the coordinator's global counter, incremented only on
+  an accepted registration — which is why P2's probes of its empty edges still carry <code>assignIdx=3</code>.</li>
+<li>On a resume-<code>ADVANCE</code> the dispatcher runs the driver before the router, so the addressed panel
+  transmits its own reply (here P1's <code>DONE</code>) before re-flooding the <code>ADVANCE</code> downstream — two
+  back-to-back tx bursts on different edges.</li>
+</ul>
+<h3 id="topology-capture-discoverytreebuilder">Topology capture — <code>DiscoveryTreeBuilder</code><a class="headerlink" href="#topology-capture-discoverytreebuilder" title="Permanent link">&para;</a></h3>
+<p><code>DiscoveryCoordinator</code> itself only tracks DFS <em>sequencing</em> (the frontier + resume stack) — it has no
+notion of the discovered tree's shape. <code>Core/Relay/DiscoveryTreeBuilder</code> (pure, natively tested) is
+fed one <code>(parentIndex, parentEdge, childIndex, childEdge)</code> tuple per accepted registration (the
+parent index comes from the coordinator's own frontier; both edge indices come from the <code>v11</code>
+<code>parentEdgeIndex</code>/<code>edgeIndex</code> fields on the <code>REGISTER_EDGE</code> reply) and accumulates the same
+<code>indices[]</code>/<code>edgeCounts[]</code>/<code>TopoLink[]</code> shape <code>PanelGraph::build()</code> consumes. <code>PanelsInitializer</code>
+(the real, non-<code>SIM_MODE</code> device glue) drives <code>ControllerDiscoveryService</code> — which owns both the
+coordinator and the tree builder — and, once discovery completes, converts the accumulated links
+into the <code>Panel</code>/<code>Edge</code> list <code>getPanels()</code> returns, the same conversion <code>Sim/PanelsInitializerSim.cpp</code>
+already does directly (fabricating a random tree with no wire protocol at all) — so every consumer
+of <code>getPanels()</code> (<code>PanelsTopologyProvider</code>, <code>PanelFlasher</code>, demos, <code>MqttService</code>) is unaffected by
+which side actually built the tree.</p>
 <hr />
 <h2 id="7-controller-boot-startup">7. Controller Boot &amp; Startup<a class="headerlink" href="#7-controller-boot-startup" title="Permanent link">&para;</a></h2>
-<p>Sequence after <code>LNPanelsInitializer.isReady() == true</code>:</p>
+<p>Sequence after <code>LNPanelsInitializer.isFinished() == true</code>:</p>
 <pre class="mermaid"><code>flowchart TD
   A[Mount LittleFS] --&gt; B[sendConfiguration — gamma/color temp to all panels]
   B --&gt; C[selfTest — fade-in/out on every panel]
@@ -3121,7 +3549,6 @@ natively tested in <code>test_runner_spawn</code>; the stateful real-time behavi
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">appStateStore</span><span class="o">-&gt;</span><span class="n">isOn</span><span class="p">())</span><span class="w"> </span><span class="n">scenePlayer</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span><span class="w">    </span><span class="c1">// multi-layer scene playback</span>
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">appearance</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span><span class="w"> </span><span class="n">configStore</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span><span class="w"> </span><span class="n">appStateStore</span><span class="o">-&gt;</span><span class="n">tick</span><span class="p">(</span><span class="n">millis</span><span class="p">());</span>
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="n">serviceMirror</span><span class="p">();</span><span class="w">                                    </span><span class="c1">// ≤30 fps flush of the mirror ring</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="n">MDNS</span><span class="p">.</span><span class="n">update</span><span class="p">();</span><span class="w">                                      </span><span class="c1">// ESP8266 only</span>
 </span></code></pre></div></p>
 <p>The ordering matters — see <a href="#main-loop-service-order">§8 Main-loop service order</a>.</p>
 <hr />
@@ -3149,13 +3576,13 @@ natively tested in <code>test_runner_spawn</code>; the stateful real-time behavi
 </tr>
 </tbody>
 </table>
-<p>On <strong><abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr></strong> these are separate FreeRTOS tasks, usually on different cores, preemptively scheduled.
-On <strong><abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr></strong> the AsyncTCP callbacks run in a context that can preempt <code>loop()</code>. Either way the two
+<p>These are separate FreeRTOS tasks, usually on different cores, preemptively scheduled — the two
 tasks run concurrently and share no implicit synchronization.</p>
 <h3 id="82-the-hazard-outbound-packets-must-be-single-task">8.2 The hazard: outbound packets must be single-task<a class="headerlink" href="#82-the-hazard-outbound-packets-must-be-single-task" title="Permanent link">&para;</a></h3>
-<p>Every outbound <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> packet is captured by <code>PacketMirror::capture()</code> (registered via
-<code>LNBus.setOnPacketSent()</code>). <code>capture()</code> appends to a single shared ring buffer <strong>with no locks</strong> — it
-is written assuming exactly one caller. But <code>LNBus.sendPacket()</code> is reached from <strong>both</strong> tasks:</p>
+<p>Every outbound packet is captured by <code>PacketMirror::capture()</code> (registered on whichever sink is
+active — <code>activeSink.setOnPacketSent()</code> on real hardware, <code>LNBus.setOnPacketSent()</code> under
+<code>SIM_MODE</code>). <code>capture()</code> appends to a single shared ring buffer <strong>with no locks</strong> — it is written
+assuming exactly one caller. But packet emission is reached from <strong>both</strong> tasks:</p>
 <ul>
 <li><strong>Main loop</strong> — <code>scenePlayer-&gt;tick()</code> emits step PREPARE/START packets and services spawners;
   step PREPARE/START packets.</li>
@@ -3166,7 +3593,7 @@ is written assuming exactly one caller. But <code>LNBus.sendPacket()</code> is r
 over the same buffer — a data race. The same AsyncTCP handlers also mutate <code>ScenePlayer</code> state that
 the main loop ticks. The invariant that removes the whole class of hazard:</p>
 <blockquote>
-<p><strong>All <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> packet emission — and the <code>ScenePlayer</code> state it touches — happens on the main-loop task.</strong></p>
+<p><strong>All packet emission — and the <code>ScenePlayer</code> state it touches — happens on the main-loop task.</strong></p>
 </blockquote>
 <p>WebSocket commands already obeyed this (see <a href="#86-ws-command-queue-sibling-mechanism">§8.6</a>). HTTP
 handlers did not; <code>MainLoopQueue</code> brings them in line.</p>
@@ -3186,10 +3613,10 @@ handlers did not; <code>MainLoopQueue</code> brings them in line.</p>
   (which decays to a <code>TaskFn</code>) plus a POD args struct, so there is <strong>no central dispatch switch</strong> —
   work stays defined at the call site and each server owns its own execute function.</li>
 <li><strong>Storage</strong> is a <code>SpscByteQueue</code> (the codebase's lock-free byte-record ring). Both <code>push</code> and <code>pop</code>
-  are wrapped in the <strong>same critical section</strong> <code>WebsocketServer</code> uses (<code>portENTER_CRITICAL</code> on <abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr>,
-  <code>noInterrupts()</code> on <abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr>). That supplies the memory barrier a multi-core <abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr> needs —
-  <code>SpscByteQueue</code> alone is only lock-free-safe on a single in-order core — and serializes producer vs
-  consumer, so it is robust even if work is posted from the main loop itself.</li>
+  are wrapped in the <strong>same critical section</strong> <code>WebsocketServer</code> uses (<code>portENTER_CRITICAL</code>). That
+  supplies the memory barrier a multi-core <abbr title="Wi-Fi + BLE microcontroller — the supported controller MCU.">ESP32</abbr> needs — <code>SpscByteQueue</code> alone is only
+  lock-free-safe on a single in-order core — and serializes producer vs consumer, so it is robust
+  even if work is posted from the main loop itself.</li>
 <li><strong>The task <code>fn()</code> runs outside the lock</strong> — its record is copied out of the ring under the lock
   first — so a slow or packet-emitting task never blocks the producer.</li>
 <li><strong>Args are copied by value</strong> into the ring, so they must be self-contained POD with no pointers
@@ -3224,7 +3651,7 @@ synchronous and return <code>200</code>.</p>
   participant TCP as AsyncTCP task
   participant Q as MainLoopQueue
   participant Loop as Main loop
-  participant Bus as LNBus → PacketMirror
+  participant Sink as activeSink → PacketMirror
 
   Cl-&gt;&gt;TCP: POST /api/scenes/play/one-shot
   TCP-&gt;&gt;TCP: parse + validate (pure, no packets)
@@ -3233,7 +3660,7 @@ synchronous and return <code>200</code>.</p>
   Note over Loop: next tick
   Loop-&gt;&gt;Q: drain()
   Q-&gt;&gt;Loop: playParsed(parsed*) (frees parsed*)
-  Loop-&gt;&gt;Bus: PREPARE × N + START — capture() on main loop
+  Loop-&gt;&gt;Sink: PREPARE × N + START — capture() on main loop
   Loop-&gt;&gt;Loop: serviceMirror() → flush ring to WS clients</code></pre>
 <p><code>ScenesService</code> is split to support this: <code>prepareInline()</code> / <code>prepareByName()</code> /
 <code>prepareOneShot()</code> parse + persist (pure, safe on AsyncTCP, return a heap-ownable result), while
@@ -3285,7 +3712,7 @@ loop (the demos).</p>
 </thead>
 <tbody>
 <tr>
-<td>All <code>GET</code>s</td>
+<td>All other <code>GET</code>s</td>
 <td>read-only</td>
 </tr>
 <tr>
@@ -3302,11 +3729,12 @@ loop (the demos).</p>
 </tr>
 </tbody>
 </table>
+<p><code>GET /api/panels</code> is the one <code>GET</code> that isn't synchronous — see §8.7.</p>
 <h3 id="85-packetmirror-flush-on-overflow">8.5 PacketMirror flush-on-overflow<a class="headerlink" href="#85-packetmirror-flush-on-overflow" title="Permanent link">&para;</a></h3>
 <p>With <code>capture()</code> now guaranteed single-task, the mirror's live ring no longer has to hold an entire
 scene-start burst. When an append would overflow, <code>capture()</code> <strong>flushes inline</strong> (<code>flushTo()</code>) and
-then appends, so <strong>no PREPARE/START packet is ever dropped</strong>, and the ring shrank (<abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr> 2 KB → 1 KB,
-<abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr> 25 KB → 6 KB, freeing scarce DRAM). This inline flush is safe <strong>only because the [§8.2 invariant]
+then appends, so <strong>no PREPARE/START packet is ever dropped</strong>, and the ring can stay small (6 KB on
+<abbr title="Wi-Fi + BLE microcontroller — the supported controller MCU.">ESP32</abbr>, freeing scarce DRAM). This inline flush is safe <strong>only because the [§8.2 invariant]
 (#82-the-hazard-outbound-packets-must-be-single-task) holds</strong>: <code>flushTo()</code> touches the WS client list
 and calls <code>socket-&gt;binary()</code>, which must not race the periodic <code>serviceMirror()</code> flush — and now
 cannot, since both run on the main loop. A <code>WebsocketServer*</code> is wired into <code>PacketMirror</code> via
@@ -3329,6 +3757,54 @@ producer/consumer discipline to arbitrary function-pointer work for the HTTP lay
 <p>Draining HTTP work <strong>before</strong> the ticks means a scene queued this iteration is played and then ticked
 in the same pass. <code>serviceMirror()</code> runs <strong>last</strong> so any packets emitted by the drained work (or by an
 inline overflow flush during it) reach mirroring clients in the same iteration.</p>
+<h3 id="87-requestreply-over-the-relay-trunk-controllerrelaypacketsink">8.7 Request/reply over the relay trunk (<code>ControllerRelayPacketSink</code>)<a class="headerlink" href="#87-requestreply-over-the-relay-trunk-controllerrelaypacketsink" title="Permanent link">&para;</a></h3>
+<p>Real (non-SIM) hardware has no I²C wire to any panel — <code>fetchState()</code> and <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> go over the relay
+trunk, and both need a genuine request/reply round trip that plain <code>IPacketSink::send()</code> doesn't
+offer (fire-and-forget only). Turn-on/off and panel configuration are fire-and-forget: per-hop
+delivery is the link-ARQ layer's job (§4), and panels send no end-to-end <code>PACKET_ACK</code> for them —
+an unsolicited ACK would only reach a controller that is no longer listening for it and be
+hop-retransmitted by the adjacent panel into nothing.
+<code>ControllerRelayPacketSink</code> (already the <code>IPacketSink</code> implementation, already holding the trunk
+transport) grows two extra, non-virtual capabilities for this rather than a separate class:</p>
+<ul>
+<li><strong><code>send(wantAck=true)</code></strong> blocks (bounded by <code>ACK_TIMEOUT_MS</code>) for a <code>PACKET_ACK</code> reply after
+  sending. No current caller requests it (and no panel handler emits <code>PACKET_ACK</code>), but the
+  capability stays on the sink for operations that need a bare delivery confirmation.</li>
+<li><strong><code>requestReply(targetPanelIndex, request, expectedReplyType, replyBuffer, timeoutMs)</code></strong> is the
+  same machinery exposed for callers that need the reply's <em>payload</em>, not just a bare ack —
+  <code>PanelsController::fetchState()</code> (<code>PACKET_FETCH_STATE_REPLY</code>) and <code>RelayBootloaderClient</code>
+  (<code>PACKET_BOOTLOADER_PONG</code>/<code>WRITE_ACK</code>) both use it directly.</li>
+</ul>
+<p>Both flush any stray buffered bytes immediately before sending, then poll the trunk transport
+(with <code>yield()</code> each iteration, so blocking doesn't starve WiFi/TCP or trip the task watchdog)
+through a private <code>PacketFramer</code>, matching on the frame's type. There is no correlation id on any
+reply (<code>PACKET_ACK</code> is meta-only), so this relies on the relay's own single-active-flow invariant
+(§4) — the controller only ever waits for one reply at a time by construction — with
+flush-before-send as the guard against a stale, already-timed-out reply confusing the next call.
+<code>requestReply()</code>'s own send deliberately does not go through the <code>onPacketSentCallback</code> mirror
+hook — queries and <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> control traffic aren't scene state changes, so there's nothing to preview.</p>
+<p>The panel side answers with the ordinary upstream routing rule (§6) —
+<code>LightnetPanel::handleFetchState()</code> calls <code>sendOnEdge(discovery.parentEdge(), ...)</code> directly, one hop, and every
+ancestor's unmodified <code>PanelRouter</code> carries the reply the rest of the way, exactly like
+<code>PACKET_DISCOVERY_DONE</code>. No <code>PanelRouter</code>/<code>PanelFrameDispatcher</code> changes were needed.</p>
+<p><strong><code>GET /api/panels</code> is deferred, not synchronous</strong> (§8.4's table): <code>fetchState()</code> costs a real
+relay round trip per panel, so <code>PanelServer::
+handleGetPanels()</code> posts the whole per-panel loop (build the response, then <code>Http::sendOkStream()</code>)
+to <code>MainLoopQueue</code> instead of running it on the AsyncTCP task — the same deferral mechanism §8.3
+describes, just used to defer a <em>read</em> that still returns its real payload once computed, rather
+than to acknowledge a write immediately and let it land later. Worst case (every panel
+unreachable) still blocks the main loop for <code>panelCount × ACK_TIMEOUT_MS</code> — the relay's
+single-active-flow design means no two fetches can ever be in flight at once, so this can't be
+parallelized away; an accepted, flagged cost of the transport, not an implementation shortcut.</p>
+<p>Also unaffected by this: <code>Protocol::isVersionExemptType()</code> (checked inside <code>validatePacket()</code>
+itself) lets a version-mismatched panel still be reset, told to enter its bootloader, or
+discovered over the relay — <code>PACKET_RESET_DEVICE</code>/<code>PACKET_ENTER_BOOTLOADER</code> and the discovery
+control plane (<code>PACKET_INITIALIZATION_PULL</code>/<code>PACKET_REGISTER_EDGE</code>/<code>PACKET_DISCOVERY_ADVANCE</code>/
+<code>PACKET_DISCOVERY_DONE</code>) are the only types that complete despite <code>header.protocolVersion</code> not
+matching this build's <code>Protocol::VERSION</code>, without weakening that check for any other packet
+type. See <a href="../ota/#flashing-order-and-reboot-safety"><abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> — Flashing order and reboot safety</a> for
+why discovery specifically needs this: without it, a controller reboot that re-runs discovery at
+a newer version than a not-yet-flashed panel is still running would never find that panel at all.</p>
 
 
 
@@ -3422,7 +3898,7 @@ inline overflow flush during it) reach mirroring clients in the same iteration.<
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.path", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tooltips", "navigation.instant.preview"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

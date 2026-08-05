@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -651,6 +651,8 @@
       
         
       
+        
+      
     
     
     
@@ -799,6 +801,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../lightnet-firmware/hardware/panel-relay-signal-path/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Panel Relay Signal Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../lightnet-firmware/architecture/" class="md-nav__link">
         
   
@@ -881,7 +911,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_8" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -905,14 +935,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3_8" id="__nav_3_8_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1707,10 +1737,9 @@
 </div>
 <p>You don't need any other Arduino install. PlatformIO manages the compilers, board definitions, and library cache itself.</p>
 <h2 id="clone-the-firmware">Clone the firmware<a class="headerlink" href="#clone-the-firmware" title="Permanent link">&para;</a></h2>
-<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>clone<span class="w"> </span>--recurse-submodules<span class="w"> </span>https://github.com/przemczan/lightnet-firmware.git
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/przemczan/lightnet-firmware.git
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">cd</span><span class="w"> </span>lightnet-firmware
 </span></code></pre></div>
-<p>If you already cloned without submodules, run <code>git submodule update --init --recursive</code> (needed for the twiboot bootloader).</p>
 <p>Copy the example config headers before your first build (they are gitignored so each checkout keeps its own settings):</p>
 <div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cp<span class="w"> </span>src/controller.config.hpp.example<span class="w"> </span>src/controller.config.hpp
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>cp<span class="w"> </span>src/panel.config.hpp.example<span class="w">       </span>src/panel.config.hpp
@@ -1726,7 +1755,7 @@
 <div class="tabbed-block">
 <ul>
 <li><strong><abbr title="A cheap USB AVR programmer used to flash the bootloader and fuses onto a panel ATmega.">USBasp</abbr></strong> — install the libusb driver via <a href="https://zadig.akeo.ie/">Zadig</a></li>
-<li><strong><abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr> / <abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr> USB-serial</strong> — most boards use CP210x or CH340; PlatformIO usually auto-installs drivers, otherwise grab them from Silicon Labs or WCH</li>
+<li><strong><abbr title="Wi-Fi + BLE microcontroller — the supported controller MCU.">ESP32</abbr> USB-serial</strong> — most boards use CP210x or CH340; PlatformIO usually auto-installs drivers, otherwise grab them from Silicon Labs or WCH</li>
 </ul>
 </div>
 <div class="tabbed-block">
@@ -1736,13 +1765,13 @@
 </div>
 <h2 id="verify-the-toolchain">Verify the toolchain<a class="headerlink" href="#verify-the-toolchain" title="Permanent link">&para;</a></h2>
 <p>Before going further, do a dry-run compile of either target. This downloads the necessary toolchain and confirms everything is wired up.</p>
-<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_esp8266
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_esp32
 </span></code></pre></div>
 <p>If the build finishes with <strong><code>SUCCESS</code></strong>, you're ready to flash.</p>
 <details class="tip">
 <summary>Optional: serial console</summary>
 <p>During development it's useful to keep a serial monitor open on the controller. The firmware logs at <strong>57600 baud</strong>:</p>
-<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>pio<span class="w"> </span>device<span class="w"> </span>monitor<span class="w"> </span>-e<span class="w"> </span>controller_esp8266
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>pio<span class="w"> </span>device<span class="w"> </span>monitor<span class="w"> </span>-e<span class="w"> </span>controller_esp32
 </span></code></pre></div>
 </details>
 <hr />
@@ -1840,7 +1869,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.path", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tooltips", "navigation.instant.preview"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

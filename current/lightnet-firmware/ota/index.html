@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -558,6 +558,8 @@
       
         
       
+        
+      
     
     
     
@@ -706,6 +708,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../hardware/panel-relay-signal-path/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Panel Relay Signal Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../architecture/" class="md-nav__link">
         
   
@@ -788,7 +818,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_8" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -812,14 +842,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3_8" id="__nav_3_8_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1030,15 +1060,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#panel-ota-twiboot" class="md-nav__link">
+  <a href="#panel-ota-relay" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Panel OTA (twiboot)
+        Panel OTA (relay)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Panel OTA (twiboot)">
+    <nav class="md-nav" aria-label="Panel OTA (relay)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1064,10 +1094,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#writing-firmware-controller-side" class="md-nav__link">
+  <a href="#how-the-controller-drives-it" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Writing firmware (controller side)
+        How the controller drives it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flashing-order-and-reboot-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flashing order and reboot safety
       
     </span>
   </a>
@@ -1652,15 +1693,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#panel-ota-twiboot" class="md-nav__link">
+  <a href="#panel-ota-relay" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Panel OTA (twiboot)
+        Panel OTA (relay)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Panel OTA (twiboot)">
+    <nav class="md-nav" aria-label="Panel OTA (relay)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1686,10 +1727,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#writing-firmware-controller-side" class="md-nav__link">
+  <a href="#how-the-controller-drives-it" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Writing firmware (controller side)
+        How the controller drives it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flashing-order-and-reboot-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flashing order and reboot safety
       
     </span>
   </a>
@@ -1842,52 +1894,125 @@
 
 
 <h1 id="ota-firmware-updates"><abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> &amp; Firmware Updates<a class="headerlink" href="#ota-firmware-updates" title="Permanent link">&para;</a></h1>
-<p>Three update paths: panel <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> via the twiboot bootloader (<abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr>, triggered from the controller), serial firmware upload, and controller self-update over ArduinoOTA.</p>
-<h2 id="panel-ota-twiboot">Panel <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> (twiboot)<a class="headerlink" href="#panel-ota-twiboot" title="Permanent link">&para;</a></h2>
-<p>Panels use a custom fork of <a href="https://github.com/orempel/twiboot"><code>orempel/twiboot</code></a> maintained in the firmware repo as the <code>twiboot/</code> git submodule. The upstream repo was tried but produced <abbr title="Static RAM — runtime memory on the microcontroller; very limited on ATmega panels.">SRAM</abbr>-initialisation issues on software jump entry and <abbr title="Watchdog Timer — a hardware safety timer that resets the MCU if firmware stops feeding it.">WDT</abbr> bootloops on hardware reset — the fork addresses both.</p>
+<p>Three update paths: panel <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> over the relay trunk (triggered from the controller), serial firmware upload, and controller self-update over ArduinoOTA. Real (non-SIM) controller hardware only — there is no I²C wire to any panel to flash over, and sim panels don't implement a bootloader protocol, so <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> doesn't exist under <code>SIM_MODE</code>.</p>
+<h2 id="panel-ota-relay">Panel <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> (relay)<a class="headerlink" href="#panel-ota-relay" title="Permanent link">&para;</a></h2>
+<p>Panels run a from-scratch bootloader speaking the relay's own <code>PacketMeta</code>/<abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16 framing:
+<a href="https://github.com/przemczan/lightnet-firmware/blob/master/lib/Lightnet/Panel/bootloader/RelayBootloader.cpp"><code>lib/Lightnet/Panel/bootloader/RelayBootloader.cpp</code></a>,
+driven from the controller side by
+<a href="https://github.com/przemczan/lightnet-firmware/blob/master/lib/Lightnet/Controller/OTA/RelayBootloaderClient.cpp"><code>RelayBootloaderClient</code></a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">No read-back verify</p>
+<p>There is no post-write flash read-back verification — each chunk's own <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16 over
+address+length+data (checked before anything reaches <code>boot_page_fill()</code>) is the integrity
+guarantee instead; see <code>RelayBootloaderClient</code>'s class comment for why a read-back pass
+would need its own new packet type.</p>
+</div>
 <h3 id="getting-the-bootloader">Getting the bootloader<a class="headerlink" href="#getting-the-bootloader" title="Permanent link">&para;</a></h3>
-<p><strong>Option 1: Use precompiled hex (fastest)</strong>
-<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Flash precompiled bootloader directly</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>avrdude<span class="w"> </span>-c<span class="w"> </span>usbasp<span class="w"> </span>-p<span class="w"> </span>m328pb<span class="w"> </span>-U<span class="w"> </span>flash:w:twiboot/pre-compiled_bootloaders/pre-compiled_atmega328pb_16mhz_twiboot.hex:i
-</span></code></pre></div></p>
-<p>Available precompiled files are in <code>twiboot/pre-compiled_bootloaders/</code>.</p>
-<p><strong>Option 2: Compile from source</strong>
-<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Build bootloader environments via PlatformIO</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>atmega328pb_bootloader
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>atmega328p_bootloader
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1"># Hex file is in `.pio/build/atmega328pb_bootloader/firmware.hex`</span>
-</span></code></pre></div></p>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Build + burn (one-time, per panel)</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>atmega328pb_bootloader<span class="w"> </span>-t<span class="w"> </span>fuses<span class="w">    </span><span class="c1"># set fuses (see getting-started.md)</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>atmega328pb_bootloader<span class="w"> </span>-t<span class="w"> </span>upload<span class="w">   </span><span class="c1"># burn via USBasp</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># Hex file is in `.pio/build/atmega328pb_bootloader/firmware.hex`</span>
+</span></code></pre></div>
 <ul>
 <li>Lives in the <strong>4 KB boot section</strong> at <code>0x7000</code> (ATmega328PB/P)</li>
-<li>TWI address: <code>0x29</code> (compiled in via <code>-DTWI_ADDRESS=0x29</code>)</li>
-<li>Stays in bootloader only when EEPROM byte 510 contains <code>0xB007</code> (cleared after first read)</li>
+<li>Stays resident only when EEPROM byte 510 contains <code>0xB007</code> (cleared once read)</li>
+<li>Listens/replies on the one edge that leads back toward the controller — persisted to EEPROM
+  by <code>BootloaderBridge::prepareAndReset()</code> immediately before the jump, alongside this panel's
+  own assigned index (for filtering)</li>
 </ul>
 <h3 id="entry-sequence">Entry sequence<a class="headerlink" href="#entry-sequence" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>sequenceDiagram
   participant C as Controller
   participant P as Panel App
-  participant BL as twiboot (0x7000)
+  participant BL as RelayBootloader (0x7000)
 
   C-&gt;&gt;P: PACKET_ENTER_BOOTLOADER (type 201, token 0xB0)
-  P-&gt;&gt;P: Write 0xB007 to EEPROM[510]
-  P-&gt;&gt;P: Disable TWI + PCINT interrupts
-  P-&gt;&gt;P: Zero SRAM 0x0100–0x04FF
+  P-&gt;&gt;P: Write assigned index + parent edge + 0xB007 to EEPROM
+  P-&gt;&gt;P: Disable TWI/PCINT interrupts, zero SRAM 0x0100-0x04FF
   P-&gt;&gt;BL: Software jump to 0x7000
-  BL-&gt;&gt;BL: Read EEPROM[510] == 0xB007 → stay resident, clear magic
-  C-&gt;&gt;BL: CMD_WAIT (0x00) — verify presence
-  loop per 128-byte page
-    C-&gt;&gt;BL: writePage(addr, data)
+  BL-&gt;&gt;BL: Read EEPROM magic == 0xB007 -&gt; stay resident, clear magic
+  C-&gt;&gt;BL: PACKET_BOOTLOADER_PING -&gt; PONG (verify presence)
+  loop per 128-byte page (2x 64-byte chunks)
+    C-&gt;&gt;BL: PACKET_BOOTLOADER_WRITE_CHUNK -&gt; WRITE_ACK
   end
-  C-&gt;&gt;BL: startApp()
+  C-&gt;&gt;BL: PACKET_BOOTLOADER_START_APP (fire-and-forget)
   BL-&gt;&gt;P: Jump to application</code></pre>
-<h3 id="writing-firmware-controller-side">Writing firmware (controller side)<a class="headerlink" href="#writing-firmware-controller-side" title="Permanent link">&para;</a></h3>
-<p><code>TwibootClient</code> uses raw <code>Wire</code> (bypasses <code>LNBus</code>):</p>
-<div class="language-cpp highlight"><span class="filename">C++</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">twibootClient</span><span class="o">-&gt;</span><span class="n">connect</span><span class="p">(</span><span class="n">panelAddress</span><span class="p">);</span><span class="w">       </span><span class="c1">// sends CMD_WAIT (0x00) to verify presence</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">twibootClient</span><span class="o">-&gt;</span><span class="n">writePage</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">);</span><span class="w">  </span><span class="c1">// 2 × 64-byte chunks</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">twibootClient</span><span class="o">-&gt;</span><span class="n">startApp</span><span class="p">();</span>
-</span></code></pre></div>
-<p><code>PanelFlasher</code> reads <code>/panel_fw.bin</code> from <abbr title="Little Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">LittleFS</abbr> 128 bytes at a time — the full binary is never buffered in RAM.</p>
+<p>Design: only one panel is ever resident in its bootloader at a
+time, and every other panel keeps running its normal application — full <code>PanelDiscovery</code>/
+<code>PanelRouter</code>, already discovered and connected. So <abbr title="Over-the-Air — flashing firmware wirelessly instead of plugging in a USB / programmer.">OTA</abbr> traffic reaches the target exactly like
+any other addressed setup packet already does — flooded downstream through unmodified
+intermediate panels, filtered by <code>targetPanelIndex</code> at the destination — with <strong>no <code>PanelRouter</code>
+changes needed anywhere</strong>. The bootloader itself does no relaying, which is also why its own
+children are transiently unreachable for the duration of the flash — an accepted cost, not a bug
+(see the warning below about the controller restart).</p>
+<p>New wire packets (<code>Core/Common/ProtocolTypes.hpp</code>, protocol v12): <code>PACKET_BOOTLOADER_PING</code>/<code>PONG</code>
+(presence + chip info), <code>PACKET_BOOTLOADER_WRITE_CHUNK</code>/<code>WRITE_ACK</code> (64-byte chunks — two per
+128-byte flash page, carrying their own <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr>-16 over address+length+data since <code>headerCrc</code> covers
+only <code>PacketHeader</code>, not payload — a corrupted target address must never land a valid chunk on
+the wrong flash page), <code>PACKET_BOOTLOADER_START_APP</code>. These are a deliberately frozen contract:
+the resident bootloader does not validate <code>protocolVersion</code> (flashing is how a version mismatch
+gets resolved), via <code>PacketFramer</code>'s <code>validateProtocolVersion</code> constructor parameter. The
+contract's own semantics are versioned separately as <code>Protocol::BOOTLOADER_PROTOCOL_VERSION</code>
+(currently 2), echoed in every <code>PONG</code> and required verbatim by <code>RelayBootloaderClient::connect()</code>
+— a panel whose resident bootloader reports an older version refuses to flash with a clear log
+line and needs its bootloader re-burned over ISP first.</p>
+<h3 id="how-the-controller-drives-it">How the controller drives it<a class="headerlink" href="#how-the-controller-drives-it" title="Permanent link">&para;</a></h3>
+<p><code>ControllerRelayPacketSink::requestReply()</code> — the same "send a unicast, block for a matching reply
+routed back up the trunk" primitive <code>PanelsController::fetchState()</code> uses (see
+<a href="../architecture/">Architecture §8.7</a>) — sends <code>PACKET_BOOTLOADER_PING</code>
+and <code>PACKET_BOOTLOADER_WRITE_CHUNK</code> and waits for <code>PONG</code>/<code>WRITE_ACK</code>. <code>PACKET_BOOTLOADER_START_APP</code>
+is fire-and-forget: the panel commits its last page and jumps to the application immediately, so
+no reply is ever coming. <code>PanelFlasher</code>'s <code>WAIT_BL</code>/<code>FLASHING</code> states call this through
+<code>RelayBootloaderClient</code>, going straight from the last page's <code>WRITE_ACK</code> to <code>startApp()</code> — no
+read-back verify pass.</p>
+<p><code>PanelFlasher</code> reads <code>/panel_fw.bin</code> from <abbr title="Little Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">LittleFS</abbr> 128 bytes at a time — the full binary is never
+buffered in RAM.</p>
+<h3 id="flashing-order-and-reboot-safety">Flashing order and reboot safety<a class="headerlink" href="#flashing-order-and-reboot-safety" title="Permanent link">&para;</a></h3>
+<p>Two complementary safeguards protect a campaign from a controller reboot partway through, which
+otherwise risks a not-yet-flashed panel becoming permanently unreachable.</p>
+<p><strong>1. Discovery's own control plane is version-exempt.</strong> <code>Protocol::isVersionExemptType()</code> covers
+<code>PACKET_INITIALIZATION_PULL</code>/<code>PACKET_REGISTER_EDGE</code>/<code>PACKET_DISCOVERY_ADVANCE</code>/
+<code>PACKET_DISCOVERY_DONE</code> alongside <code>PACKET_RESET_DEVICE</code>/<code>PACKET_ENTER_BOOTLOADER</code> — all six survive
+a <code>header.protocolVersion</code> mismatch (<code>validatePacket()</code> consults this unconditionally, even though
+every normal RX path validates the version by default). Without this, a controller reboot that
+re-runs discovery at a newer <code>protocolVersion</code> than a not-yet-flashed panel is still running would
+never even find that panel — a version-mismatched panel would look identical to an empty, unwired
+port, drop out of <code>getPanels()</code>, and become unreachable for <code>ENTER_BOOTLOADER</code> with no way back in.</p>
+<p>This only helps when the version bump doesn't change the <em>shape</em> of these structs themselves (true
+for a bump like v12, which only added unrelated packet types elsewhere). A bump that changes
+<code>PacketHeader</code> or the discovery structs' own layout (as v10/v11 did) isn't saved by this — an old
+panel's <code>packetSizeForType()</code>/field offsets would misparse the new layout regardless of the
+version-check bypass. That residual risk is exactly what the second safeguard covers.</p>
+<p><strong>2. <code>PanelFlasher</code> flashes leaves first, root last</strong> — <code>currentPanelAddress()</code> walks the
+discovered panel list back to front. <code>getPanels()</code> is ordered by discovery (pre-order DFS: a panel
+is always discovered before any of its descendants — a child can only be found by probing through
+an already-registered parent), so walking it in reverse visits every panel <em>after</em> all of its own
+descendants, and the root last of all. This keeps the controller and every <em>not-yet-flashed</em> panel
+on the <em>same</em> <code>protocolVersion</code> throughout almost the entire campaign, since the controller isn't
+updated until the very end — so a mid-campaign reboot's rediscovery never even needs the
+version-exemption above to reach the panels still waiting to be flashed, which is what makes this
+safe even for a struct-shape-changing bump. The reverse order (root-first, discovery order — not
+what this code does) would instead update the controller and root-ward panels first, so a reboot's
+rediscovery runs at a version only the <em>already-flashed</em> prefix shares — safe for a same-shape
+bump thanks to safeguard 1, but with no protection left for a shape-changing one.</p>
+<p>Ordinary application traffic (animations, scene commands) to already-flashed panels is frozen by
+the same version-mismatch check for the rest of the campaign regardless of order — cosmetic, not a
+reachability problem, and it resolves the moment the controller itself is updated at the end.</p>
+<div class="admonition note">
+<p class="admonition-title">Not yet built: skip-if-already-at-target-version</p>
+<p>Every campaign re-flashes every panel from scratch — <code>PanelFlasher::startFlashing()</code> always
+restarts at the first (in flash order) panel, and there's currently no way for a panel to
+report which application firmware it's already running, so an interrupted-and-resumed
+campaign harmlessly but redundantly re-writes already-up-to-date panels.
+<code>PacketBootloaderPong.bootloaderVersion</code> doesn't help — that's the <em>bootloader's</em> own fixed
+version constant, not the application's. Building this would need a version marker embedded
+in the panel binary at a known flash address (the controller side already has an analogous
+<code>FW_VERSION</code>, git-describe-based, via <code>tools/fw_version.py</code> — panel builds have no equivalent
+today), <code>RelayBootloader.cpp</code> reading it back and reporting it, and <code>PanelFlasher</code> comparing
+it against the image about to be written before deciding whether to skip straight to
+<code>startApp()</code>.</p>
+</div>
 <h3 id="http-upload-flow">HTTP upload flow<a class="headerlink" href="#http-upload-flow" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>sequenceDiagram
   participant Client
@@ -1899,7 +2024,7 @@
   Controller-&gt;&gt;LittleFS: Stream to /panel_fw.bin
   Controller-&gt;&gt;Client: 200 {"status":"flashing","panels":N}
   loop per panel (main loop)
-    Controller-&gt;&gt;Panels: ENTER_BOOTLOADER → flash via twiboot
+    Controller-&gt;&gt;Panels: ENTER_BOOTLOADER -&gt; flash over the relay
     Client-&gt;&gt;Controller: GET /api/firmware/status
     Controller-&gt;&gt;Client: {"state":"flashing","panel":K,"total":N,"progress":P}
   end
@@ -1951,19 +2076,23 @@
 <p>Controller replies:</p>
 <ul>
 <li><code>READY\n</code> — after the header is received</li>
+<li>one <code>0x06</code> byte — after each 256-byte chunk of <code>Data</code> is flushed to flash; the host waits for
+  it before sending the next chunk. Native USB CDC (the <code>controller_s2_mini</code> target) has no
+  baud-rate throttling, so this flow control keeps the host from outrunning the flash-write
+  speed and overflowing the RX ring buffer.</li>
 <li><code>OK\n</code> — after <abbr title="Cyclic Redundancy Check — short checksum used to detect corrupted packets.">CRC</abbr> validates and binary is saved to <abbr title="Little Flash File System — small filesystem the ESP uses to store scenes, palettes, and the panel firmware blob.">LittleFS</abbr></li>
 <li><code>ERR:&lt;message&gt;\n</code> — on any failure</li>
 </ul>
 <h3 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>pip<span class="w"> </span>install<span class="w"> </span>pyserial
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>python<span class="w"> </span>tools/flash_panels_serial.py<span class="w"> </span>&lt;port&gt;<span class="w"> </span>&lt;firmware.bin&gt;
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span>pyserial
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>python<span class="w"> </span>tools/flash_panels_serial.py<span class="w"> </span>&lt;port&gt;<span class="w"> </span>&lt;firmware.bin&gt;
 </span></code></pre></div>
 <p>Once the binary is saved the controller starts flashing panels exactly as with the HTTP upload path.</p>
 <hr />
 <h2 id="controller-self-update-arduinoota">Controller Self-Update (ArduinoOTA)<a class="headerlink" href="#controller-self-update-arduinoota" title="Permanent link">&para;</a></h2>
-<p><code>ArduinoOTA</code> is initialised after WiFi connects. Standard ports: 8266 (<abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr>), 3232 (<abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr>). No password — intended for a trusted local network.</p>
-<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Upload directly over WiFi</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_esp32<span class="w"> </span>--target<span class="w"> </span>upload<span class="w"> </span>--upload-port<span class="w"> </span>lightnet-XXXX.local
+<p><code>ArduinoOTA</code> is initialised after WiFi connects, on the standard <abbr title="Wi-Fi + BLE microcontroller — the supported controller MCU.">ESP32</abbr> port 3232. No password — intended for a trusted local network.</p>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Upload directly over WiFi</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_esp32<span class="w"> </span>--target<span class="w"> </span>upload<span class="w"> </span>--upload-port<span class="w"> </span>lightnet-XXXX.local
 </span></code></pre></div>
 <p>The hostname matches the <abbr title="Multicast DNS — local-network discovery protocol that lets devices announce a hostname like `lightnet-xxxx.local` without DNS or static IP.">mDNS</abbr> name (<code>lightnet-&lt;chipid&gt;</code>). The <code>.local</code> suffix requires <abbr title="Multicast DNS — local-network discovery protocol that lets devices announce a hostname like `lightnet-xxxx.local` without DNS or static IP.">mDNS</abbr> to be working on the network (standard on most OS setups).</p>
 <hr />
@@ -2071,7 +2200,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.path", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tooltips", "navigation.instant.preview"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

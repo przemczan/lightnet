@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -556,6 +556,8 @@
       
         
       
+        
+      
     
     
     
@@ -704,6 +706,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../lightnet-firmware/hardware/panel-relay-signal-path/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Panel Relay Signal Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../lightnet-firmware/architecture/" class="md-nav__link">
         
   
@@ -786,7 +816,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_8" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -810,14 +840,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3_8" id="__nav_3_8_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1871,7 +1901,7 @@
 <tr>
 <td><code>SET_MIRROR</code></td>
 <td>10</td>
-<td><code>enabled:u8</code> — opt in/out of live <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> packet mirroring</td>
+<td><code>enabled:u8</code> — opt in/out of live I²C packet mirroring</td>
 </tr>
 <tr>
 <td><code>PING</code></td>
@@ -1915,7 +1945,7 @@
 </table>
 <p>Inbound variable-length payloads are decoded by top-level functions in <code>api/websocket/protocol/</code>.</p>
 <h3 id="live-preview-mirror_batch">Live preview (<code>MIRROR_BATCH</code>)<a class="headerlink" href="#live-preview-mirror_batch" title="Permanent link">&para;</a></h3>
-<p>Mirroring is <strong>off by default</strong>. When the app enables it (<code>SET_MIRROR(1)</code>), the controller unicasts a state snapshot, then streams outbound <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> packets at up to ~30 fps. <code>PanelMirrorService</code> feeds these into <code>PanelPacketRenderer</code> so the visualiser shows live colours without polling.</p>
+<p>Mirroring is <strong>off by default</strong>. When the app enables it (<code>SET_MIRROR(1)</code>), the controller unicasts a state snapshot, then streams outbound I²C packets at up to ~30 fps. <code>PanelMirrorService</code> feeds these into <code>PanelPacketRenderer</code> so the visualiser shows live colours without polling.</p>
 <hr />
 <h2 id="reconnection">Reconnection<a class="headerlink" href="#reconnection" title="Permanent link">&para;</a></h2>
 <p><code>SocketConnector</code> uses exponential back-off to reconnect on failure:</p>
@@ -2026,7 +2056,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.path", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tooltips", "navigation.instant.preview"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

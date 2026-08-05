@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -556,6 +556,8 @@
       
         
       
+        
+      
     
     
     
@@ -704,6 +706,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../lightnet-firmware/hardware/panel-relay-signal-path/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Panel Relay Signal Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../lightnet-firmware/architecture/" class="md-nav__link">
         
   
@@ -786,7 +816,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_8" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -810,14 +840,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3_8" id="__nav_3_8_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1564,17 +1594,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#esp8266-vs-esp32" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ESP8266 vs ESP32?
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#how-do-i-update-panel-firmware-after-the-first-flash" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1952,17 +1971,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#esp8266-vs-esp32" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ESP8266 vs ESP32?
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#how-do-i-update-panel-firmware-after-the-first-flash" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2232,7 +2240,7 @@
 <h1 id="faq">FAQ<a class="headerlink" href="#faq" title="Permanent link">&para;</a></h1>
 <h2 id="about-lightnet">About Lightnet<a class="headerlink" href="#about-lightnet" title="Permanent link">&para;</a></h2>
 <h3 id="what-is-lightnet">What is Lightnet?<a class="headerlink" href="#what-is-lightnet" title="Permanent link">&para;</a></h3>
-<p>A modular addressable lighting system: one <strong>controller</strong> drives many <strong>panels</strong> over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr>. The controller handles Wi-Fi, the HTTP and WebSocket APIs, and scene playback. Each panel runs animations locally on its <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr> after a single setup packet.</p>
+<p>A modular addressable lighting system: one <strong>controller</strong> drives many <strong>panels</strong> daisy-chained over <abbr title="Universal Asynchronous Receiver/Transmitter — the point-to-point serial link used on every controller-to-panel and panel-to-panel edge.">UART</abbr> — every panel is a store-and-forward repeater, not a node on a shared bus. The controller handles Wi-Fi, the HTTP and WebSocket APIs, and scene playback. Each panel runs animations locally on its <abbr title="8-bit AVR microcontroller family (e.g. 328P / 328PB) used in panel boards.">ATmega</abbr> after a single setup packet.</p>
 <p>See <a href="../../lightnet-firmware/overview/">Firmware Overview</a> and <a href="../../lightnet-mobile/overview/">App Overview</a> for the design tour.</p>
 <h3 id="is-it-a-kit-i-can-buy">Is it a kit I can buy?<a class="headerlink" href="#is-it-a-kit-i-can-buy" title="Permanent link">&para;</a></h3>
 <p>No — it's a DIY project. You build the boards, flash the firmware, and connect everything yourself. Schematics, <abbr title="Printed Circuit Board — the physical board you solder components onto.">PCB</abbr> layouts, and a bill of materials will be published in the future. For now, follow the <a href="../../getting-started/">Get Started</a> guide.</p>
@@ -2245,7 +2253,7 @@
 <h3 id="do-i-need-the-mobile-app">Do I need the mobile app?<a class="headerlink" href="#do-i-need-the-mobile-app" title="Permanent link">&para;</a></h3>
 <p>No. The controller exposes HTTP and WebSocket APIs — <code>curl</code>, a web page, a Python script, Home Assistant, or anything else that talks HTTP can control Lightnet. The mobile app is a convenient client, not a requirement. See <a href="../../lightnet-firmware/api/">Firmware → API Reference</a>.</p>
 <h3 id="how-many-panels-can-a-controller-drive">How many panels can a controller drive?<a class="headerlink" href="#how-many-panels-can-a-controller-drive" title="Permanent link">&para;</a></h3>
-<p>The firmware caps panel count at <strong>32 on <abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr></strong> and <strong>100 on <abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr></strong> (<code>LIGHTNET_MAX_PANELS</code> in <code>Core/Common/LightnetConfig.hpp</code>). In practice the real limit is whichever you hit first: physical layout, power supply, <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> bus quality, and controller <abbr title="Static RAM — runtime memory on the microcontroller; very limited on ATmega panels.">SRAM</abbr> for per-panel state. The <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> address space (7-bit) would allow up to 254, but the firmware reserves headroom.</p>
+<p>The firmware caps panel count at <strong>100</strong> (<code>LIGHTNET_MAX_PANELS</code> in <code>Core/Common/LightnetConfig.hpp</code>) — a purely <abbr title="Static RAM — runtime memory on the microcontroller; very limited on ATmega panels.">SRAM</abbr> limit, comfortable on any <abbr title="Wi-Fi + BLE microcontroller — the supported controller MCU.">ESP32</abbr>-class controller. In practice the real limit is whichever you hit first: physical layout, power supply, and per-hop latency — traffic to panel N relays through every panel between it and the controller, so deeper trees mean more accumulated hop latency.</p>
 <p>See <a href="../../lightnet-firmware/architecture/">Firmware → Architecture</a> for the bandwidth budget.</p>
 <h3 id="can-a-panel-run-without-the-controller">Can a panel run without the controller?<a class="headerlink" href="#can-a-panel-run-without-the-controller" title="Permanent link">&para;</a></h3>
 <p>No. Panels are headless — they need the controller for discovery, addressing, palette setup, and any external API. They execute animations locally, but they don't initiate them.</p>
@@ -2257,35 +2265,15 @@
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>controller_esp32<span class="w"> </span>-t<span class="w"> </span>upload
 </span></code></pre></div>
 <p>Full walkthrough: <a href="../../getting-started/flashing/">Get Started → Flash the firmware</a>. Per-environment details: <a href="../../lightnet-firmware/getting-started/">Firmware → Getting Started</a>.</p>
-<h3 id="esp8266-vs-esp32"><abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr> vs <abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr>?<a class="headerlink" href="#esp8266-vs-esp32" title="Permanent link">&para;</a></h3>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1"><abbr title="Wi-Fi-enabled microcontroller — one of the two supported controller MCUs.">ESP8266</abbr></label><label for="__tabbed_1_2"><abbr title="Wi-Fi + BLE microcontroller — the other supported controller MCU.">ESP32</abbr></label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<ul>
-<li>Cheaper, lower-power, single-core</li>
-<li>Plenty for typical installs</li>
-<li>Slightly different pin map</li>
-</ul>
-</div>
-<div class="tabbed-block">
-<ul>
-<li>Dual-core, more <abbr title="Static RAM — runtime memory on the microcontroller; very limited on ATmega panels.">SRAM</abbr></li>
-<li>Better headroom for large installs and heavy <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr> load</li>
-<li>Recommended if you can pick</li>
-</ul>
-</div>
-</div>
-</div>
-<p>Pin assignments: <a href="../../lightnet-firmware/hardware/">Firmware → Hardware</a>.</p>
 <h3 id="how-do-i-update-panel-firmware-after-the-first-flash">How do I update panel firmware after the first flash?<a class="headerlink" href="#how-do-i-update-panel-firmware-after-the-first-flash" title="Permanent link">&para;</a></h3>
 <p>Three ways, in order of convenience:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Mobile app / HTTP</label><label for="__tabbed_2_2">Serial</label><label for="__tabbed_2_3">Programmer</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Mobile app / HTTP</label><label for="__tabbed_1_2">Serial</label><label for="__tabbed_1_3">Programmer</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p><div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://lightnet-XXXX.local/api/firmware/panels<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>--data-binary<span class="w"> </span>@panel_fw.bin
 </span></code></pre></div>
-The controller streams the binary to its flash, then reflashes every panel one at a time over <abbr title="Inter-Integrated Circuit — two-wire serial bus (SDA + SCL) used between the controller and panels.">I²C</abbr>.</p>
+The controller streams the binary to its flash, then reflashes every panel one at a time over the relay trunk.</p>
 </div>
 <div class="tabbed-block">
 <p><div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>tools/flash_panels_serial.py<span class="w"> </span>&lt;port&gt;<span class="w"> </span>&lt;firmware.bin&gt;
@@ -2306,7 +2294,7 @@ Same flow, delivered over the controller's USB serial port instead of Wi-Fi.</p>
 <hr />
 <h2 id="mobile-app">Mobile app<a class="headerlink" href="#mobile-app" title="Permanent link">&para;</a></h2>
 <h3 id="how-do-i-build-the-app">How do I build the app?<a class="headerlink" href="#how-do-i-build-the-app" title="Permanent link">&para;</a></h3>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Android</label><label for="__tabbed_3_2">iOS</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Android</label><label for="__tabbed_2_2">iOS</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p><div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>./gradlew<span class="w"> </span>:composeApp:installDebug
@@ -2486,7 +2474,7 @@ Requires Android SDK with <strong>API 24+</strong> and a connected device or emu
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.path", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tooltips", "navigation.instant.preview"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
