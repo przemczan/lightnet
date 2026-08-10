@@ -12,6 +12,8 @@
 /* Footer social links with names */
 .md-footer-social {
   display: flex;
+  align-items: center;
+  flex-wrap: wrap;
   gap: 2rem;
   padding: 1.5rem 0;
   justify-content: center;
